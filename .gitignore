@@ -1,0 +1,58 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Unity auto-generated VS/Rider solution and project files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.slnx
+
+# Unity3D generated meta files are required, do not ignore them
+# *.meta
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# Packed Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/**/[Cc]atalog*.json
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/**/[Cc]atalog*.hash
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/[Ss]tream[Ii]ng[Aa]ssets[Dd]ata
+
+# TextMeshPro
+/[Aa]ssets/[Tt]ext[Mm]esh[Pp]ro/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
