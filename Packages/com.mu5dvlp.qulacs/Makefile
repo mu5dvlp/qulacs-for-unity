@@ -5,15 +5,16 @@
 #   - Git
 #   - CMake 3.20+
 #   - Visual Studio 2022 (MSVC) with "Desktop development with C++" workload
-#   - make (e.g. via Git Bash / MinGW / Chocolatey: choco install make)
+#   - make (Git Bash 付属、または choco install make)
 #
-# Usage:
-#   make            # full build: clone → build qulacs → build wrapper → install
-#   make qulacs     # build Qulacs only
-#   make wrapper    # build the C++ wrapper only (requires qulacs target done)
-#   make install    # copy DLL to Unity plugin folder
-#   make clean      # remove all build artifacts
-#   make clean-all  # also remove the cloned Qulacs source
+# Commands:
+#   make build                # フルビルド (fetch → build-qulacs → build-dll → deploy-dll)
+#   make fetch-qulacs         # Qulacs ソースを git clone する
+#   make build-qulacs         # Qulacs を CMake でビルド & インストールする
+#   make build-dll            # C++ ラッパーをビルドして qulacs_unity.dll を生成する
+#   make deploy-dll           # 生成した DLL を Unity プラグインフォルダにコピーする
+#   make clean-build          # ビルド成果物を削除する (native~/build/)
+#   make clean-all            # ビルド成果物 + Qulacs ソース & インストール先を全削除する
 # =============================================================================
 
 QULACS_REPO    := https://github.com/qulacs/qulacs.git
@@ -25,46 +26,49 @@ WRAPPER_BUILD  := native~/build/wrapper
 PLUGIN_DIR     := Runtime/Plugins/Windows/x86_64
 DLL            := qulacs_unity.dll
 
-.PHONY: all qulacs wrapper install clean clean-all
+.PHONY: build fetch-qulacs build-qulacs build-dll deploy-dll clean-build clean-all
 
-all: qulacs wrapper install
+build: fetch-qulacs build-qulacs build-dll deploy-dll
 
 # -----------------------------------------------------------------------------
-# [1-3] Clone and build Qulacs, then install to a known prefix
+# Qulacs ソースを取得する
 # -----------------------------------------------------------------------------
-qulacs:
-	@echo ">>> [1/3] Fetching Qulacs source..."
+fetch-qulacs:
+	@echo ">>> [1/4] Fetching Qulacs source..."
 	@if [ ! -d "$(QULACS_SRC)/.git" ]; then \
 		git clone --depth 1 $(QULACS_REPO) $(QULACS_SRC); \
 	else \
 		echo "    Qulacs source already present, skipping clone."; \
 	fi
-	@echo ">>> [2/3] Configuring Qulacs..."
+
+# -----------------------------------------------------------------------------
+# Qulacs をビルドして include/ と lib/ をインストールする
+# -----------------------------------------------------------------------------
+build-qulacs:
+	@echo ">>> [2/4] Building Qulacs..."
 	cmake -B $(QULACS_BUILD) -S $(QULACS_SRC) \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=$(QULACS_INSTALL) \
 		-DUSE_GPU=No \
 		-DUSE_MPI=No
-	@echo ">>> [3/3] Building and installing Qulacs..."
 	cmake --build $(QULACS_BUILD) --config Release
 	cmake --install $(QULACS_BUILD) --config Release
 
 # -----------------------------------------------------------------------------
-# [4-5] Build the extern "C" wrapper DLL
+# extern "C" ラッパーをビルドして qulacs_unity.dll を生成する
 # -----------------------------------------------------------------------------
-wrapper:
-	@echo ">>> [4/5] Configuring wrapper..."
+build-dll:
+	@echo ">>> [3/4] Building qulacs_unity.dll..."
 	cmake -B $(WRAPPER_BUILD) -S $(WRAPPER_SRC) \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DQULACS_ROOT=$(QULACS_INSTALL)
-	@echo ">>> [5/5] Building wrapper..."
 	cmake --build $(WRAPPER_BUILD) --config Release
 
 # -----------------------------------------------------------------------------
-# [6] Copy DLL to Unity plugin folder
+# 生成した DLL を Unity が読み込むフォルダにコピーする
 # -----------------------------------------------------------------------------
-install:
-	@echo ">>> Copying $(DLL) to $(PLUGIN_DIR)..."
+deploy-dll:
+	@echo ">>> [4/4] Deploying $(DLL) to Unity plugin folder..."
 	@mkdir -p $(PLUGIN_DIR)
 	@if [ -f "$(WRAPPER_BUILD)/Release/$(DLL)" ]; then \
 		cp $(WRAPPER_BUILD)/Release/$(DLL) $(PLUGIN_DIR)/$(DLL); \
@@ -73,15 +77,15 @@ install:
 	else \
 		echo "ERROR: $(DLL) not found. Build may have failed."; exit 1; \
 	fi
-	@echo ">>> Done. DLL installed to $(PLUGIN_DIR)/$(DLL)"
+	@echo ">>> Done. $(PLUGIN_DIR)/$(DLL)"
 
 # -----------------------------------------------------------------------------
-# Cleanup
+# ビルド成果物を削除する
 # -----------------------------------------------------------------------------
-clean:
-	@echo ">>> Removing build artifacts..."
+clean-build:
+	@echo ">>> Removing build artifacts (native~/build/)..."
 	rm -rf native~/build
 
-clean-all: clean
+clean-all: clean-build
 	@echo ">>> Removing Qulacs install and source..."
 	rm -rf $(QULACS_INSTALL) $(QULACS_SRC)
