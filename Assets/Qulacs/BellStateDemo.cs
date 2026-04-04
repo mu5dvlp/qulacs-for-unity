@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mu5dvlp.Qulacs;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// Demonstrates creating a Bell state (|00> + |11>) / √2 and displaying measurement results.
@@ -16,10 +16,10 @@ using UnityEngine.UI;
 public class BellStateDemo : MonoBehaviour
 {
     [Header("Number of measurement shots")]
-    public int samplingCount = 1000;
+    public int samplingCount = 1024;
 
     [Header("(Optional) UI Text for displaying results")]
-    public Text resultText;
+    public TMP_Text resultText;
 
     void Start()
     {
