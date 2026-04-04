@@ -1,0 +1,10 @@
+# Qulacs source and install (cloned/built locally)
+extern/qulacs/
+extern/qulacs-install/
+
+# Boost headers (downloaded locally, too large for git)
+extern/boost/
+extern/boost.zip
+
+# CMake build output
+build/
