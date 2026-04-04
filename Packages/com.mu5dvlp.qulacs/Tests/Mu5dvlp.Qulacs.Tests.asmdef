@@ -1,0 +1,21 @@
+{
+  "name": "Mu5dvlp.Qulacs.Tests",
+  "rootNamespace": "Mu5dvlp.Qulacs.Tests",
+  "references": [
+    "Mu5dvlp.Qulacs.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
