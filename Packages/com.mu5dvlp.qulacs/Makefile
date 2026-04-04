@@ -62,7 +62,14 @@ build-qulacs:
 		-DBOOST_ROOT=$(BOOST_ROOT) \
 		-DBoost_NO_SYSTEM_PATHS=ON
 	"$(CMAKE)" --build $(QULACS_BUILD) --config Release
-	"$(CMAKE)" --install $(QULACS_BUILD) --config Release
+	"$(CMAKE)" --build $(QULACS_BUILD) --config Release
+	@echo ">>> Staging Qulacs headers and libs to $(QULACS_INSTALL)..."
+	@mkdir -p $(QULACS_INSTALL)/include $(QULACS_INSTALL)/lib
+	@cp -r $(QULACS_SRC)/src/cppsim $(QULACS_INSTALL)/include/
+	@cp -r $(QULACS_SRC)/src/csim   $(QULACS_INSTALL)/include/
+	@cp -r $(QULACS_BUILD)/eigen/src/eigen/Eigen $(QULACS_INSTALL)/include/
+	@cp native~/build/lib/cppsim_static.lib $(QULACS_INSTALL)/lib/
+	@cp native~/build/lib/csim_static.lib   $(QULACS_INSTALL)/lib/
 
 # -----------------------------------------------------------------------------
 # extern "C" ラッパーをビルドして qulacs_unity.dll を生成する
