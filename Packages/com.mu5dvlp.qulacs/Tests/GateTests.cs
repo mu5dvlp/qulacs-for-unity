@@ -150,20 +150,24 @@ namespace Mu5dvlp.Qulacs.Tests
         [Test]
         public void RX_PiRotation_FlipsZeroToOne()
         {
-            // RX(π)|0> = -i|1>
+            // NOTE: Qulacs defines RX(θ) = exp(+iθX/2), the opposite sign from the
+            // standard physics convention exp(-iθX/2).
+            // RX(π)|0> = +i|1>  (Qulacs convention)
             var v = ApplyToZero(1, c => c.RX(0, Math.PI));
-            Assert.AreEqual(0.0,  Complex.Abs(v[0]), Eps);
-            Assert.AreEqual(0.0,  v[1].Real, Eps);
-            Assert.AreEqual(-1.0, v[1].Imaginary, Eps);
+            Assert.AreEqual(0.0, Complex.Abs(v[0]), Eps);
+            Assert.AreEqual(0.0, v[1].Real, Eps);
+            Assert.AreEqual(1.0, v[1].Imaginary, Eps);
         }
 
         [Test]
         public void RY_PiRotation_FlipsZeroToOne()
         {
-            // RY(π)|0> = |1>
+            // NOTE: Qulacs defines RY(θ) = exp(+iθY/2), the opposite sign from the
+            // standard physics convention exp(-iθY/2).
+            // RY(π)|0> = -|1>  (Qulacs convention)
             var v = ApplyToZero(1, c => c.RY(0, Math.PI));
-            Assert.AreEqual(0.0, Complex.Abs(v[0]), Eps);
-            Assert.AreEqual(1.0, v[1].Real, Eps);
+            Assert.AreEqual(0.0,  Complex.Abs(v[0]), Eps);
+            Assert.AreEqual(-1.0, v[1].Real, Eps);
         }
 
         [Test]
