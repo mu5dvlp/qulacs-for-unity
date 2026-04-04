@@ -1,0 +1,14 @@
+{
+  "name": "Mu5dvlp.Qulacs.Runtime",
+  "rootNamespace": "Mu5dvlp.Qulacs",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

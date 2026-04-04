@@ -1,0 +1,67 @@
+# quri-toolkit
+
+A Unity package that brings [Qulacs](https://github.com/qulacs/qulacs) — a high-performance C++ quantum circuit simulator — into Unity projects.
+
+## Overview
+
+Qulacs is written in C++ and has no native C# bindings. This package provides:
+
+1. **A thin `extern "C"` C++ wrapper** (`native~/`) around the Qulacs C++ API, compiled as a platform-specific native library.
+2. **A C# API** (`Runtime/`) that calls the wrapper via P/Invoke and exposes an idiomatic Unity-friendly interface.
+
+```
+Unity C# (Mu5dvlp.Qulacs)
+    └── P/Invoke
+        └── qulacs_unity.dll  (extern "C" C++ wrapper)
+            └── Qulacs C++ library
+```
+
+## Platform Support
+
+| Platform | Status |
+|---|---|
+| Windows x86_64 | In development |
+| macOS | Planned |
+| Android ARM64 | Planned |
+| iOS | Planned |
+
+## Package
+
+**Package ID:** `com.mu5dvlp.qulacs`
+**Unity:** 6000.0+
+
+### Installation
+
+Add to your project's `Packages/manifest.json`:
+
+```json
+{
+  "dependencies": {
+    "com.mu5dvlp.qulacs": "file:../path/to/com.mu5dvlp.qulacs"
+  }
+}
+```
+
+Or clone this repository and open the Unity project directly — the package is embedded under `Packages/com.mu5dvlp.qulacs/`.
+
+## Building the Native Plugin
+
+### Requirements
+
+- CMake 3.20+
+- MSVC (Visual Studio 2022) — Windows
+- Qulacs built from source (see [Qulacs build instructions](https://github.com/qulacs/qulacs))
+
+### Build (Windows)
+
+```bash
+cd Packages/com.mu5dvlp.qulacs/native~
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+
+The output `qulacs_unity.dll` should be copied to `Runtime/Plugins/Windows/x86_64/`.
+
+## License
+
+The wrapper code in this repository is MIT licensed. Qulacs itself is licensed under MIT. See [Qulacs license](https://github.com/qulacs/qulacs/blob/main/LICENSE) for details.

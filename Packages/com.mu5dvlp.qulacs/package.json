@@ -1,0 +1,10 @@
+{
+  "name": "com.mu5dvlp.qulacs",
+  "version": "0.1.0",
+  "displayName": "Qulacs",
+  "description": "A Unity native plugin wrapper for Qulacs, the C++ quantum circuit simulator.",
+  "unity": "6000.0",
+  "author": {
+    "name": "mu5dvlp"
+  }
+}
