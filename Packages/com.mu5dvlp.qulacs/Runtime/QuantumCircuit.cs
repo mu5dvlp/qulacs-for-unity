@@ -1,0 +1,190 @@
+using System;
+using Mu5dvlp.Qulacs.Internal;
+
+namespace Mu5dvlp.Qulacs
+{
+    /// <summary>
+    /// Represents a quantum circuit backed by the Qulacs native library.
+    /// Gates are appended in order and applied to a <see cref="QuantumState"/> via
+    /// <see cref="UpdateQuantumState"/>.
+    /// Must be disposed when no longer needed.
+    /// </summary>
+    public sealed class QuantumCircuit : IDisposable
+    {
+        private IntPtr _handle;
+        private bool _disposed;
+
+        /// <summary>Number of qubits in the circuit.</summary>
+        public int QubitCount { get; }
+
+        /// <summary>Number of gates currently in the circuit.</summary>
+        public int GateCount
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return (int)NativeMethods.qulacs_circuit_get_gate_count(_handle);
+            }
+        }
+
+        public QuantumCircuit(int qubitCount)
+        {
+            if (qubitCount <= 0)
+                throw new ArgumentOutOfRangeException(nameof(qubitCount), "qubitCount must be > 0.");
+
+            _handle = NativeMethods.qulacs_circuit_create((uint)qubitCount);
+            if (_handle == IntPtr.Zero)
+                throw new InvalidOperationException("Failed to create QuantumCircuit in native library.");
+
+            QubitCount = qubitCount;
+        }
+
+        /// <summary>Applies all gates in the circuit to the given state in order.</summary>
+        public void UpdateQuantumState(QuantumState state)
+        {
+            ThrowIfDisposed();
+            if (state == null) throw new ArgumentNullException(nameof(state));
+            NativeMethods.qulacs_circuit_update_quantum_state(_handle, state.Handle);
+        }
+
+        // --- Single-qubit gates ---
+
+        public QuantumCircuit H(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_H_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit X(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_X_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit Y(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_Y_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit Z(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_Z_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit S(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_S_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit Sdag(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_Sdag_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit T(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_T_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit Tdag(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_Tdag_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit Identity(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_Identity_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        // --- Rotation gates ---
+
+        public QuantumCircuit RX(int qubitIndex, double angle)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_RX_gate(_handle, (uint)qubitIndex, angle);
+            return this;
+        }
+
+        public QuantumCircuit RY(int qubitIndex, double angle)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_RY_gate(_handle, (uint)qubitIndex, angle);
+            return this;
+        }
+
+        public QuantumCircuit RZ(int qubitIndex, double angle)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_RZ_gate(_handle, (uint)qubitIndex, angle);
+            return this;
+        }
+
+        // --- Two-qubit gates ---
+
+        public QuantumCircuit CNOT(int control, int target)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_CNOT_gate(_handle, (uint)control, (uint)target);
+            return this;
+        }
+
+        public QuantumCircuit CZ(int control, int target)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_CZ_gate(_handle, (uint)control, (uint)target);
+            return this;
+        }
+
+        public QuantumCircuit SWAP(int qubit0, int qubit1)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_SWAP_gate(_handle, (uint)qubit0, (uint)qubit1);
+            return this;
+        }
+
+        // --- Measurement ---
+
+        /// <summary>
+        /// Adds a measurement gate. The result is stored in the state's classical register
+        /// at <paramref name="registerAddress"/>.
+        /// </summary>
+        public QuantumCircuit Measure(int qubitIndex, int registerAddress = 0)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_measurement_gate(
+                _handle, (uint)qubitIndex, (uint)registerAddress);
+            return this;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed) throw new ObjectDisposedException(nameof(QuantumCircuit));
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                NativeMethods.qulacs_circuit_destroy(_handle);
+                _handle = IntPtr.Zero;
+                _disposed = true;
+            }
+        }
+    }
+}
