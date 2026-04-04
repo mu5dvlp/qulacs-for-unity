@@ -47,6 +47,10 @@ crashlytics-build.properties
 # TextMeshPro
 /[Aa]ssets/[Tt]ext[Mm]esh[Pp]ro/
 
+# IDE
+.vscode/
+.idea/
+
 # OS
 .DS_Store
 .DS_Store?
