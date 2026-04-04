@@ -1,0 +1,67 @@
+# quri-toolkit
+
+[Qulacs](https://github.com/qulacs/qulacs) — 高性能な C++ 量子回路シミュレータ — を Unity プロジェクトで利用するための Unity パッケージです。
+
+## 概要
+
+Qulacs は C++ で実装されており、C# のネイティブバインディングは存在しません。このパッケージは以下を提供します。
+
+1. **薄い `extern "C"` C++ ラッパー** (`native~/`) — Qulacs の C++ API をラップし、プラットフォーム固有のネイティブライブラリとしてコンパイルします。
+2. **C# API** (`Runtime/`) — ラッパーを P/Invoke 経由で呼び出し、Unity に馴染みやすいインターフェースを公開します。
+
+```
+Unity C# (Mu5dvlp.Qulacs)
+    └── P/Invoke
+        └── qulacs_unity.dll  (extern "C" C++ ラッパー)
+            └── Qulacs C++ ライブラリ
+```
+
+## プラットフォームサポート
+
+| プラットフォーム | 状態 |
+|---|---|
+| Windows x86_64 | 開発中 |
+| macOS | 予定 |
+| Android ARM64 | 予定 |
+| iOS | 予定 |
+
+## パッケージ
+
+**パッケージ ID:** `com.mu5dvlp.qulacs`
+**Unity:** 6000.0+
+
+### インストール
+
+プロジェクトの `Packages/manifest.json` に追記してください。
+
+```json
+{
+  "dependencies": {
+    "com.mu5dvlp.qulacs": "file:../path/to/com.mu5dvlp.qulacs"
+  }
+}
+```
+
+あるいはこのリポジトリをクローンして Unity プロジェクトを直接開くことも可能です。パッケージは `Packages/com.mu5dvlp.qulacs/` に埋め込まれています。
+
+## ネイティブプラグインのビルド
+
+### 要件
+
+- CMake 3.20 以上
+- MSVC (Visual Studio 2022) — Windows の場合
+- ソースからビルドした Qulacs ([Qulacs ビルド手順](https://github.com/qulacs/qulacs) を参照)
+
+### ビルド (Windows)
+
+```bash
+cd Packages/com.mu5dvlp.qulacs/native~
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+
+生成された `qulacs_unity.dll` を `Runtime/Plugins/Windows/x86_64/` にコピーしてください。
+
+## ライセンス
+
+このリポジトリのラッパーコードは MIT ライセンスです。Qulacs 本体も MIT ライセンスです。詳細は [Qulacs ライセンス](https://github.com/qulacs/qulacs/blob/main/LICENSE) を参照してください。
