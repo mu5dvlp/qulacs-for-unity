@@ -17,10 +17,17 @@
 #   make clean-all            # ビルド成果物 + Qulacs ソース & インストール先を全削除する
 # =============================================================================
 
+# VS 付属の cmake を使う（PATH に cmake がない場合のフォールバック）
+CMAKE := $(shell where cmake 2>/dev/null | head -1)
+ifeq ($(CMAKE),)
+CMAKE := C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe
+endif
+
 QULACS_REPO    := https://github.com/qulacs/qulacs.git
 QULACS_SRC     := native~/extern/qulacs
 QULACS_BUILD   := native~/build/qulacs
 QULACS_INSTALL := native~/extern/qulacs-install
+BOOST_ROOT     := native~/extern/boost
 WRAPPER_SRC    := native~
 WRAPPER_BUILD  := native~/build/wrapper
 PLUGIN_DIR     := Runtime/Plugins/Windows/x86_64
@@ -46,23 +53,26 @@ fetch-qulacs:
 # -----------------------------------------------------------------------------
 build-qulacs:
 	@echo ">>> [2/4] Building Qulacs..."
-	cmake -B $(QULACS_BUILD) -S $(QULACS_SRC) \
+	"$(CMAKE)" -B $(QULACS_BUILD) -S $(QULACS_SRC) \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=$(QULACS_INSTALL) \
 		-DUSE_GPU=No \
-		-DUSE_MPI=No
-	cmake --build $(QULACS_BUILD) --config Release
-	cmake --install $(QULACS_BUILD) --config Release
+		-DUSE_MPI=No \
+		-DUSE_PYTHON=No \
+		-DBOOST_ROOT=$(BOOST_ROOT) \
+		-DBoost_NO_SYSTEM_PATHS=ON
+	"$(CMAKE)" --build $(QULACS_BUILD) --config Release
+	"$(CMAKE)" --install $(QULACS_BUILD) --config Release
 
 # -----------------------------------------------------------------------------
 # extern "C" ラッパーをビルドして qulacs_unity.dll を生成する
 # -----------------------------------------------------------------------------
 build-dll:
 	@echo ">>> [3/4] Building qulacs_unity.dll..."
-	cmake -B $(WRAPPER_BUILD) -S $(WRAPPER_SRC) \
+	"$(CMAKE)" -B $(WRAPPER_BUILD) -S $(WRAPPER_SRC) \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DQULACS_ROOT=$(QULACS_INSTALL)
-	cmake --build $(WRAPPER_BUILD) --config Release
+	"$(CMAKE)" --build $(WRAPPER_BUILD) --config Release
 
 # -----------------------------------------------------------------------------
 # 生成した DLL を Unity が読み込むフォルダにコピーする
