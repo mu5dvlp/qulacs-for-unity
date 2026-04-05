@@ -11,6 +11,7 @@ Unity native plugin package wrapping Qulacs (C++ quantum circuit simulator).
 ## Structure
 
 ```
+Makefile                      # build targets (run from this directory)
 Runtime/
   Internal/NativeMethods.cs   # P/Invoke declarations (internal)
   QuantumState.cs             # public API
@@ -20,12 +21,27 @@ native~/
   src/qulacs_unity.h          # C API
   src/qulacs_unity.cpp        # extern "C" wrapper
   CMakeLists.txt
-  build.sh                    # full build script
+  build.sh                    # invoked by Makefile
 Tests/
   QuantumStateTests.cs
   GateTests.cs
   QuantumCircuitTests.cs
 ```
+
+## Public API
+
+### QuantumState
+`new QuantumState(int qubitCount)` — IDisposable  
+Methods: `SetZeroState()`, `SetComputationalBasis(ulong)`, `SetHaarRandomState()`, `SetHaarRandomState(uint seed)`, `GetStateVector()` → `Complex[]`, `GetZeroProbability(int)`, `GetSquaredNorm()`, `Sampling(int)`, `Sampling(int, uint seed)` → `ulong[]`
+
+### QuantumCircuit
+`new QuantumCircuit(int qubitCount)` — IDisposable, fluent builder (all gate methods return `this`)  
+`UpdateQuantumState(QuantumState state)`
+
+Single-qubit: `H`, `X`, `Y`, `Z`, `S`, `Sdag`, `T`, `Tdag`, `Identity`  
+Rotation: `RX(qubit, angle)`, `RY(qubit, angle)`, `RZ(qubit, angle)` — see gate convention above  
+Two-qubit: `CNOT(control, target)`, `CZ(control, target)`, `SWAP(qubit0, qubit1)`  
+Measurement: `Measure(qubit, registerAddress=0)`
 
 ## Building the DLL
 
