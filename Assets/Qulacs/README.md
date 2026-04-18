@@ -7,7 +7,30 @@ This folder contains sample scenes and scripts that demonstrate how to use the `
 | Path | Description |
 |---|---|
 | `Scenes/BellState.unity` | Demo scene for the Bell state example |
-| `Scripts/BellStateDemo.cs` | MonoBehaviour that creates and measures a Bell state |
+| `Scripts/Runtime/BellStateDemo.cs` | MonoBehaviour that creates and measures a Bell state |
+| `Scenes/QbitObject.unity` | Demo scene for the single-qubit inspector |
+| `Scripts/Runtime/QbitObject.cs` | MonoBehaviour for inspector-configurable single-qubit state |
+
+## QbitObject
+
+`QbitObject` is an inspector-configurable MonoBehaviour representing a single qubit state |ψ⟩ = α|0⟩ + β|1⟩. Magnitudes are coupled via a single angle θ so that |α|²+|β|²=1 is always satisfied:
+
+- |α| = cos(θ), |β| = sin(θ), where θ ∈ [0°, 90°]
+- Sign and phase (×i) can be toggled independently per amplitude
+
+**Inspector fields:**
+
+| Field | Default | Description |
+|---|---|---|
+| `Theta Deg` | 0 | θ in degrees — 0° = \|0⟩, 90° = \|1⟩, 45° = equal superposition |
+| `Alpha Negative` | false | Multiply α by −1 |
+| `Alpha Imaginary` | false | Multiply α by i |
+| `Beta Negative` | false | Multiply β by −1 |
+| `Beta Imaginary` | false | Multiply β by i |
+
+**Read-only properties (updated after `Apply()`):** `Alpha`, `Beta`, `ZeroProbability`, `OneProbability`, `SquaredNorm`
+
+Open `Scenes/QbitObject.unity` and press **Play** to use the demo.
 
 ## BellState Demo
 

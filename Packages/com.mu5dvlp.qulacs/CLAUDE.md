@@ -32,7 +32,7 @@ Tests/
 
 ### QuantumState
 `new QuantumState(int qubitCount)` — IDisposable  
-Methods: `SetZeroState()`, `SetComputationalBasis(ulong)`, `SetHaarRandomState()`, `SetHaarRandomState(uint seed)`, `GetStateVector()` → `Complex[]`, `GetZeroProbability(int)`, `GetSquaredNorm()`, `Sampling(int)`, `Sampling(int, uint seed)` → `ulong[]`
+Methods: `SetZeroState()`, `SetComputationalBasis(ulong)`, `SetHaarRandomState()`, `SetHaarRandomState(uint seed)`, `SetStateVector(Complex[])`, `GetStateVector()` → `Complex[]`, `GetZeroProbability(int)`, `GetSquaredNorm()`, `Sampling(int)`, `Sampling(int, uint seed)` → `ulong[]`
 
 ### QuantumCircuit
 `new QuantumCircuit(int qubitCount)` — IDisposable, fluent builder (all gate methods return `this`)  

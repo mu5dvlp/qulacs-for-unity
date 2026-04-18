@@ -60,6 +60,7 @@ new QuantumState(int qubitCount)   // IDisposable
 | `SetComputationalBasis(ulong)` | Set to a specific basis state |
 | `SetHaarRandomState()` | Set to a Haar-random state |
 | `SetHaarRandomState(uint seed)` | Reproducible Haar-random state |
+| `SetStateVector(Complex[])` | Load an arbitrary state vector (length must equal Dimension) |
 | `GetStateVector()` → `Complex[]` | Full state vector (length = Dimension) |
 | `GetZeroProbability(int qubit)` | P(qubit = \|0⟩) |
 | `GetSquaredNorm()` | Squared norm (≈ 1 for normalised states) |
