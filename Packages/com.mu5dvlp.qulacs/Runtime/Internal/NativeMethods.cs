@@ -38,6 +38,13 @@ namespace Mu5dvlp.Qulacs.Internal
             ulong length);
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_state_set_vector(
+            IntPtr state,
+            [In] double[] realIn,
+            [In] double[] imagIn,
+            ulong length);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern double qulacs_state_get_zero_probability(IntPtr state, uint qubitIndex);
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]

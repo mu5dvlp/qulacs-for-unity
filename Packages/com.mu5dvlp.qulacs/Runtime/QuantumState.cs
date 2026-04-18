@@ -60,6 +60,27 @@ namespace Mu5dvlp.Qulacs
         }
 
         /// <summary>
+        /// Loads an arbitrary state vector. The array must have length 2^QubitCount.
+        /// The vector need not be normalised beforehand.
+        /// </summary>
+        public void SetStateVector(Complex[] vector)
+        {
+            ThrowIfDisposed();
+            if (vector == null) throw new ArgumentNullException(nameof(vector));
+            if (vector.Length != Dimension)
+                throw new ArgumentException($"vector.Length must be {Dimension}.", nameof(vector));
+
+            var real = new double[Dimension];
+            var imag = new double[Dimension];
+            for (int i = 0; i < Dimension; i++)
+            {
+                real[i] = vector[i].Real;
+                imag[i] = vector[i].Imaginary;
+            }
+            NativeMethods.qulacs_state_set_vector(_handle, real, imag, (ulong)Dimension);
+        }
+
+        /// <summary>
         /// Returns the full state vector as an array of complex amplitudes.
         /// Length is 2^QubitCount.
         /// </summary>

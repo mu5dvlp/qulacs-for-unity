@@ -31,6 +31,10 @@ QULACS_UNITY_API void         qulacs_state_set_haar_random_state_seed(void* stat
  * real_out[i] = Re(amplitude[i]), imag_out[i] = Im(amplitude[i]) */
 QULACS_UNITY_API void         qulacs_state_get_vector(void* state, double* real_out, double* imag_out, uint64_t length);
 
+/* Loads an arbitrary state vector from caller-supplied arrays of length (1 << qubit_count).
+ * The vector need not be normalised beforehand. */
+QULACS_UNITY_API void         qulacs_state_set_vector(void* state, const double* real_in, const double* imag_in, uint64_t length);
+
 QULACS_UNITY_API double       qulacs_state_get_zero_probability(void* state, uint32_t qubit_index);
 QULACS_UNITY_API double       qulacs_state_get_squared_norm(void* state);
 

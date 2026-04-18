@@ -73,6 +73,17 @@ double qulacs_state_get_squared_norm(void* state) {
     return as_state(state)->get_squared_norm();
 }
 
+void qulacs_state_set_vector(void* state, const double* real_in, const double* imag_in, uint64_t length) {
+    QuantumState* s = as_state(state);
+    uint64_t dim = 1ULL << s->qubit_count;
+    uint64_t count = (length < dim) ? length : dim;
+    std::vector<CPPCTYPE> vec(dim, CPPCTYPE(0.0, 0.0));
+    for (uint64_t i = 0; i < count; ++i) {
+        vec[i] = CPPCTYPE(real_in[i], imag_in[i]);
+    }
+    s->load(vec);
+}
+
 void qulacs_state_sampling(void* state, uint32_t count, uint64_t* results_out) {
     auto results = as_state(state)->sampling(static_cast<UINT>(count));
     for (size_t i = 0; i < results.size() && i < count; ++i) {
