@@ -1,0 +1,118 @@
+# com.mu5dvlp.qulacs
+
+Unity native plugin package that wraps **Qulacs** — a high-performance C++ quantum circuit simulator.
+
+## Requirements
+
+- Unity 6 (6000.4.1f1 LTS) or later
+- Windows x86_64 (macOS / Android ARM64 / iOS planned)
+
+## Installation
+
+Add the package via the Unity Package Manager using the local path:
+
+```
+Packages/com.mu5dvlp.qulacs
+```
+
+Or reference it in `Packages/manifest.json`:
+
+```json
+{
+  "dependencies": {
+    "com.mu5dvlp.qulacs": "file:../Packages/com.mu5dvlp.qulacs"
+  }
+}
+```
+
+## Quick Start
+
+```csharp
+using Mu5dvlp.Qulacs;
+
+// Create a 2-qubit Bell state
+using var state = new QuantumState(2);
+using var circuit = new QuantumCircuit(2);
+
+circuit.H(0).CNOT(0, 1);
+circuit.UpdateQuantumState(state);
+
+// Inspect the state vector
+var vector = state.GetStateVector();   // Complex[4]
+
+// Sample 1024 times
+var samples = state.Sampling(1024);    // ulong[1024]
+```
+
+## API Reference
+
+### QuantumState
+
+```csharp
+new QuantumState(int qubitCount)   // IDisposable
+```
+
+| Member | Description |
+|---|---|
+| `QubitCount` | Number of qubits |
+| `Dimension` | 2^QubitCount |
+| `SetZeroState()` | Reset to \|0…0⟩ |
+| `SetComputationalBasis(ulong)` | Set to a specific basis state |
+| `SetHaarRandomState()` | Set to a Haar-random state |
+| `SetHaarRandomState(uint seed)` | Reproducible Haar-random state |
+| `GetStateVector()` → `Complex[]` | Full state vector (length = Dimension) |
+| `GetZeroProbability(int qubit)` | P(qubit = \|0⟩) |
+| `GetSquaredNorm()` | Squared norm (≈ 1 for normalised states) |
+| `Sampling(int count)` → `ulong[]` | Measure `count` times |
+| `Sampling(int count, uint seed)` → `ulong[]` | Reproducible sampling |
+
+### QuantumCircuit
+
+```csharp
+new QuantumCircuit(int qubitCount)  // IDisposable, fluent builder
+```
+
+All gate methods return `this` to allow method chaining.
+
+| Member | Description |
+|---|---|
+| `QubitCount` | Number of qubits |
+| `GateCount` | Number of gates currently in the circuit |
+| `UpdateQuantumState(QuantumState)` | Apply the circuit to a state |
+
+**Single-qubit gates:** `H`, `X`, `Y`, `Z`, `S`, `Sdag`, `T`, `Tdag`, `Identity`
+
+**Rotation gates:** `RX(qubit, angle)`, `RY(qubit, angle)`, `RZ(qubit, angle)`
+
+> **Convention:** Qulacs defines R{X,Y,Z}(θ) = exp(+iθP/2), which is the **opposite sign** from the standard physics convention exp(−iθP/2).
+
+**Two-qubit gates:** `CNOT(control, target)`, `CZ(control, target)`, `SWAP(qubit0, qubit1)`
+
+**Measurement:** `Measure(qubit, registerAddress = 0)`
+
+## Building the Native DLL
+
+The prebuilt `qulacs_unity.dll` is included for Windows x86_64. To rebuild it from source:
+
+```bash
+cd Packages/com.mu5dvlp.qulacs
+
+make build        # full build: fetch-qulacs → build-qulacs → build-dll → deploy-dll
+make build-dll    # wrapper only (Qulacs already built)
+make deploy-dll   # copy DLL to Runtime/Plugins only
+```
+
+Requires CMake (bundled with Visual Studio 2022) and a C++17 compiler.
+
+## Architecture
+
+```
+Unity C# (Mu5dvlp.Qulacs)
+    └── P/Invoke
+        └── qulacs_unity.dll  (extern "C" C++ wrapper)
+            └── Qulacs C++ library
+```
+
+## License
+
+See `LICENSE` for details. Qulacs is licensed under the MIT License.
