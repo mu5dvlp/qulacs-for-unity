@@ -463,14 +463,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94fe85e314d5f3a4b9495a08acf0f671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Qbit
-  alpha:
-    magnitude: 1
-    negative: 0
-    imaginary: 0
-  beta:
-    magnitude: 0
-    negative: 0
-    imaginary: 0
+  thetaDeg: 0
+  alphaNegative: 0
+  alphaImaginary: 0
+  betaNegative: 0
+  betaImaginary: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
