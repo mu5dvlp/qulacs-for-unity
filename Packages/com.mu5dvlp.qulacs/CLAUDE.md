@@ -6,7 +6,7 @@ Unity native plugin package wrapping Qulacs (C++ quantum circuit simulator).
 
 - C# namespace: `Mu5dvlp.Qulacs`
 - Native library name: `qulacs_unity` (loaded via P/Invoke)
-- **Qulacs rotation gate convention**: `R{X,Y,Z}(θ) = exp(+iθP/2)` — opposite sign from the standard physics convention `exp(-iθP/2)`. Tests and docs must reflect Qulacs' convention, not the standard one.
+- **Rotation gate convention**: `R{X,Y,Z}(θ) = exp(+iθP/2)` — opposite sign from the standard `exp(−iθP/2)`
 
 ## Structure
 
@@ -17,6 +17,8 @@ Runtime/
   QuantumState.cs             # public API
   QuantumCircuit.cs           # public API
   Plugins/Windows/x86_64/     # qulacs_unity.dll
+docs/
+  api-reference.md            # full API reference
 native~/
   src/qulacs_unity.h          # C API
   src/qulacs_unity.cpp        # extern "C" wrapper
@@ -28,20 +30,19 @@ Tests/
   QuantumCircuitTests.cs
 ```
 
-## Public API
+## Unity-side scripts (Assets/)
 
-### QuantumState
-`new QuantumState(int qubitCount)` — IDisposable  
-Methods: `SetZeroState()`, `SetComputationalBasis(ulong)`, `SetHaarRandomState()`, `SetHaarRandomState(uint seed)`, `SetStateVector(Complex[])`, `GetStateVector()` → `Complex[]`, `GetZeroProbability(int)`, `GetSquaredNorm()`, `Sampling(int)`, `Sampling(int, uint seed)` → `ulong[]`
+These MonoBehaviours consume this package:
 
-### QuantumCircuit
-`new QuantumCircuit(int qubitCount)` — IDisposable, fluent builder (all gate methods return `this`)  
-`UpdateQuantumState(QuantumState state)`
+| Script | Role |
+|---|---|
+| `QbitObject` | Holds a 1-qubit `QuantumState`; colors its `Renderer` via HSV (hue = β phase, saturation = P(\|1⟩)) |
+| `QuantumGateObject` | Holds a `GateType` (X/Y/Z/H); colors its `Renderer` by gate type |
+| `QuantumCircuitObject` | Holds `List<QbitObject>` and `List<GateEntry>` (gate + qubit index pairs) |
 
-Single-qubit: `H`, `X`, `Y`, `Z`, `S`, `Sdag`, `T`, `Tdag`, `Identity`  
-Rotation: `RX(qubit, angle)`, `RY(qubit, angle)`, `RZ(qubit, angle)` — see gate convention above  
-Two-qubit: `CNOT(control, target)`, `CZ(control, target)`, `SWAP(qubit0, qubit1)`  
-Measurement: `Measure(qubit, registerAddress=0)`
+## API reference
+
+See [`docs/api-reference.md`](docs/api-reference.md).
 
 ## Building the DLL
 
@@ -52,8 +53,8 @@ make build-dll      # wrapper only (Qulacs already built)
 make deploy-dll     # copy DLL only
 ```
 
-cmake is at `C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe`
+cmake: `C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe`
 
-Qulacs and Boost are staged under `native~/extern/` (gitignored).
-Built libs are in `native~/build/lib/`.
-Install prefix: `native~/extern/qulacs-install/`.
+- Source/deps: `native~/extern/` (gitignored)
+- Built libs: `native~/build/lib/`
+- Install prefix: `native~/extern/qulacs-install/`
