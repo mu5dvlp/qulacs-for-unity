@@ -173,12 +173,20 @@ def check_coverage(entries: list[ApiEntry], wrapped: set[str]) -> None:
             e.covered = True
 
 
+def _colorize(text: str, code: str, use_color: bool) -> str:
+    return f"\033[{code}m{text}\033[0m" if use_color else text
+
+
 def print_report(entries: list[ApiEntry], out=sys.stdout) -> None:
     in_scope = [e for e in entries if e.expected_wrapper is not None]
     out_scope = [e for e in entries if e.expected_wrapper is None]
     covered = [e for e in in_scope if e.covered]
     uncovered = [e for e in in_scope if not e.covered]
     pct = len(covered) / len(in_scope) * 100 if in_scope else 0.0
+    use_color = hasattr(out, "isatty") and out.isatty()
+
+    def c(text, code):
+        return _colorize(text, code, use_color)
 
     def w(line=""):
         print(line, file=out)
@@ -187,7 +195,8 @@ def print_report(entries: list[ApiEntry], out=sys.stdout) -> None:
     w("  Qulacs → qulacs_unity wrapper coverage")
     w("=" * 64)
     w(f"  In-scope:      {len(in_scope):3d}")
-    w(f"  Covered:       {len(covered):3d}  ({pct:.1f}%)")
+    pct_str = c(f"{pct:.1f}%", "32" if pct >= 80 else "33" if pct >= 50 else "31")
+    w(f"  Covered:       {len(covered):3d}  ({pct_str})")
     w(f"  Uncovered:     {len(uncovered):3d}  ← gaps to fill")
     w(f"  Out-of-scope:  {len(out_scope):3d}  (skipped)")
     w()
@@ -195,12 +204,12 @@ def print_report(entries: list[ApiEntry], out=sys.stdout) -> None:
     if uncovered:
         w("--- Uncovered (gaps) ---")
         for e in sorted(uncovered, key=lambda x: x.symbol):
-            w(f"  MISS  {e.symbol}")
+            w(f"  {c('MISS', '31')}  {e.symbol}")
         w()
 
     w("--- Covered ---")
     for e in sorted(covered, key=lambda x: x.symbol):
-        w(f"  OK    {e.symbol}")
+        w(f"  {c('OK', '32')}    {e.symbol}")
 
     w("=" * 64)
 
@@ -246,10 +255,9 @@ def main() -> None:
         covered = [e for e in in_scope if e.covered]
         pct = len(covered) / len(in_scope) * 100 if in_scope else 0.0
         if pct < args.min_coverage:
-            print(
-                f"\nFAIL: coverage {pct:.1f}% is below required {args.min_coverage}%",
-                file=sys.stderr,
-            )
+            use_color = sys.stderr.isatty()
+            msg = _colorize(f"FAIL: coverage {pct:.1f}% is below required {args.min_coverage}%", "31", use_color)
+            print(f"\n{msg}", file=sys.stderr)
             sys.exit(1)
 
 
