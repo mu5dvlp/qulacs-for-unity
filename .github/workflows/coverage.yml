@@ -1,0 +1,45 @@
+name: API Coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  coverage:
+    name: Qulacs wrapper coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Create venv and install deps
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install -r tools/requirements.txt
+
+      - name: Fetch Qulacs headers (sparse)
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/qulacs/qulacs.git /tmp/qulacs
+          cd /tmp/qulacs && git sparse-checkout set src/cppsim
+
+      - name: Run coverage check
+        run: |
+          .venv/bin/python tools/check_coverage.py \
+            --qulacs-src /tmp/qulacs/src/cppsim \
+            --report coverage-report.txt
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-coverage-report
+          path: coverage-report.txt

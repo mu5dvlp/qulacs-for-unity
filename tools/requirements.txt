@@ -1,0 +1,2 @@
+# check_coverage.py uses stdlib only; no third-party packages required.
+# Add dependencies here if tools expand.
