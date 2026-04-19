@@ -63,3 +63,8 @@ crashlytics-build.properties
 ehthumbs.db
 Thumbs.db
 Desktop.ini
+
+# Python
+.venv/
+__pycache__/
+*.pyc
