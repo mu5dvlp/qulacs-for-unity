@@ -112,6 +112,48 @@ namespace Mu5dvlp.Qulacs
             return this;
         }
 
+        public QuantumCircuit SqrtX(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_sqrtX_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit SqrtXdag(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_sqrtXdag_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit SqrtY(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_sqrtY_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit SqrtYdag(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_sqrtYdag_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit P0(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_P0_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
+        public QuantumCircuit P1(int qubitIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_P1_gate(_handle, (uint)qubitIndex);
+            return this;
+        }
+
         // --- Rotation gates ---
 
         public QuantumCircuit RX(int qubitIndex, double angle)
@@ -132,6 +174,27 @@ namespace Mu5dvlp.Qulacs
         {
             ThrowIfDisposed();
             NativeMethods.qulacs_circuit_add_RZ_gate(_handle, (uint)qubitIndex, angle);
+            return this;
+        }
+
+        public QuantumCircuit U1(int qubitIndex, double lambda)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_U1_gate(_handle, (uint)qubitIndex, lambda);
+            return this;
+        }
+
+        public QuantumCircuit U2(int qubitIndex, double phi, double lambda)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_U2_gate(_handle, (uint)qubitIndex, phi, lambda);
+            return this;
+        }
+
+        public QuantumCircuit U3(int qubitIndex, double theta, double phi, double lambda)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_add_U3_gate(_handle, (uint)qubitIndex, theta, phi, lambda);
             return this;
         }
 
@@ -170,6 +233,45 @@ namespace Mu5dvlp.Qulacs
             NativeMethods.qulacs_circuit_add_measurement_gate(
                 _handle, (uint)qubitIndex, (uint)registerAddress);
             return this;
+        }
+
+        // --- Circuit inspection ---
+
+        /// <summary>Returns the depth (critical path length) of the circuit.</summary>
+        public int CalculateDepth()
+        {
+            ThrowIfDisposed();
+            return (int)NativeMethods.qulacs_circuit_calculate_depth(_handle);
+        }
+
+        /// <summary>Returns true if all gates in the circuit are Clifford gates.</summary>
+        public bool IsClifford()
+        {
+            ThrowIfDisposed();
+            return NativeMethods.qulacs_circuit_is_Clifford(_handle) != 0;
+        }
+
+        /// <summary>Returns true if all gates in the circuit are Gaussian gates.</summary>
+        public bool IsGaussian()
+        {
+            ThrowIfDisposed();
+            return NativeMethods.qulacs_circuit_is_Gaussian(_handle) != 0;
+        }
+
+        // --- Circuit mutation ---
+
+        /// <summary>Removes the gate at the given index.</summary>
+        public void RemoveGate(int index)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_remove_gate(_handle, (uint)index);
+        }
+
+        /// <summary>Moves the gate at <paramref name="fromIndex"/> to <paramref name="toIndex"/>.</summary>
+        public void MoveGate(int fromIndex, int toIndex)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_circuit_move_gate(_handle, (uint)fromIndex, (uint)toIndex);
         }
 
         private void ThrowIfDisposed()

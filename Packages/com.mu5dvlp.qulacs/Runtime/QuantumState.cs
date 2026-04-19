@@ -107,6 +107,13 @@ namespace Mu5dvlp.Qulacs
             return NativeMethods.qulacs_state_get_zero_probability(_handle, (uint)qubitIndex);
         }
 
+        /// <summary>Returns the von Neumann entropy of the state.</summary>
+        public double GetEntropy()
+        {
+            ThrowIfDisposed();
+            return NativeMethods.qulacs_state_get_entropy(_handle);
+        }
+
         /// <summary>Returns the squared norm of the state vector (should be ~1 for normalized states).</summary>
         public double GetSquaredNorm()
         {

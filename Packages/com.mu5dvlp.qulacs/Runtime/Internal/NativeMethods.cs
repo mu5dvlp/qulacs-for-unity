@@ -123,5 +123,52 @@ namespace Mu5dvlp.Qulacs.Internal
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void qulacs_circuit_add_measurement_gate(
             IntPtr circuit, uint qubitIndex, uint registerAddress);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_sqrtX_gate(IntPtr circuit, uint qubitIndex);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_sqrtXdag_gate(IntPtr circuit, uint qubitIndex);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_sqrtY_gate(IntPtr circuit, uint qubitIndex);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_sqrtYdag_gate(IntPtr circuit, uint qubitIndex);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_P0_gate(IntPtr circuit, uint qubitIndex);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_P1_gate(IntPtr circuit, uint qubitIndex);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_U1_gate(IntPtr circuit, uint qubitIndex, double lambda);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_U2_gate(IntPtr circuit, uint qubitIndex, double phi, double lambda);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_add_U3_gate(IntPtr circuit, uint qubitIndex, double theta, double phi, double lambda);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint qulacs_circuit_calculate_depth(IntPtr circuit);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint qulacs_circuit_is_Clifford(IntPtr circuit);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint qulacs_circuit_is_Gaussian(IntPtr circuit);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_remove_gate(IntPtr circuit, uint index);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_circuit_move_gate(IntPtr circuit, uint fromIndex, uint toIndex);
+
+        // --- QuantumState (additional) ---
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern double qulacs_state_get_entropy(IntPtr state);
     }
 }

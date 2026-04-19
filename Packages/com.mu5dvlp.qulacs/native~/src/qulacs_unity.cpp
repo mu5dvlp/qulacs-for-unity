@@ -194,4 +194,69 @@ void qulacs_circuit_add_measurement_gate(void* circuit, uint32_t qubit_index, ui
     as_circuit(circuit)->add_gate(gate::Measurement(qubit_index, register_address));
 }
 
+// Additional single-qubit gates
+void qulacs_circuit_add_sqrtX_gate(void* circuit, uint32_t qubit_index) {
+    as_circuit(circuit)->add_gate(gate::sqrtX(qubit_index));
+}
+
+void qulacs_circuit_add_sqrtXdag_gate(void* circuit, uint32_t qubit_index) {
+    as_circuit(circuit)->add_gate(gate::sqrtXdag(qubit_index));
+}
+
+void qulacs_circuit_add_sqrtY_gate(void* circuit, uint32_t qubit_index) {
+    as_circuit(circuit)->add_gate(gate::sqrtY(qubit_index));
+}
+
+void qulacs_circuit_add_sqrtYdag_gate(void* circuit, uint32_t qubit_index) {
+    as_circuit(circuit)->add_gate(gate::sqrtYdag(qubit_index));
+}
+
+void qulacs_circuit_add_P0_gate(void* circuit, uint32_t qubit_index) {
+    as_circuit(circuit)->add_gate(gate::P0(qubit_index));
+}
+
+void qulacs_circuit_add_P1_gate(void* circuit, uint32_t qubit_index) {
+    as_circuit(circuit)->add_gate(gate::P1(qubit_index));
+}
+
+// IBM-convention rotation gates
+void qulacs_circuit_add_U1_gate(void* circuit, uint32_t qubit_index, double lambda) {
+    as_circuit(circuit)->add_gate(gate::U1(qubit_index, lambda));
+}
+
+void qulacs_circuit_add_U2_gate(void* circuit, uint32_t qubit_index, double phi, double lambda) {
+    as_circuit(circuit)->add_gate(gate::U2(qubit_index, phi, lambda));
+}
+
+void qulacs_circuit_add_U3_gate(void* circuit, uint32_t qubit_index, double theta, double phi, double lambda) {
+    as_circuit(circuit)->add_gate(gate::U3(qubit_index, theta, phi, lambda));
+}
+
+// Circuit inspection
+uint32_t qulacs_circuit_calculate_depth(void* circuit) {
+    return static_cast<uint32_t>(as_circuit(circuit)->calculate_depth());
+}
+
+uint32_t qulacs_circuit_is_Clifford(void* circuit) {
+    return as_circuit(circuit)->is_Clifford() ? 1u : 0u;
+}
+
+uint32_t qulacs_circuit_is_Gaussian(void* circuit) {
+    return as_circuit(circuit)->is_Gaussian() ? 1u : 0u;
+}
+
+// Circuit mutation
+void qulacs_circuit_remove_gate(void* circuit, uint32_t index) {
+    as_circuit(circuit)->remove_gate(static_cast<UINT>(index));
+}
+
+void qulacs_circuit_move_gate(void* circuit, uint32_t from_index, uint32_t to_index) {
+    as_circuit(circuit)->move_gate(static_cast<UINT>(from_index), static_cast<UINT>(to_index));
+}
+
+// QuantumState (additional)
+double qulacs_state_get_entropy(void* state) {
+    return as_state(state)->get_entropy();
+}
+
 } // extern "C"

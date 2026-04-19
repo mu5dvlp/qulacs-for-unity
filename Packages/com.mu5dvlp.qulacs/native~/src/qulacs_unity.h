@@ -78,6 +78,33 @@ QULACS_UNITY_API void         qulacs_circuit_add_SWAP_gate(void* circuit, uint32
 /* Measurement gate — result written to classical register at `register_address` */
 QULACS_UNITY_API void         qulacs_circuit_add_measurement_gate(void* circuit, uint32_t qubit_index, uint32_t register_address);
 
+/* Additional single-qubit gates */
+QULACS_UNITY_API void         qulacs_circuit_add_sqrtX_gate(void* circuit, uint32_t qubit_index);
+QULACS_UNITY_API void         qulacs_circuit_add_sqrtXdag_gate(void* circuit, uint32_t qubit_index);
+QULACS_UNITY_API void         qulacs_circuit_add_sqrtY_gate(void* circuit, uint32_t qubit_index);
+QULACS_UNITY_API void         qulacs_circuit_add_sqrtYdag_gate(void* circuit, uint32_t qubit_index);
+QULACS_UNITY_API void         qulacs_circuit_add_P0_gate(void* circuit, uint32_t qubit_index);
+QULACS_UNITY_API void         qulacs_circuit_add_P1_gate(void* circuit, uint32_t qubit_index);
+
+/* IBM-convention rotation gates */
+QULACS_UNITY_API void         qulacs_circuit_add_U1_gate(void* circuit, uint32_t qubit_index, double lambda);
+QULACS_UNITY_API void         qulacs_circuit_add_U2_gate(void* circuit, uint32_t qubit_index, double phi, double lambda);
+QULACS_UNITY_API void         qulacs_circuit_add_U3_gate(void* circuit, uint32_t qubit_index, double theta, double phi, double lambda);
+
+/* Circuit inspection */
+QULACS_UNITY_API uint32_t     qulacs_circuit_calculate_depth(void* circuit);
+QULACS_UNITY_API uint32_t     qulacs_circuit_is_Clifford(void* circuit);
+QULACS_UNITY_API uint32_t     qulacs_circuit_is_Gaussian(void* circuit);
+
+/* Circuit mutation */
+QULACS_UNITY_API void         qulacs_circuit_remove_gate(void* circuit, uint32_t index);
+QULACS_UNITY_API void         qulacs_circuit_move_gate(void* circuit, uint32_t from_index, uint32_t to_index);
+
+/* -------------------------------------------------------------------------
+ * QuantumState (additional)
+ * -------------------------------------------------------------------------*/
+QULACS_UNITY_API double       qulacs_state_get_entropy(void* state);
+
 #ifdef __cplusplus
 }
 #endif
