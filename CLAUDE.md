@@ -39,3 +39,17 @@ Plugin paths per platform:
 ## C# Scripts
 
 Scripts live in `Assets/`. Unity auto-generates `.csproj` — do not edit manually.
+
+## Qulacs Resources
+
+Key files for coverage analysis and API work:
+
+| File | Role |
+|---|---|
+| `Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h` | C API declarations (all `extern "C"` exports) |
+| `Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.cpp` | extern "C" wrapper implementation |
+| `Packages/com.mu5dvlp.qulacs/Runtime/Internal/NativeMethods.cs` | P/Invoke declarations (C# side) |
+| `Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll` | Built DLL (Windows) |
+| `Packages/com.mu5dvlp.qulacs/docs/api-reference.md` | Full API reference |
+| `Packages/com.mu5dvlp.qulacs/native~/extern/` | Qulacs C++ source and deps (gitignored) |
+| `Packages/com.mu5dvlp.qulacs/native~/build/lib/` | Built Qulacs libs |
