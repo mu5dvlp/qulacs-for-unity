@@ -1,11 +1,17 @@
 using UnityEngine;
 
-public enum GateType { X, Y, Z, H }
+public enum GateType { X, Y, Z, H, CNOT }
 
 public class QuantumGateObject : MonoBehaviour
 {
     [SerializeField] private GateType m_gateType;
-    public GateType GateType => m_gateType;
+    [SerializeField] private GameObject wire;
+
+    public GateType GateType
+    {
+        get => m_gateType;
+        set { m_gateType = value; ApplyColor(); }
+    }
 
     private Renderer _renderer;
 
@@ -14,23 +20,28 @@ public class QuantumGateObject : MonoBehaviour
         _renderer = GetComponent<Renderer>();
     }
 
-    void Start()
+    void Start() => ApplyColor();
+
+    void ApplyColor()
     {
         if (_renderer == null) return;
-        switch (m_gateType)
+        _renderer.material.color = m_gateType switch
         {
-            case GateType.X:
-                _renderer.material.color = Color.red;
-                break;
-            case GateType.Y:
-                _renderer.material.color = Color.green;
-                break;
-            case GateType.Z:
-                _renderer.material.color = Color.blue;
-                break;
-            case GateType.H:
-                _renderer.material.color = Color.yellow;
-                break;
-        }
+            GateType.X => Color.red,
+            GateType.Y => Color.green,
+            GateType.Z => Color.blue,
+            GateType.H => Color.yellow,
+            GateType.CNOT => Color.red,
+            _ => Color.white,
+        };
+    }
+
+    // signedHeight > 0: extends toward +y (control above target), < 0: toward -y, 0: hidden
+    public void SetwireHeight(float signedHeight)
+    {
+        if (wire == null) return;
+        var t = wire.transform;
+        t.localScale = new Vector3(t.localScale.x, Mathf.Abs(signedHeight), t.localScale.z);
+        t.localPosition = new Vector3(0, signedHeight * 0.5f, 0);
     }
 }

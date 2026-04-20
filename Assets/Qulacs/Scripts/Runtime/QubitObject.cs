@@ -2,8 +2,9 @@ using System;
 using Mu5dvlp.Qulacs;
 using UnityEngine;
 
-public class QbitObject : MonoBehaviour
+public class QubitObject : MonoBehaviour
 {
+    [SerializeField] bool useColor = false;
     public QuantumState State { get; private set; }
 
     private Renderer _renderer;
@@ -22,7 +23,17 @@ public class QbitObject : MonoBehaviour
 
     void Update()
     {
+        UpdateColor();
+    }
+
+    void UpdateColor()
+    {
         if (State == null || _renderer == null) return;
+        if (!useColor)
+        {
+            _renderer.material.color = Color.white;
+            return;
+        }
 
         var v = State.GetStateVector();
         var beta = v[1];
