@@ -168,6 +168,103 @@ namespace Mu5dvlp.Qulacs.Tests
                 Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
         }
 
+        // --- CalculateDepth ---
+
+        [Test]
+        public void CalculateDepth_SerialGates_ReturnsGateCount()
+        {
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0).X(0).Z(0);
+            Assert.AreEqual(3, circuit.CalculateDepth());
+        }
+
+        [Test]
+        public void CalculateDepth_ParallelGates_ReturnsOne()
+        {
+            using var circuit = new QuantumCircuit(2);
+            circuit.H(0).H(1);
+            Assert.AreEqual(1, circuit.CalculateDepth());
+        }
+
+        // --- IsClifford ---
+
+        [Test]
+        public void IsClifford_HAndCNOT_ReturnsTrue()
+        {
+            using var circuit = new QuantumCircuit(2);
+            circuit.H(0).CNOT(0, 1);
+            Assert.IsTrue(circuit.IsClifford());
+        }
+
+        [Test]
+        public void IsClifford_WithArbitraryRotation_ReturnsFalse()
+        {
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0).RY(0, 0.1);
+            Assert.IsFalse(circuit.IsClifford());
+        }
+
+        // --- IsGaussian ---
+
+        [Test]
+        public void IsGaussian_EmptyCircuit_ReturnsTrue()
+        {
+            using var circuit = new QuantumCircuit(1);
+            Assert.IsTrue(circuit.IsGaussian());
+        }
+
+        [Test]
+        public void IsGaussian_WithHGate_ReturnsFalse()
+        {
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0);
+            Assert.IsFalse(circuit.IsGaussian());
+        }
+
+        // --- RemoveGate ---
+
+        [Test]
+        public void RemoveGate_DecreasesGateCount()
+        {
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0).X(0).Z(0);
+            Assert.AreEqual(3, circuit.GateCount);
+            circuit.RemoveGate(1);
+            Assert.AreEqual(2, circuit.GateCount);
+        }
+
+        [Test]
+        public void RemoveGate_AffectsCircuitBehavior()
+        {
+            // H, X, Z → remove X (index 1) → H then Z
+            // Z(H|0>) = Z|+> = |->: [1/√2, -1/√2]
+            using var state = new QuantumState(1);
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0).X(0).Z(0);
+            circuit.RemoveGate(1);
+            circuit.UpdateQuantumState(state);
+            var v = state.GetStateVector();
+            Assert.AreEqual( Inv_Sqrt2, v[0].Real, Eps);
+            Assert.AreEqual(-Inv_Sqrt2, v[1].Real, Eps);
+        }
+
+        // --- MoveGate ---
+
+        [Test]
+        public void MoveGate_ChangesGateOrder()
+        {
+            // Circuit: H(0), Z(0). MoveGate(0, 1) → order becomes Z(0), H(0)
+            // Z|0> = |0>, H|0> = |+>: [1/√2, +1/√2]  (not |->: [1/√2, -1/√2])
+            using var state = new QuantumState(1);
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0).Z(0);
+            circuit.MoveGate(0, 1);
+            circuit.UpdateQuantumState(state);
+            var v = state.GetStateVector();
+            Assert.AreEqual(Inv_Sqrt2, v[0].Real, Eps);
+            Assert.AreEqual(Inv_Sqrt2, v[1].Real, Eps);
+        }
+
         // --- Dispose ---
 
         [Test]

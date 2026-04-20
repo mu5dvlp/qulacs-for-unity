@@ -143,6 +143,55 @@ namespace Mu5dvlp.Qulacs.Tests
                 Assert.AreEqual(a[i], b[i]);
         }
 
+        // --- SetStateVector ---
+
+        [Test]
+        public void SetStateVector_RoundTrip_PreservesAmplitudes()
+        {
+            using var state = new QuantumState(1);
+            var input = new Complex[] { new Complex(Inv_Sqrt2, 0), new Complex(0, Inv_Sqrt2) };
+            state.SetStateVector(input);
+            var output = state.GetStateVector();
+            for (int i = 0; i < input.Length; i++)
+            {
+                Assert.AreEqual(input[i].Real,      output[i].Real,      Eps);
+                Assert.AreEqual(input[i].Imaginary, output[i].Imaginary, Eps);
+            }
+        }
+
+        // --- GetEntropy ---
+
+        [Test]
+        public void GetEntropy_ZeroState_IsZero()
+        {
+            using var state = new QuantumState(2);
+            Assert.AreEqual(0.0, state.GetEntropy(), Eps);
+        }
+
+        [Test]
+        public void GetEntropy_EqualSuperposition_IsPositive()
+        {
+            using var state = new QuantumState(1);
+            using var circuit = new QuantumCircuit(1);
+            circuit.H(0);
+            circuit.UpdateQuantumState(state);
+            Assert.Greater(state.GetEntropy(), 0.0);
+        }
+
+        // --- Sampling (no seed) ---
+
+        [Test]
+        public void Sampling_NoSeed_ReturnsCorrectCountAndRange()
+        {
+            using var state = new QuantumState(3);
+            state.SetHaarRandomState(seed: 0);
+            var results = state.Sampling(50);
+            Assert.AreEqual(50, results.Length);
+            ulong maxIndex = (ulong)state.Dimension;
+            foreach (var r in results)
+                Assert.Less(r, maxIndex);
+        }
+
         // --- Dispose ---
 
         [Test]
