@@ -2,9 +2,27 @@
   "name": "com.mu5dvlp.qulacs",
   "version": "0.1.0",
   "displayName": "Qulacs",
-  "description": "A Unity native plugin wrapper for Qulacs, the C++ quantum circuit simulator.",
+  "description": "Unity native plugin wrapper for Qulacs, the high-performance C++ quantum circuit simulator. Provides an idiomatic C# API (QuantumState, QuantumCircuit) backed by a thin extern \"C\" layer loaded via P/Invoke.",
   "unity": "6000.0",
+  "unityRelease": "47f1",
+  "keywords": [
+    "quantum",
+    "qulacs",
+    "simulator",
+    "native-plugin",
+    "pinvoke"
+  ],
   "author": {
-    "name": "mu5dvlp"
+    "name": "mu5dvlp",
+    "url": "https://github.com/mu5dvlp"
+  },
+  "license": "MIT",
+  "licensesUrl": "https://github.com/mu5dvlp/qulacs-toolkit/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md",
+  "documentationUrl": "https://github.com/mu5dvlp/qulacs-toolkit/blob/main/Packages/com.mu5dvlp.qulacs/docs/api-reference.md",
+  "changelogUrl": "https://github.com/mu5dvlp/qulacs-toolkit/blob/main/Packages/com.mu5dvlp.qulacs/CHANGELOG.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mu5dvlp/qulacs-toolkit.git",
+    "directory": "Packages/com.mu5dvlp.qulacs"
   }
 }

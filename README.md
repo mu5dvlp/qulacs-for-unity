@@ -32,17 +32,26 @@ Unity C# (Mu5dvlp.Qulacs)
 
 ### Installation
 
-Add to your project's `Packages/manifest.json`:
+Install via Unity Package Manager using the git URL:
+
+```
+https://github.com/mu5dvlp/qulacs-toolkit.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0
+```
+
+Or add to your project's `Packages/manifest.json`:
 
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "file:../path/to/com.mu5dvlp.qulacs"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-toolkit.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0"
   }
 }
 ```
 
-Or clone this repository and open the Unity project directly — the package is embedded under `Packages/com.mu5dvlp.qulacs/`.
+Replace `v0.1.0` with the desired release tag, or omit `#v0.1.0` to track `main`.
+`git` must be on the PATH — Unity invokes it internally.
+
+Alternatively, clone this repository and open the Unity project directly — the package is embedded under `Packages/com.mu5dvlp.qulacs/`.
 
 ## Building the Native Plugin
 
