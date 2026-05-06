@@ -71,6 +71,12 @@ cmake --build build --config Release
 
 The output `qulacs_unity.dll` should be copied to `Runtime/Plugins/Windows/x86_64/`.
 
+## Contact
+
+- Personal: mu5dvlp@gmail.com
+- Work: dvlpwork@gmail.com
+- X: [@Yugo_dvlp](https://x.com/Yugo_dvlp)
+
 ## License
 
 The wrapper code in this repository is MIT licensed. Qulacs itself is licensed under MIT. See [Qulacs license](https://github.com/qulacs/qulacs/blob/main/LICENSE) for details.

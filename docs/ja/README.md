@@ -71,6 +71,12 @@ cmake --build build --config Release
 
 生成された `qulacs_unity.dll` を `Runtime/Plugins/Windows/x86_64/` にコピーしてください。
 
+## 連絡先
+
+- 個人用: mu5dvlp@gmail.com
+- 仕事用: dvlpwork@gmail.com
+- X: [@Yugo_dvlp](https://x.com/Yugo_dvlp)
+
 ## ライセンス
 
 このリポジトリのラッパーコードは MIT ライセンスです。Qulacs 本体も MIT ライセンスです。詳細は [Qulacs ライセンス](https://github.com/qulacs/qulacs/blob/main/LICENSE) を参照してください。

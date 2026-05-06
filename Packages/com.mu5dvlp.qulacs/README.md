@@ -135,6 +135,12 @@ Unity C# (Mu5dvlp.Qulacs)
             └── Qulacs C++ library
 ```
 
+## Contact
+
+- Personal: mu5dvlp@gmail.com
+- Work: dvlpwork@gmail.com
+- X: [@Yugo_dvlp](https://x.com/Yugo_dvlp)
+
 ## License
 
 See `LICENSE` for details. Qulacs is licensed under the MIT License.
