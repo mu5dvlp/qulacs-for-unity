@@ -54,6 +54,11 @@ crashlytics-build.properties
 # Local settings
 *.local.json
 
+# Test runner output
+test.log
+test-results.xml
+test-results/
+
 # OS
 .DS_Store
 .DS_Store?
