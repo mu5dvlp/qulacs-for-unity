@@ -30,15 +30,20 @@ Tests/
   QuantumCircuitTests.cs
 ```
 
-## Unity-side scripts (Assets/)
+## Unity-side scripts (Assets/Qulacs/Scripts/)
 
 These MonoBehaviours consume this package:
 
 | Script | Role |
 |---|---|
-| `QbitObject` | Holds a 1-qubit `QuantumState`; colors its `Renderer` via HSV (hue = β phase, saturation = P(\|1⟩)) |
-| `QuantumGateObject` | Holds a `GateType` (X/Y/Z/H); colors its `Renderer` by gate type |
-| `QuantumCircuitObject` | Holds `List<QbitObject>` and `List<GateEntry>` (gate + qubit index pairs) |
+| `QubitObject` | Holds a 1-qubit `QuantumState`; optionally colors its `Renderer` via HSV (hue = β phase, saturation = P(\|1⟩)) |
+| `QuantumGateObject` | Holds a `GateType` (X/Y/Z/H/CNOT); colors its `Renderer` by gate type |
+| `QuantumCircuitObject` | Spawns `QubitObject`s and `QuantumGateObject`s from `List<GateEntry>` (gate + control/target indices), runs the circuit, and pushes per-qubit marginal probabilities back to each `QubitObject` |
+| `BlochSphereObject` | Visualises a `QubitObject`'s state as a Bloch-sphere arrow (with transparent shell coloured by phase × P(\|1⟩)) |
+| `QuantumStateSetter` | Inspector helper that writes a 1-qubit state into a `QubitObject` either from Bloch angles (θ, φ) or from raw α/β components |
+| `BellStateDemo` | Builds H(0)·CNOT(0,1), prints the state vector / sampling histogram / per-qubit P(\|0⟩) to the Console (and optional `TMP_Text`) |
+
+Editor scripts live in `Assets/Qulacs/Scripts/Editor/`: `GateEntryDrawer` (custom drawer for `GateEntry`) and `QuantumStateSetterEditor` (mode-aware inspector with an "Apply" button).
 
 ## API reference
 
