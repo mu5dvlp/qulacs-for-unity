@@ -2,9 +2,13 @@
   "name": "Mu5dvlp.Qulacs.Tests",
   "rootNamespace": "Mu5dvlp.Qulacs.Tests",
   "references": [
-    "Mu5dvlp.Qulacs.Runtime"
+    "Mu5dvlp.Qulacs.Runtime",
+    "UnityEngine.TestRunner",
+    "UnityEditor.TestRunner"
   ],
-  "includePlatforms": [],
+  "includePlatforms": [
+    "Editor"
+  ],
   "excludePlatforms": [],
   "allowUnsafeCode": false,
   "overrideReferences": true,
@@ -12,10 +16,9 @@
     "nunit.framework.dll"
   ],
   "autoReferenced": false,
-  "defineConstraints": [],
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
   "versionDefines": [],
-  "noEngineReferences": false,
-  "optionalUnityReferences": [
-    "TestAssemblies"
-  ]
+  "noEngineReferences": false
 }
