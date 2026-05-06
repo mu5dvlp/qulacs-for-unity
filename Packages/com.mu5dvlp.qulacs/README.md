@@ -70,6 +70,7 @@ new QuantumState(int qubitCount)   // IDisposable
 | `GetStateVector()` → `Complex[]` | Full state vector (length = Dimension) |
 | `GetZeroProbability(int qubit)` | P(qubit = \|0⟩) |
 | `GetSquaredNorm()` | Squared norm (≈ 1 for normalised states) |
+| `GetEntropy()` | Von Neumann entropy of the state |
 | `Sampling(int count)` → `ulong[]` | Measure `count` times |
 | `Sampling(int count, uint seed)` → `ulong[]` | Reproducible sampling |
 
@@ -87,15 +88,23 @@ All gate methods return `this` to allow method chaining.
 | `GateCount` | Number of gates currently in the circuit |
 | `UpdateQuantumState(QuantumState)` | Apply the circuit to a state |
 
-**Single-qubit gates:** `H`, `X`, `Y`, `Z`, `S`, `Sdag`, `T`, `Tdag`, `Identity`
+**Single-qubit gates:** `H`, `X`, `Y`, `Z`, `S`, `Sdag`, `T`, `Tdag`, `Identity`, `SqrtX`, `SqrtXdag`, `SqrtY`, `SqrtYdag`, `P0`, `P1`
 
 **Rotation gates:** `RX(qubit, angle)`, `RY(qubit, angle)`, `RZ(qubit, angle)`
 
 > **Convention:** Qulacs defines R{X,Y,Z}(θ) = exp(+iθP/2), which is the **opposite sign** from the standard physics convention exp(−iθP/2).
 
+**General single-qubit unitaries:** `U1(qubit, lambda)`, `U2(qubit, phi, lambda)`, `U3(qubit, theta, phi, lambda)`
+
 **Two-qubit gates:** `CNOT(control, target)`, `CZ(control, target)`, `SWAP(qubit0, qubit1)`
 
 **Measurement:** `Measure(qubit, registerAddress = 0)`
+
+**Circuit inspection:** `CalculateDepth()`, `IsClifford()`, `IsGaussian()`
+
+**Circuit mutation:** `RemoveGate(index)`, `MoveGate(fromIndex, toIndex)`
+
+See [`docs/api-reference.md`](docs/api-reference.md) for the full reference.
 
 ## Building the Native DLL
 

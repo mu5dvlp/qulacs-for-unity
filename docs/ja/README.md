@@ -32,15 +32,24 @@ Unity C# (Mu5dvlp.Qulacs)
 
 ### インストール
 
-プロジェクトの `Packages/manifest.json` に追記してください。
+Unity Package Manager の git URL でインストールできます。
+
+```
+https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0
+```
+
+または、プロジェクトの `Packages/manifest.json` に追記:
 
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "file:../path/to/com.mu5dvlp.qulacs"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0"
   }
 }
 ```
+
+`v0.1.0` を任意のリリースタグに置き換えてください。`#v0.1.0` を省略すると `main` を追跡します。
+`git` コマンドが PATH に通っている必要があります (Unity が内部的に呼び出します)。
 
 あるいはこのリポジトリをクローンして Unity プロジェクトを直接開くことも可能です。パッケージは `Packages/com.mu5dvlp.qulacs/` に埋め込まれています。
 
