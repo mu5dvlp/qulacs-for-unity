@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**quri-toolkit** is a Unity 6 (6000.4.1f1 LTS) project that provides `com.mu5dvlp.qulacs` — a Unity native plugin package wrapping **Qulacs** (C++ quantum circuit simulator).
+**qulacs-for-unity** is a Unity 6 (6000.4.1f1 LTS) project that provides `com.mu5dvlp.qulacs` — a Unity native plugin package wrapping **Qulacs** (C++ quantum circuit simulator).
 
 For package-specific details, see `Packages/com.mu5dvlp.qulacs/CLAUDE.md`.
 

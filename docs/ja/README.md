@@ -1,4 +1,4 @@
-# quri-toolkit
+# qulacs-for-unity
 
 [Qulacs](https://github.com/qulacs/qulacs) — 高性能な C++ 量子回路シミュレータ — を Unity プロジェクトで利用するための Unity パッケージです。
 

@@ -1,4 +1,4 @@
-# quri-toolkit
+# qulacs-for-unity
 
 A Unity package that brings [Qulacs](https://github.com/qulacs/qulacs) — a high-performance C++ quantum circuit simulator — into Unity projects.
 
@@ -35,7 +35,7 @@ Unity C# (Mu5dvlp.Qulacs)
 Install via Unity Package Manager using the git URL:
 
 ```
-https://github.com/mu5dvlp/qulacs-toolkit.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0
+https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0
 ```
 
 Or add to your project's `Packages/manifest.json`:
@@ -43,7 +43,7 @@ Or add to your project's `Packages/manifest.json`:
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-toolkit.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0"
   }
 }
 ```

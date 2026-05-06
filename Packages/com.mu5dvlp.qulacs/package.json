@@ -17,12 +17,12 @@
     "url": "https://github.com/mu5dvlp"
   },
   "license": "MIT",
-  "licensesUrl": "https://github.com/mu5dvlp/qulacs-toolkit/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md",
-  "documentationUrl": "https://github.com/mu5dvlp/qulacs-toolkit/blob/main/Packages/com.mu5dvlp.qulacs/docs/api-reference.md",
-  "changelogUrl": "https://github.com/mu5dvlp/qulacs-toolkit/blob/main/Packages/com.mu5dvlp.qulacs/CHANGELOG.md",
+  "licensesUrl": "https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md",
+  "documentationUrl": "https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/docs/api-reference.md",
+  "changelogUrl": "https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/CHANGELOG.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mu5dvlp/qulacs-toolkit.git",
+    "url": "https://github.com/mu5dvlp/qulacs-for-unity.git",
     "directory": "Packages/com.mu5dvlp.qulacs"
   }
 }
