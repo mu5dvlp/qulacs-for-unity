@@ -1,0 +1,46 @@
+# Default: detect text files automatically and normalize to LF in the repo.
+# Working tree gets the platform's native line endings on checkout.
+* text=auto eol=lf
+
+# Force LF for files that should always be LF regardless of platform.
+*.sh        text eol=lf
+Makefile    text eol=lf
+*.cmake     text eol=lf
+CMakeLists.txt text eol=lf
+
+# Force CRLF for Windows-only files.
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+*.sln       text eol=crlf
+
+# Treat these as binary (no line ending conversion, no diff).
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.psd       binary
+*.tif       binary
+*.tiff      binary
+*.fbx       binary
+*.obj       binary
+*.blend     binary
+*.unity     binary
+*.asset     binary
+*.prefab    binary
+*.mat       binary
+*.anim      binary
+*.controller binary
+*.unitypackage binary
+*.dll       binary
+*.so        binary
+*.dylib     binary
+*.a         binary
+*.lib       binary
+*.exe       binary
+*.pdb       binary
+*.zip       binary
+*.gz        binary
+*.tar       binary
+*.7z        binary
