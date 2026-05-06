@@ -4,8 +4,8 @@
   "hasTests": true,
   "displayName": "Qulacs",
   "description": "Unity native plugin wrapper for Qulacs, the high-performance C++ quantum circuit simulator. Provides an idiomatic C# API (QuantumState, QuantumCircuit) backed by a thin extern \"C\" layer loaded via P/Invoke.",
-  "unity": "6000.0",
-  "unityRelease": "47f1",
+  "unity": "2020.3",
+  "unityRelease": "48f1",
   "keywords": [
     "quantum",
     "qulacs",
