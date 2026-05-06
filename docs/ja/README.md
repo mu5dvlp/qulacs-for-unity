@@ -76,6 +76,8 @@ cmake --build build --config Release
 - 個人用: mu5dvlp@gmail.com
 - 仕事用: dvlpwork@gmail.com
 - X: [@Yugo_dvlp](https://x.com/Yugo_dvlp)
+- Qiita: [@mu5dvlp](https://qiita.com/mu5dvlp)
+- Zenn: [@mu5dvlp](https://zenn.dev/mu5dvlp)
 
 ## ライセンス
 

@@ -140,6 +140,8 @@ Unity C# (Mu5dvlp.Qulacs)
 - Personal: mu5dvlp@gmail.com
 - Work: dvlpwork@gmail.com
 - X: [@Yugo_dvlp](https://x.com/Yugo_dvlp)
+- Qiita: [@mu5dvlp](https://qiita.com/mu5dvlp)
+- Zenn: [@mu5dvlp](https://zenn.dev/mu5dvlp)
 
 ## License
 
