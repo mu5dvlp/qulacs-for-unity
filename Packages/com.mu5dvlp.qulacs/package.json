@@ -25,5 +25,12 @@
     "type": "git",
     "url": "https://github.com/mu5dvlp/qulacs-for-unity.git",
     "directory": "Packages/com.mu5dvlp.qulacs"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Demo Scenes",
+      "description": "Bell state console demo, Bloch-sphere visualiser, inspector-driven quantum circuit, and qubit colouring scenes. Includes the MonoBehaviours (QubitObject, QuantumCircuitObject, BlochSphereObject, etc.) the scenes are wired to.",
+      "path": "Samples~/DemoScenes"
+    }
+  ]
 }

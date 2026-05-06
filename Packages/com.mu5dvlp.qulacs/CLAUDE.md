@@ -28,9 +28,17 @@ Tests/
   QuantumStateTests.cs
   GateTests.cs
   QuantumCircuitTests.cs
+Samples~/
+  DemoScenes/                 # bundled sample (Package Manager → Import)
+    Scenes/                   # BellState, BlochSphere, QuantumCircuitObject, QuantumStateColor
+    Scripts/Runtime/          # QubitObject, QuantumGateObject, QuantumCircuitObject, ...
+    Scripts/Editor/           # GateEntryDrawer, QuantumStateSetterEditor
+    README.md
 ```
 
-## Unity-side scripts (Assets/Qulacs/Scripts/)
+> `Samples~/` is hidden from Unity (the trailing `~`). To edit the sample, import it via Package Manager → Samples → Demo Scenes → Import; the working copy lands in `Assets/Samples/Qulacs/<version>/Demo Scenes/`. Sync any changes back to `Samples~/DemoScenes/` before committing.
+
+## Sample MonoBehaviours (Samples~/DemoScenes/Scripts/)
 
 These MonoBehaviours consume this package:
 
@@ -43,7 +51,7 @@ These MonoBehaviours consume this package:
 | `QuantumStateSetter` | Inspector helper that writes a 1-qubit state into a `QubitObject` either from Bloch angles (θ, φ) or from raw α/β components |
 | `BellStateDemo` | Builds H(0)·CNOT(0,1), prints the state vector / sampling histogram / per-qubit P(\|0⟩) to the Console (and optional `TMP_Text`) |
 
-Editor scripts live in `Assets/Qulacs/Scripts/Editor/`: `GateEntryDrawer` (custom drawer for `GateEntry`) and `QuantumStateSetterEditor` (mode-aware inspector with an "Apply" button).
+Editor helpers (`Samples~/DemoScenes/Scripts/Editor/`): `GateEntryDrawer` (custom drawer for `GateEntry`) and `QuantumStateSetterEditor` (mode-aware inspector with an "Apply" button).
 
 ## API reference
 

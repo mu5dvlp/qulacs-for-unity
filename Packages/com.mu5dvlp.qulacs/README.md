@@ -106,6 +106,12 @@ All gate methods return `this` to allow method chaining.
 
 See [`docs/api-reference.md`](docs/api-reference.md) for the full reference.
 
+## Samples
+
+A **Demo Scenes** sample is bundled with the package — Bell state console output, Bloch-sphere visualiser, inspector-driven quantum circuit, and qubit colouring. Import via **Window → Package Manager → Qulacs → Samples → Demo Scenes → Import**. Files land in `Assets/Samples/Qulacs/<version>/Demo Scenes/`.
+
+See [`Samples~/DemoScenes/README.md`](Samples~/DemoScenes/README.md) for what each scene and MonoBehaviour does.
+
 ## Building the Native DLL
 
 The prebuilt `qulacs_unity.dll` is included for Windows x86_64. To rebuild it from source:
