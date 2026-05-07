@@ -29,10 +29,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Unity ライセンスは GitHub Secrets に登録が必要:
-      #   UNITY_LICENSE  : Unity Personal/Pro ライセンスの XML 文字列
-      #   UNITY_EMAIL    : Unity アカウントのメールアドレス
-      #   UNITY_PASSWORD : Unity アカウントのパスワード
       - name: Activate Unity and run tests
         uses: game-ci/unity-test-runner@v4
         env:
