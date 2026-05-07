@@ -29,6 +29,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Start Docker service
+        shell: powershell
+        run: |
+          Start-Service docker
+          docker info
+
       - name: Activate Unity and run tests
         uses: game-ci/unity-test-runner@v4
         env:
