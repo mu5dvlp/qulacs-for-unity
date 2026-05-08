@@ -57,13 +57,16 @@ Editor helpers (`Samples~/DemoScenes/Scripts/Editor/`): `GateEntryDrawer` (custo
 
 See [`docs/api-reference.md`](docs/api-reference.md).
 
-## Building the DLL
+## Building the native library
 
 ```bash
 cd Packages/com.mu5dvlp.qulacs
-make build          # fetch-qulacs → build-qulacs → build-dll → deploy-dll
-make build-dll      # wrapper only (Qulacs already built)
-make deploy-dll     # copy DLL only
+make build                # Windows x86_64 full build: fetch-qulacs → build-qulacs → build-dll → deploy-dll
+make build-dll            # wrapper only (Qulacs already built)
+make deploy-dll           # copy DLL only
+make build-android        # Android ARM64 full build
+make build-android-x86_64 # Android x86_64 full build (emulator)
+make build-android-all    # Android ARM64 + x86_64
 ```
 
 cmake: `C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe`

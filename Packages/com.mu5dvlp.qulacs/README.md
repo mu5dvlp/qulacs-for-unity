@@ -5,7 +5,7 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 ## Requirements
 
 - Unity 6 (6000.4.1f1 LTS) or later
-- Windows x86_64 (macOS / Android ARM64 / iOS planned)
+- Windows x86_64, Android ARM64, Android x86_64 (macOS / iOS planned)
 
 ## Installation
 
@@ -114,14 +114,17 @@ See [`Samples~/DemoScenes/README.md`](Samples~/DemoScenes/README.md) for what ea
 
 ## Building the Native DLL
 
-The prebuilt `qulacs_unity.dll` is included for Windows x86_64. To rebuild it from source:
+Prebuilt binaries are included for Windows x86_64 (`.dll`) and Android ARM64/x86_64 (`.so`). To rebuild from source:
 
 ```bash
 cd Packages/com.mu5dvlp.qulacs
 
-make build        # full build: fetch-qulacs → build-qulacs → build-dll → deploy-dll
-make build-dll    # wrapper only (Qulacs already built)
-make deploy-dll   # copy DLL to Runtime/Plugins only
+make build                # Windows x86_64 full build: fetch-qulacs → build-qulacs → build-dll → deploy-dll
+make build-dll            # wrapper only (Qulacs already built)
+make deploy-dll           # copy DLL to Runtime/Plugins only
+make build-android        # Android ARM64 full build
+make build-android-x86_64 # Android x86_64 full build (emulator)
+make build-android-all    # Android ARM64 + x86_64
 ```
 
 Requires CMake (bundled with Visual Studio 2022) and a C++17 compiler.

@@ -19,7 +19,7 @@ Unity C# (Mu5dvlp.Qulacs)
 
 ## Platform Support
 
-Windows x86_64 (current). Planned: macOS, Android ARM64, iOS.
+Windows x86_64, Android ARM64, Android x86_64 (current). Planned: macOS, iOS.
 
 Plugin paths per platform:
 | Platform | Path | Ext |
