@@ -78,5 +78,8 @@ if(ANDROID)
     target_link_options(qulacs_unity PRIVATE "-Wl,-z,max-page-size=16384")
 endif()
 
-# Strip "lib" prefix so Unity finds "qulacs_unity.dll/.so/.dylib"
-set_target_properties(qulacs_unity PROPERTIES PREFIX "")
+# Android requires the "lib" prefix (dlopen looks for libqulacs_unity.so).
+# Other platforms strip it so Unity finds "qulacs_unity.dll/.dylib".
+if(NOT ANDROID)
+    set_target_properties(qulacs_unity PROPERTIES PREFIX "")
+endif()
