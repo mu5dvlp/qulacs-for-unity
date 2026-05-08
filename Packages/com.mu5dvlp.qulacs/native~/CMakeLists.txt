@@ -73,5 +73,10 @@ if(OpenMP_CXX_FOUND)
     target_link_libraries(qulacs_unity PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
+# Android 15+ requires 16KB-aligned shared libraries
+if(ANDROID)
+    target_link_options(qulacs_unity PRIVATE "-Wl,-z,max-page-size=16384")
+endif()
+
 # Strip "lib" prefix so Unity finds "qulacs_unity.dll/.so/.dylib"
 set_target_properties(qulacs_unity PROPERTIES PREFIX "")
