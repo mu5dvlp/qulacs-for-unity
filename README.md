@@ -1,4 +1,4 @@
-# qulacs-for-unity
+# Qulacs for Unity
 
 A Unity package that brings [Qulacs](https://github.com/qulacs/qulacs) — a high-performance C++ quantum circuit simulator — into Unity projects.
 
