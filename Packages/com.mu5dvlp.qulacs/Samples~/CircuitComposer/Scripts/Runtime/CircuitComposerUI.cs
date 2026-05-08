@@ -9,8 +9,8 @@ public class CircuitComposerUI : MonoBehaviour
     const float CellSize = 56f;
     const float CellGap = 4f;
     const float LabelW = 40f;
-    const float ToolH = 48f;
-    const float ToolBtnW = 42f;
+    const float ToolH = 38f;
+    const float ToolBtnW = 32f;
     const float BarMaxW = 280f;
     const float RowH = 22f;
     const int MaxResults = 32;
@@ -90,6 +90,7 @@ public class CircuitComposerUI : MonoBehaviour
         BuildToolbar(root);
         BuildGrid(root);
         BuildResults(root);
+        OnToolChanged();
     }
 
     Canvas CreateCanvas()
@@ -117,16 +118,9 @@ public class CircuitComposerUI : MonoBehaviour
         hl.spacing = 3;
         hl.childAlignment = TextAnchor.MiddleLeft;
         hl.childForceExpandWidth = false;
-        hl.childForceExpandHeight = true;
+        hl.childForceExpandHeight = false;
         hl.childControlWidth = true;
         hl.childControlHeight = true;
-
-        var titleRt = Rt("Title", bar);
-        Lay(titleRt, prefW: 150);
-        var tt = Txt(titleRt, "Circuit Composer", 14, TextAnchor.MiddleLeft, cText);
-        tt.fontStyle = FontStyle.Bold;
-
-        MakeSep(bar);
 
         ComposerGate[] tools =
         {
@@ -136,6 +130,10 @@ public class CircuitComposerUI : MonoBehaviour
         };
         foreach (var g in tools)
             MakeToolBtn(bar, g);
+
+        MakeSep(bar);
+
+        MakeRunBtn(bar);
 
         Lay(Rt("Sp", bar), flexW: 1);
 
@@ -149,18 +147,17 @@ public class CircuitComposerUI : MonoBehaviour
         MakeActBtn(bar, "CLR", () => composer.ClearAll());
 
         var stRt = Rt("Status", bar);
-        Lay(stRt, prefW: 180);
+        Lay(stRt, prefW: 160);
         statusText = Txt(stRt, "", 11, TextAnchor.MiddleLeft, cDim);
     }
 
     void MakeToolBtn(RectTransform parent, ComposerGate gate)
     {
         var rt = Rt($"T_{gate}", parent);
-        Lay(rt, prefW: ToolBtnW);
-        var baseColor = GClr(gate);
-        var img = Img(rt, gate == composer.SelectedTool ? baseColor : baseColor * 0.5f);
+        Lay(rt, prefW: ToolBtnW, prefH: ToolBtnW);
+        var img = Img(rt, GClr(gate));
         toolImgs[gate] = img;
-        var txt = Txt(rt, GSym(gate, false), 17, TextAnchor.MiddleCenter, Color.white);
+        var txt = Txt(rt, GSym(gate, false), 15, TextAnchor.MiddleCenter, Color.white);
         txt.fontStyle = FontStyle.Bold;
         var btn = rt.gameObject.AddComponent<Button>();
         btn.targetGraphic = img;
@@ -172,12 +169,24 @@ public class CircuitComposerUI : MonoBehaviour
     void MakeActBtn(RectTransform parent, string label, UnityEngine.Events.UnityAction act)
     {
         var rt = Rt($"A_{label}", parent);
-        Lay(rt, prefW: ToolBtnW);
+        Lay(rt, prefW: ToolBtnW, prefH: ToolBtnW);
         var img = Img(rt, new Color(0.3f, 0.3f, 0.37f));
         Txt(rt, label, 12, TextAnchor.MiddleCenter, cText);
         var btn = rt.gameObject.AddComponent<Button>();
         btn.targetGraphic = img;
         btn.onClick.AddListener(act);
+    }
+
+    void MakeRunBtn(RectTransform parent)
+    {
+        var rt = Rt("A_RUN", parent);
+        Lay(rt, prefW: ToolBtnW * 1.8f, prefH: ToolBtnW);
+        var img = Img(rt, new Color(0.2f, 0.65f, 0.3f));
+        var txt = Txt(rt, "RUN", 13, TextAnchor.MiddleCenter, Color.white);
+        txt.fontStyle = FontStyle.Bold;
+        var btn = rt.gameObject.AddComponent<Button>();
+        btn.targetGraphic = img;
+        btn.onClick.AddListener(() => composer.RunCircuit());
     }
 
     void MakeSep(RectTransform parent)
@@ -311,8 +320,8 @@ public class CircuitComposerUI : MonoBehaviour
 
         var vp = Rt("VP", srRt);
         Stretch(vp);
-        Img(vp, Color.clear);
-        vp.gameObject.AddComponent<Mask>().showMaskGraphic = false;
+        Img(vp, cPanel);
+        vp.gameObject.AddComponent<Mask>().showMaskGraphic = true;
         sr.viewport = vp;
 
         resultsContent = Rt("RC", vp);
@@ -372,7 +381,9 @@ public class CircuitComposerUI : MonoBehaviour
         foreach (var kv in toolImgs)
         {
             var c = GClr(kv.Key);
-            kv.Value.color = kv.Key == composer.SelectedTool ? c : c * 0.5f;
+            kv.Value.color = kv.Key == composer.SelectedTool
+                ? c
+                : new Color(c.r * 0.35f, c.g * 0.35f, c.b * 0.35f, 1f);
         }
     }
 
