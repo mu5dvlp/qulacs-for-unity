@@ -23,22 +23,53 @@ public class BellStateDemo : MonoBehaviour
 
     void Start()
     {
-        RunBellStateDemo();
+        try
+        {
+            RunBellStateDemo();
+        }
+        catch (Exception ex)
+        {
+            string error = $"[BellStateDemo Error]\n{ex.GetType().Name}: {ex.Message}\n\n{ex.StackTrace}";
+            Debug.LogError(error);
+            ShowError(error);
+        }
+    }
+
+    void ShowError(string message)
+    {
+        if (resultText != null)
+        {
+            resultText.text = message;
+            return;
+        }
+
+        var canvasGo = new GameObject("ErrorCanvas");
+        var canvas = canvasGo.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvasGo.AddComponent<UnityEngine.UI.CanvasScaler>();
+
+        var textGo = new GameObject("ErrorText");
+        textGo.transform.SetParent(canvasGo.transform, false);
+        var text = textGo.AddComponent<TextMeshProUGUI>();
+        var rect = textGo.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = new Vector2(20, 20);
+        rect.offsetMax = new Vector2(-20, -20);
+        text.text = message;
+        text.fontSize = 24;
+        text.color = Color.red;
     }
 
     void RunBellStateDemo()
     {
-        // Create a 2-qubit quantum state
         using var state = new QuantumState(2);
 
-        // Build circuit: H(0) -> CNOT(0, 1) produces Bell state (|00> + |11>) / √2
         using var circuit = new QuantumCircuit(2);
         circuit.H(0).CNOT(0, 1);
 
-        // Apply circuit to state
         circuit.UpdateQuantumState(state);
 
-        // Retrieve state vector
         var vector = state.GetStateVector();
         var sb = new StringBuilder();
         sb.AppendLine("=== Bell State ===");
@@ -52,7 +83,6 @@ public class BellStateDemo : MonoBehaviour
             sb.AppendLine($"  |{basis}> : ({vector[i].Real:+0.000;-0.000}, {vector[i].Imaginary:+0.000;-0.000}i)");
         }
 
-        // Sample the state
         var samples = state.Sampling(samplingCount);
         var counts = new Dictionary<ulong, int>();
         foreach (var s in samples)
@@ -70,7 +100,6 @@ public class BellStateDemo : MonoBehaviour
             sb.AppendLine($"  |{basis}> : {kv.Value,5} ({ratio:F1}%)");
         }
 
-        // Zero probability per qubit
         sb.AppendLine();
         sb.AppendLine("Zero probability:");
         for (int q = 0; q < state.QubitCount; q++)
