@@ -1,5 +1,9 @@
 # Qulacs for Unity
 
+[![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
+
 A Unity package that brings [Qulacs](https://github.com/qulacs/qulacs) — a high-performance C++ quantum circuit simulator — into Unity projects.
 
 ## Overview

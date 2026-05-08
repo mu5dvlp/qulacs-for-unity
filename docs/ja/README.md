@@ -1,5 +1,9 @@
 # qulacs-for-unity
 
+[![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
+[![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
+
 [Qulacs](https://github.com/qulacs/qulacs) — 高性能な C++ 量子回路シミュレータ — を Unity プロジェクトで利用するための Unity パッケージです。
 
 ## 概要
