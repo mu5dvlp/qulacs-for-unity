@@ -47,6 +47,10 @@ crashlytics-build.properties
 # TextMeshPro
 /[Aa]ssets/[Tt]ext[Mm]esh[Pp]ro/
 
+# Imported Samples (auto-copied by Package Manager)
+/[Aa]ssets/[Ss]amples/
+/[Aa]ssets/[Ss]amples.meta
+
 # IDE
 .vscode/
 .idea/
