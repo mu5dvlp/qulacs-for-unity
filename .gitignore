@@ -63,6 +63,9 @@ test.log
 test-results.xml
 test-results/
 
+# Unity Android build temp
+.utmp/
+
 # OS
 .DS_Store
 .DS_Store?
