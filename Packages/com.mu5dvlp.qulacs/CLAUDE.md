@@ -34,6 +34,9 @@ Samples~/
     Scripts/Runtime/          # QubitObject, QuantumGateObject, QuantumCircuitObject, ...
     Scripts/Editor/           # GateEntryDrawer, QuantumStateSetterEditor
     README.md
+  CircuitComposer/            # 2D interactive circuit composer (Package Manager → Import)
+    Scripts/Runtime/          # CircuitComposer, CircuitComposerUI
+    README.md
 ```
 
 > `Samples~/` is hidden from Unity (the trailing `~`). To edit the sample, import it via Package Manager → Samples → Demo Scenes → Import; the working copy lands in `Assets/Samples/Qulacs/<version>/Demo Scenes/`. Sync any changes back to `Samples~/DemoScenes/` before committing.
@@ -52,6 +55,15 @@ These MonoBehaviours consume this package:
 | `BellStateDemo` | Builds H(0)·CNOT(0,1), prints the state vector / sampling histogram / per-qubit P(\|0⟩) to the Console (and optional `TMP_Text`) |
 
 Editor helpers (`Samples~/DemoScenes/Scripts/Editor/`): `GateEntryDrawer` (custom drawer for `GateEntry`) and `QuantumStateSetterEditor` (mode-aware inspector with an "Apply" button).
+
+## Circuit Composer (Samples~/CircuitComposer/Scripts/)
+
+Interactive 2D quantum circuit composer built with uGUI. All UI is generated at runtime — attach `CircuitComposer` to an empty GameObject and press Play.
+
+| Script | Role |
+|---|---|
+| `CircuitComposer` | Data model, gate placement logic, circuit execution via `QuantumCircuit`/`QuantumState`. Supports H/X/Y/Z/S/T/CNOT/SWAP/Measure |
+| `CircuitComposerUI` | Builds Canvas UI programmatically: toolbar, scrollable grid, connection lines for 2-qubit gates, real-time probability bar chart |
 
 ## API reference
 
