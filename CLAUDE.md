@@ -27,6 +27,7 @@ Plugin paths per platform:
 | Windows x86_64 | `Runtime/Plugins/Windows/x86_64/` | `.dll` |
 | macOS | `Runtime/Plugins/macOS/` | `.dylib` |
 | Android ARM64 | `Runtime/Plugins/Android/ARM64/` | `.so` |
+| Android x86_64 | `Runtime/Plugins/Android/x86_64/` | `.so` |
 | iOS | `Runtime/Plugins/iOS/` | `.a` |
 
 ## Unity Commands

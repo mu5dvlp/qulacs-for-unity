@@ -11,6 +11,8 @@
 # Commands:
 #   make build                # Windows x86_64 フルビルド
 #   make build-android        # Android ARM64 フルビルド
+#   make build-android-x86_64 # Android x86_64 フルビルド (エミュレータ用)
+#   make build-android-all    # Android ARM64 + x86_64 フルビルド
 #   make fetch-qulacs         # Qulacs ソースを git clone する
 #   make clean-build          # ビルド成果物を削除する (native~/build/)
 #   make clean-all            # ビルド成果物 + Qulacs ソース & インストール先を全削除する
@@ -33,21 +35,36 @@ PLUGIN_DIR     := Runtime/Plugins/Windows/x86_64
 DLL            := qulacs_unity.dll
 
 # ---------------------------------------------------------------------------
-# Android ARM64 settings
+# Android common settings
 # ---------------------------------------------------------------------------
 ANDROID_NDK            := C:/Program Files/Unity/Hub/Editor/6000.4.1f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK
 ANDROID_TOOLCHAIN      := $(ANDROID_NDK)/build/cmake/android.toolchain.cmake
 NINJA                  := C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe
-ANDROID_ABI            := arm64-v8a
 ANDROID_PLATFORM       := android-24
+SO                     := qulacs_unity.so
+
+# ---------------------------------------------------------------------------
+# Android ARM64 settings
+# ---------------------------------------------------------------------------
+ANDROID_ABI            := arm64-v8a
 QULACS_BUILD_ANDROID   := native~/build/qulacs-android
 QULACS_INSTALL_ANDROID := native~/extern/qulacs-install-android
 WRAPPER_BUILD_ANDROID  := native~/build/wrapper-android
 PLUGIN_DIR_ANDROID     := Runtime/Plugins/Android/ARM64
-SO                     := qulacs_unity.so
+
+# ---------------------------------------------------------------------------
+# Android x86_64 settings (エミュレータ用)
+# ---------------------------------------------------------------------------
+ANDROID_ABI_X86_64            := x86_64
+QULACS_BUILD_ANDROID_X86_64   := native~/build/qulacs-android-x86_64
+QULACS_INSTALL_ANDROID_X86_64 := native~/extern/qulacs-install-android-x86_64
+WRAPPER_BUILD_ANDROID_X86_64  := native~/build/wrapper-android-x86_64
+PLUGIN_DIR_ANDROID_X86_64     := Runtime/Plugins/Android/x86_64
 
 .PHONY: build fetch-qulacs build-qulacs build-dll deploy-dll \
         build-android build-qulacs-android build-dll-android deploy-dll-android \
+        build-android-x86_64 build-qulacs-android-x86_64 build-dll-android-x86_64 deploy-dll-android-x86_64 \
+        build-android-all \
         clean-build clean-all
 
 build: fetch-qulacs build-qulacs build-dll deploy-dll
@@ -174,6 +191,74 @@ deploy-dll-android:
 	@echo ">>> Done. $(PLUGIN_DIR_ANDROID)/$(SO)"
 
 # =============================================================================
+# Android x86_64 (エミュレータ用)
+# =============================================================================
+
+build-android-x86_64: fetch-qulacs build-qulacs-android-x86_64 build-dll-android-x86_64 deploy-dll-android-x86_64
+
+# -----------------------------------------------------------------------------
+# Qulacs を Android x86_64 向けにクロスビルドする
+# -----------------------------------------------------------------------------
+build-qulacs-android-x86_64:
+	@echo ">>> [2/4] Building Qulacs for Android x86_64..."
+	"$(CMAKE)" -G Ninja -Wno-dev \
+		-DCMAKE_MAKE_PROGRAM="$(NINJA)" \
+		-B $(QULACS_BUILD_ANDROID_X86_64) -S $(QULACS_SRC) \
+		-DCMAKE_TOOLCHAIN_FILE="$(ANDROID_TOOLCHAIN)" \
+		-DANDROID_ABI=$(ANDROID_ABI_X86_64) \
+		-DANDROID_PLATFORM=$(ANDROID_PLATFORM) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=$(QULACS_INSTALL_ANDROID_X86_64) \
+		-DCMAKE_POLICY_DEFAULT_CMP0144=NEW \
+		-DUSE_GPU=No \
+		-DUSE_MPI=No \
+		-DUSE_PYTHON=No \
+		-DBOOST_ROOT=$(BOOST_ROOT) \
+		-DBoost_ROOT=$(BOOST_ROOT) \
+		-DBoost_INCLUDE_DIR=$(BOOST_ROOT) \
+		-DBoost_NO_SYSTEM_PATHS=ON
+	"$(CMAKE)" --build $(QULACS_BUILD_ANDROID_X86_64) --config Release
+	@echo ">>> Staging Qulacs headers and libs for Android x86_64..."
+	@mkdir -p $(QULACS_INSTALL_ANDROID_X86_64)/include $(QULACS_INSTALL_ANDROID_X86_64)/lib
+	@cp -r $(QULACS_SRC)/src/cppsim $(QULACS_INSTALL_ANDROID_X86_64)/include/
+	@cp -r $(QULACS_SRC)/src/csim   $(QULACS_INSTALL_ANDROID_X86_64)/include/
+	@cp -r $(QULACS_BUILD_ANDROID_X86_64)/eigen/src/eigen/Eigen $(QULACS_INSTALL_ANDROID_X86_64)/include/
+	@find $(QULACS_BUILD_ANDROID_X86_64) -name "libcppsim_static.a" | head -1 | xargs -I{} cp {} $(QULACS_INSTALL_ANDROID_X86_64)/lib/
+	@find $(QULACS_BUILD_ANDROID_X86_64) -name "libcsim_static.a"   | head -1 | xargs -I{} cp {} $(QULACS_INSTALL_ANDROID_X86_64)/lib/
+
+# -----------------------------------------------------------------------------
+# ラッパーを Android x86_64 向けにクロスビルドする
+# -----------------------------------------------------------------------------
+build-dll-android-x86_64:
+	@echo ">>> [3/4] Building $(SO) for Android x86_64..."
+	"$(CMAKE)" -G Ninja -Wno-dev \
+		-DCMAKE_MAKE_PROGRAM="$(NINJA)" \
+		-B $(WRAPPER_BUILD_ANDROID_X86_64) -S $(WRAPPER_SRC) \
+		-DCMAKE_TOOLCHAIN_FILE="$(ANDROID_TOOLCHAIN)" \
+		-DANDROID_ABI=$(ANDROID_ABI_X86_64) \
+		-DANDROID_PLATFORM=$(ANDROID_PLATFORM) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DQULACS_ROOT=$(QULACS_INSTALL_ANDROID_X86_64) \
+		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH \
+		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH
+	"$(CMAKE)" --build $(WRAPPER_BUILD_ANDROID_X86_64) --config Release
+
+# -----------------------------------------------------------------------------
+# x86_64 の .so を Unity プラグインフォルダにコピーする
+# -----------------------------------------------------------------------------
+deploy-dll-android-x86_64:
+	@echo ">>> [4/4] Deploying $(SO) to Unity plugin folder (x86_64)..."
+	@mkdir -p $(PLUGIN_DIR_ANDROID_X86_64)
+	@find $(WRAPPER_BUILD_ANDROID_X86_64) -name "$(SO)" | head -1 | xargs -I{} cp {} $(PLUGIN_DIR_ANDROID_X86_64)/$(SO)
+	@echo ">>> Done. $(PLUGIN_DIR_ANDROID_X86_64)/$(SO)"
+
+# =============================================================================
+# Android ALL (ARM64 + x86_64)
+# =============================================================================
+
+build-android-all: build-android build-android-x86_64
+
+# =============================================================================
 # Clean
 # =============================================================================
 
@@ -186,4 +271,4 @@ clean-build:
 
 clean-all: clean-build
 	@echo ">>> Removing Qulacs install and source..."
-	rm -rf $(QULACS_INSTALL) $(QULACS_INSTALL_ANDROID) $(QULACS_SRC)
+	rm -rf $(QULACS_INSTALL) $(QULACS_INSTALL_ANDROID) $(QULACS_INSTALL_ANDROID_X86_64) $(QULACS_SRC)
