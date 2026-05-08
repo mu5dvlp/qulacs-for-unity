@@ -41,7 +41,7 @@ ANDROID_NDK            := C:/Program Files/Unity/Hub/Editor/6000.4.1f1/Editor/Da
 ANDROID_TOOLCHAIN      := $(ANDROID_NDK)/build/cmake/android.toolchain.cmake
 NINJA                  := C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe
 ANDROID_PLATFORM       := android-24
-SO                     := qulacs_unity.so
+SO                     := libqulacs_unity.so
 
 # ---------------------------------------------------------------------------
 # Android ARM64 settings
