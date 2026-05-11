@@ -68,9 +68,16 @@ target_link_libraries(qulacs_unity PRIVATE
     "${QULACS_CSIM_LIB}")
 
 # OpenMP (Qulacs uses it internally for parallelism)
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(qulacs_unity PRIVATE OpenMP::OpenMP_CXX)
+if(ANDROID)
+    # Android: link OpenMP statically to avoid libomp.so runtime dependency.
+    # NDK ships libomp.a alongside libomp.so; -static-openmp selects the former.
+    target_compile_options(qulacs_unity PRIVATE -fopenmp)
+    target_link_options(qulacs_unity PRIVATE -fopenmp -static-openmp)
+else()
+    find_package(OpenMP)
+    if(OpenMP_CXX_FOUND)
+        target_link_libraries(qulacs_unity PRIVATE OpenMP::OpenMP_CXX)
+    endif()
 endif()
 
 # Android 15+ requires 16KB-aligned shared libraries
