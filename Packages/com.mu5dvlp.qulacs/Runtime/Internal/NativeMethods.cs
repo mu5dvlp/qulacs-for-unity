@@ -3,6 +3,16 @@ using System.Runtime.InteropServices;
 
 namespace Mu5dvlp.Qulacs.Internal
 {
+    /// <summary>
+    /// P/Invoke declarations for the qulacs_unity native library.
+    ///
+    /// Buffer safety: Array parameters (realOut, imagOut, resultsOut, etc.) must be
+    /// pre-allocated by the caller with the correct length before passing to native code.
+    /// The native side performs no bounds checking — undersized buffers cause undefined behavior.
+    /// Required sizes: state vectors = 2^qubitCount, sampling results = count.
+    ///
+    /// Memory ownership: Handles returned by _create() must be freed with the matching _destroy().
+    /// </summary>
     internal static class NativeMethods
     {
         private const string Lib = "qulacs_unity";

@@ -24,15 +24,16 @@ Unity C# (Mu5dvlp.Qulacs)
 
 | Platform | Status |
 |---|---|
-| Windows x86_64 | In development |
+| Windows x86_64 | Supported |
+| Android ARM64 | Supported |
+| Android x86_64 | Supported (emulator) |
 | macOS | Planned |
-| Android ARM64 | Planned |
 | iOS | Planned |
 
 ## Package
 
 **Package ID:** `com.mu5dvlp.qulacs`
-**Unity:** 6000.0+
+**Unity:** 6000.0+ (developed on 6000.4.1f1 LTS; also confirmed on 2022.3 LTS)
 
 ### Installation
 

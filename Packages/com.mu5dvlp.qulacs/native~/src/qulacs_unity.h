@@ -15,6 +15,10 @@ extern "C" {
 /* -------------------------------------------------------------------------
  * QuantumState
  * Opaque handle: void* points to a heap-allocated QuantumState.
+ *
+ * Ownership: qulacs_state_create() allocates; the caller owns the handle
+ * and MUST call qulacs_state_destroy() exactly once to free it.
+ * Passing NULL or a dangling handle to any function is undefined behavior.
  * -------------------------------------------------------------------------*/
 
 QULACS_UNITY_API void*        qulacs_state_create(uint32_t qubit_count);
@@ -27,23 +31,31 @@ QULACS_UNITY_API void         qulacs_state_set_computational_basis(void* state, 
 QULACS_UNITY_API void         qulacs_state_set_haar_random_state(void* state);
 QULACS_UNITY_API void         qulacs_state_set_haar_random_state_seed(void* state, uint32_t seed);
 
-/* Copies the state vector into caller-allocated arrays of length (1 << qubit_count).
+/* Copies the state vector into caller-allocated arrays.
+ * Buffer safety: real_out and imag_out must each have at least
+ * min(length, 1 << qubit_count) elements. No bounds checking is performed.
  * real_out[i] = Re(amplitude[i]), imag_out[i] = Im(amplitude[i]) */
 QULACS_UNITY_API void         qulacs_state_get_vector(void* state, double* real_out, double* imag_out, uint64_t length);
 
-/* Loads an arbitrary state vector from caller-supplied arrays of length (1 << qubit_count).
- * The vector need not be normalised beforehand. */
+/* Loads an arbitrary state vector from caller-supplied arrays.
+ * Buffer safety: real_in and imag_in must each have at least
+ * min(length, 1 << qubit_count) elements. No bounds checking is performed. */
 QULACS_UNITY_API void         qulacs_state_set_vector(void* state, const double* real_in, const double* imag_in, uint64_t length);
 
 QULACS_UNITY_API double       qulacs_state_get_zero_probability(void* state, uint32_t qubit_index);
 QULACS_UNITY_API double       qulacs_state_get_squared_norm(void* state);
 
-/* Samples the state and writes `count` measurement outcomes into results_out. */
+/* Samples the state and writes `count` measurement outcomes into results_out.
+ * Buffer safety: results_out must have at least `count` elements. */
 QULACS_UNITY_API void         qulacs_state_sampling(void* state, uint32_t count, uint64_t* results_out);
 QULACS_UNITY_API void         qulacs_state_sampling_seed(void* state, uint32_t count, uint32_t seed, uint64_t* results_out);
 
 /* -------------------------------------------------------------------------
  * QuantumCircuit
+ * Opaque handle: void* points to a heap-allocated QuantumCircuit.
+ *
+ * Ownership: qulacs_circuit_create() allocates; the caller owns the handle
+ * and MUST call qulacs_circuit_destroy() exactly once to free it.
  * -------------------------------------------------------------------------*/
 
 QULACS_UNITY_API void*        qulacs_circuit_create(uint32_t qubit_count);

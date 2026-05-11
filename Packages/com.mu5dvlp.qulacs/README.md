@@ -8,7 +8,9 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 
 ## Requirements
 
-- Unity 6 (6000.4.1f1 LTS) or later
+- **Unity 6000.0 or later** (developed and tested on Unity 6000.4.1f1 LTS)
+  - Unity 2022.3 LTS: confirmed working via UPM Git URL install
+  - Unity 2021.x and earlier: untested, may work but not officially supported
 - Windows x86_64, Android ARM64, Android x86_64 (macOS / iOS planned)
 
 ## Installation
@@ -141,6 +143,28 @@ Unity C# (Mu5dvlp.Qulacs)
         └── qulacs_unity.dll  (extern "C" C++ wrapper)
             └── Qulacs C++ library
 ```
+
+## Troubleshooting
+
+### DllNotFoundException (all platforms)
+
+The native plugin binary is missing or not recognized by Unity.
+
+- Verify the `.meta` file for the plugin has the correct platformData settings (CPU, OS).
+- Ensure the plugin file is in the correct `Runtime/Plugins/<Platform>/` folder.
+- After renaming or moving plugin files, delete the old `.meta` and let Unity reimport, then verify the platform settings in the Inspector.
+
+### DllNotFoundException on Android (`dlopen failed`)
+
+- **`library "qulacs_unity" not found`**: Android requires the `lib` prefix. The `.so` must be named `libqulacs_unity.so`, not `qulacs_unity.so`.
+- **`libomp.so` not found**: The plugin was built with dynamic OpenMP linking. Rebuild with `-static-openmp` (see `native~/CMakeLists.txt`). The prebuilt binaries in this package already include this fix.
+- Use `readelf -d libqulacs_unity.so` to check runtime dependencies. Only `libm.so`, `libdl.so`, and `libc.so` should appear.
+
+### Build failures (native plugin)
+
+- **CMake not found**: Install CMake 3.20+ or use the one bundled with Visual Studio 2022.
+- **Qulacs source missing**: Run `make fetch-qulacs` first, or `make build` which includes the fetch step.
+- **Android `find_path` fails**: The Makefile uses `$(CURDIR)` for absolute paths. If building CMake manually, pass an absolute path for `-DQULACS_ROOT`.
 
 ## Contact
 
