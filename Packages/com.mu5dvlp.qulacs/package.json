@@ -1,6 +1,6 @@
 {
   "name": "com.mu5dvlp.qulacs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "hasTests": true,
   "displayName": "Qulacs",
   "description": "Unity native plugin wrapper for Qulacs, the high-performance C++ quantum circuit simulator. Provides an idiomatic C# API (QuantumState, QuantumCircuit) backed by a thin extern \"C\" layer loaded via P/Invoke.",
