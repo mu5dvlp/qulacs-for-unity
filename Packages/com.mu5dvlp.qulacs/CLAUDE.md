@@ -17,6 +17,8 @@ Runtime/
   QuantumState.cs             # public API
   QuantumCircuit.cs           # public API
   Plugins/Windows/x86_64/     # qulacs_unity.dll
+  Plugins/macOS/               # qulacs_unity.dylib
+  Plugins/iOS/                 # qulacs_unity.a (static)
 docs/
   api-reference.md            # full API reference
 native~/
@@ -79,10 +81,25 @@ make deploy-dll           # copy DLL only
 make build-android        # Android ARM64 full build
 make build-android-x86_64 # Android x86_64 full build (emulator)
 make build-android-all    # Android ARM64 + x86_64
+make build-macos          # macOS full build (host arch): fetch-qulacs → fetch-boost → build → deploy
+make build-ios            # iOS ARM64 full build (cross-compile from macOS)
+make fetch-boost          # Boost ヘッダーのみダウンロード
 ```
 
-cmake: `C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe`
+### Prerequisites by platform
 
+| Platform | Prerequisites |
+|---|---|
+| Windows | CMake 3.20+, Visual Studio 2022 (MSVC), make |
+| Android | Above + Unity 付属 NDK |
+| macOS | CMake 3.20+, Xcode, `brew install libomp` |
+| iOS | Same as macOS (cross-compile) |
+
+### Notes
+
+- macOS/iOS builds auto-detect cmake via `which cmake` and libomp via `brew --prefix libomp`
+- iOS builds as static library (`.a`) — Unity iOS requires static plugins
+- iOS builds without OpenMP (not available on iOS; gracefully skipped)
 - Source/deps: `native~/extern/` (gitignored)
 - Built libs: `native~/build/lib/`
-- Install prefix: `native~/extern/qulacs-install/`
+- Install prefix: `native~/extern/qulacs-install{,-macos,-ios}/`
