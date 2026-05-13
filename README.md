@@ -25,10 +25,10 @@ Unity C# (Mu5dvlp.Qulacs)
 | Platform | Status |
 |---|---|
 | Windows x86_64 | Supported |
+| macOS x86_64 | Supported |
 | Android ARM64 | Supported |
 | Android x86_64 | Supported (emulator) |
-| macOS | Planned |
-| iOS | Planned |
+| iOS ARM64 | Supported |
 
 ## Package
 
@@ -40,7 +40,7 @@ Unity C# (Mu5dvlp.Qulacs)
 Install via Unity Package Manager using the git URL:
 
 ```
-https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0
+https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0
 ```
 
 Or add to your project's `Packages/manifest.json`:
@@ -48,12 +48,12 @@ Or add to your project's `Packages/manifest.json`:
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0"
   }
 }
 ```
 
-Replace `v0.1.0` with the desired release tag, or omit `#v0.1.0` to track `main`.
+Replace `v0.1.0` with the desired release tag, or omit `#v0.2.0` to track `main`.
 `git` must be on the PATH — Unity invokes it internally.
 
 Alternatively, clone this repository and open the Unity project directly — the package is embedded under `Packages/com.mu5dvlp.qulacs/`.
@@ -62,19 +62,25 @@ Alternatively, clone this repository and open the Unity project directly — the
 
 ### Requirements
 
-- CMake 3.20+
-- MSVC (Visual Studio 2022) — Windows
-- Qulacs built from source (see [Qulacs build instructions](https://github.com/qulacs/qulacs))
+| Platform | Prerequisites |
+|---|---|
+| Windows | CMake 3.20+, Visual Studio 2022 (MSVC) |
+| Android | Above + Unity 付属 NDK |
+| macOS | CMake 3.20+, Xcode, `brew install libomp` |
+| iOS | Same as macOS (cross-compile) |
 
-### Build (Windows)
+### Build
 
 ```bash
-cd Packages/com.mu5dvlp.qulacs/native~
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+cd Packages/com.mu5dvlp.qulacs
+
+make build                # Windows x86_64
+make build-android-all    # Android ARM64 + x86_64
+make build-macos          # macOS (host architecture)
+make build-ios            # iOS ARM64 (cross-compile from macOS)
 ```
 
-The output `qulacs_unity.dll` should be copied to `Runtime/Plugins/Windows/x86_64/`.
+See [`Packages/com.mu5dvlp.qulacs/CLAUDE.md`](Packages/com.mu5dvlp.qulacs/CLAUDE.md) for details.
 
 ## Contact
 

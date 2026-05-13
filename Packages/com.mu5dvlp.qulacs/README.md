@@ -11,7 +11,7 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 - **Unity 6000.0 or later** (developed and tested on Unity 6000.4.1f1 LTS)
   - Unity 2022.3 LTS: confirmed working via UPM Git URL install
   - Unity 2021.x and earlier: untested, may work but not officially supported
-- Windows x86_64, Android ARM64, Android x86_64 (macOS / iOS planned)
+- Windows x86_64, macOS x86_64, Android ARM64, Android x86_64, iOS ARM64
 
 ## Installation
 
@@ -20,7 +20,7 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 In Unity Editor, open **Window → Package Manager → + → Add package from git URL…** and paste:
 
 ```
-https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0
+https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0
 ```
 
 Or edit `Packages/manifest.json` directly:
@@ -28,12 +28,12 @@ Or edit `Packages/manifest.json` directly:
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.1.0"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0"
   }
 }
 ```
 
-Replace `v0.1.0` with the desired tag, or omit `#v0.1.0` to track `main`.
+Replace `v0.1.0` with the desired tag, or omit `#v0.2.0` to track `main`.
 
 > Requires `git` to be available on the PATH — Unity invokes it internally to clone the repository.
 
@@ -120,20 +120,23 @@ See [`Samples~/DemoScenes/README.md`](Samples~/DemoScenes/README.md) for what ea
 
 ## Building the Native DLL
 
-Prebuilt binaries are included for Windows x86_64 (`.dll`) and Android ARM64/x86_64 (`.so`). To rebuild from source:
+Prebuilt binaries are included for all supported platforms. To rebuild from source:
 
 ```bash
 cd Packages/com.mu5dvlp.qulacs
 
-make build                # Windows x86_64 full build: fetch-qulacs → build-qulacs → build-dll → deploy-dll
-make build-dll            # wrapper only (Qulacs already built)
-make deploy-dll           # copy DLL to Runtime/Plugins only
-make build-android        # Android ARM64 full build
-make build-android-x86_64 # Android x86_64 full build (emulator)
+make build                # Windows x86_64
 make build-android-all    # Android ARM64 + x86_64
+make build-macos          # macOS (host architecture)
+make build-ios            # iOS ARM64 (cross-compile from macOS)
 ```
 
-Requires CMake (bundled with Visual Studio 2022) and a C++17 compiler.
+| Platform | Prerequisites |
+|---|---|
+| Windows | CMake 3.20+, Visual Studio 2022 (MSVC) |
+| Android | Above + Unity 付属 NDK |
+| macOS | CMake 3.20+, Xcode, `brew install libomp` |
+| iOS | Same as macOS (cross-compile) |
 
 ## Architecture
 
