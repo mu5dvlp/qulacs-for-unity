@@ -91,7 +91,7 @@ make fetch-boost          # Boost ヘッダーのみダウンロード
 | Platform | Prerequisites |
 |---|---|
 | Windows | CMake 3.20+, Visual Studio 2022 (MSVC), make |
-| Android | Above + Unity 付属 NDK |
+| Android | Above + Unity-bundled NDK |
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
 

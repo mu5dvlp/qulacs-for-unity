@@ -53,7 +53,7 @@ Or add to your project's `Packages/manifest.json`:
 }
 ```
 
-Replace `v0.1.0` with the desired release tag, or omit `#v0.2.0` to track `main`.
+Replace `v0.2.0` with the desired release tag, or omit `#v0.2.0` to track `main`.
 `git` must be on the PATH — Unity invokes it internally.
 
 Alternatively, clone this repository and open the Unity project directly — the package is embedded under `Packages/com.mu5dvlp.qulacs/`.
@@ -64,8 +64,8 @@ Alternatively, clone this repository and open the Unity project directly — the
 
 | Platform | Prerequisites |
 |---|---|
-| Windows | CMake 3.20+, Visual Studio 2022 (MSVC) |
-| Android | Above + Unity 付属 NDK |
+| Windows | CMake 3.20+, Visual Studio 2022 (MSVC), `make` (via Git Bash or `choco install make`) |
+| Android | Above + Unity-bundled NDK (install via Unity Hub → Android Build Support) |
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
 
