@@ -1,5 +1,6 @@
 name: Chore
 description: Maintenance tasks (CI, docs, refactoring, dependencies, etc.)
+title: "[chore] "
 labels: ["chore"]
 body:
   - type: markdown
