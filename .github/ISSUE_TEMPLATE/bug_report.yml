@@ -31,6 +31,7 @@ body:
         - Android x86_64
         - iOS ARM64
         - Editor only
+        - Other
     validations:
       required: true
   - type: textarea
