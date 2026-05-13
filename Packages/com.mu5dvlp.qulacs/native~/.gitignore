@@ -3,6 +3,8 @@ extern/qulacs/
 extern/qulacs-install/
 extern/qulacs-install-android/
 extern/qulacs-install-android-x86_64/
+extern/qulacs-install-macos/
+extern/qulacs-install-ios/
 
 # Boost headers (downloaded locally, too large for git)
 extern/boost/

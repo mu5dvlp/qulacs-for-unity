@@ -8,20 +8,35 @@
 #   - make (Git Bash 付属、または choco install make)
 #   - Android: Unity 付属の NDK (Android Build Support をインストール)
 #
+# Prerequisites (macOS):
+#   - Git
+#   - CMake 3.20+
+#   - Xcode (Command Line Tools)
+#   - OpenMP: brew install libomp
+#
 # Commands:
 #   make build                # Windows x86_64 フルビルド
 #   make build-android        # Android ARM64 フルビルド
 #   make build-android-x86_64 # Android x86_64 フルビルド (エミュレータ用)
 #   make build-android-all    # Android ARM64 + x86_64 フルビルド
+#   make build-macos          # macOS フルビルド (ホストアーキテクチャ)
+#   make build-ios            # iOS ARM64 フルビルド (クロスコンパイル)
 #   make fetch-qulacs         # Qulacs ソースを git clone する
+#   make fetch-boost          # Boost ヘッダーをダウンロードする
 #   make clean-build          # ビルド成果物を削除する (native~/build/)
 #   make clean-all            # ビルド成果物 + Qulacs ソース & インストール先を全削除する
 # =============================================================================
 
-# VS 付属の cmake を使う（PATH に cmake がない場合のフォールバック）
+# ---------------------------------------------------------------------------
+# CMake detection (cross-platform)
+# ---------------------------------------------------------------------------
+ifeq ($(OS),Windows_NT)
 CMAKE := $(shell where cmake 2>/dev/null | head -1)
 ifeq ($(CMAKE),)
 CMAKE := C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe
+endif
+else
+CMAKE := $(shell which cmake 2>/dev/null)
 endif
 
 QULACS_REPO    := https://github.com/qulacs/qulacs.git
@@ -61,10 +76,34 @@ QULACS_INSTALL_ANDROID_X86_64 := native~/extern/qulacs-install-android-x86_64
 WRAPPER_BUILD_ANDROID_X86_64  := native~/build/wrapper-android-x86_64
 PLUGIN_DIR_ANDROID_X86_64     := Runtime/Plugins/Android/x86_64
 
-.PHONY: build fetch-qulacs build-qulacs build-dll deploy-dll \
+# ---------------------------------------------------------------------------
+# macOS settings
+# ---------------------------------------------------------------------------
+QULACS_BUILD_MACOS   := native~/build/qulacs-macos
+QULACS_INSTALL_MACOS := native~/extern/qulacs-install-macos
+WRAPPER_BUILD_MACOS  := native~/build/wrapper-macos
+PLUGIN_DIR_MACOS     := Runtime/Plugins/macOS
+DYLIB                := qulacs_unity.dylib
+
+# Homebrew libomp (Apple Clang does not bundle OpenMP)
+LIBOMP_PREFIX := $(shell brew --prefix libomp 2>/dev/null)
+
+# ---------------------------------------------------------------------------
+# iOS settings
+# ---------------------------------------------------------------------------
+QULACS_BUILD_IOS   := native~/build/qulacs-ios
+QULACS_INSTALL_IOS := native~/extern/qulacs-install-ios
+WRAPPER_BUILD_IOS  := native~/build/wrapper-ios
+PLUGIN_DIR_IOS     := Runtime/Plugins/iOS
+IOS_STATIC_LIB     := qulacs_unity.a
+IOS_DEPLOYMENT_TARGET := 13.0
+
+.PHONY: build fetch-qulacs fetch-boost build-qulacs build-dll deploy-dll \
         build-android build-qulacs-android build-dll-android deploy-dll-android \
         build-android-x86_64 build-qulacs-android-x86_64 build-dll-android-x86_64 deploy-dll-android-x86_64 \
         build-android-all \
+        build-macos build-qulacs-macos build-dll-macos deploy-dll-macos \
+        build-ios build-qulacs-ios build-dll-ios deploy-dll-ios \
         clean-build clean-all
 
 build: fetch-qulacs build-qulacs build-dll deploy-dll
@@ -78,6 +117,23 @@ fetch-qulacs:
 		git clone --depth 1 $(QULACS_REPO) $(QULACS_SRC); \
 	else \
 		echo "    Qulacs source already present, skipping clone."; \
+	fi
+
+# -----------------------------------------------------------------------------
+# Boost ヘッダーをダウンロード・展開する
+# -----------------------------------------------------------------------------
+fetch-boost:
+	@echo ">>> Fetching Boost headers..."
+	@if [ ! -d "$(BOOST_ROOT)/boost" ]; then \
+		mkdir -p native~/extern && \
+		curl -L -o native~/extern/boost.zip \
+			https://archives.boost.io/release/1.86.0/source/boost_1_86_0.zip && \
+		cd native~/extern && \
+		unzip -q boost.zip "boost_1_86_0/boost/*" -d boost_extracted && \
+		mv boost_extracted/boost_1_86_0 boost && \
+		rm -rf boost_extracted boost.zip; \
+	else \
+		echo "    Boost headers already present, skipping."; \
 	fi
 
 # -----------------------------------------------------------------------------
@@ -259,6 +315,123 @@ deploy-dll-android-x86_64:
 build-android-all: build-android build-android-x86_64
 
 # =============================================================================
+# macOS
+# =============================================================================
+
+build-macos: fetch-qulacs fetch-boost build-qulacs-macos build-dll-macos deploy-dll-macos
+
+# -----------------------------------------------------------------------------
+# Qulacs を macOS 向けにビルドする
+# -----------------------------------------------------------------------------
+build-qulacs-macos:
+	@echo ">>> [2/4] Building Qulacs for macOS..."
+	"$(CMAKE)" -B $(QULACS_BUILD_MACOS) -S $(QULACS_SRC) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=$(QULACS_INSTALL_MACOS) \
+		-DCMAKE_POLICY_DEFAULT_CMP0144=NEW \
+		-DUSE_GPU=No \
+		-DUSE_MPI=No \
+		-DUSE_PYTHON=No \
+		-DBOOST_ROOT=$(CURDIR)/$(BOOST_ROOT) \
+		-DBoost_ROOT=$(CURDIR)/$(BOOST_ROOT) \
+		-DBoost_INCLUDE_DIR=$(CURDIR)/$(BOOST_ROOT) \
+		-DBoost_NO_SYSTEM_PATHS=ON
+	"$(CMAKE)" --build $(QULACS_BUILD_MACOS) --config Release
+	@echo ">>> Staging Qulacs headers and libs for macOS..."
+	@mkdir -p $(QULACS_INSTALL_MACOS)/include $(QULACS_INSTALL_MACOS)/lib
+	@cp -r $(QULACS_SRC)/src/cppsim $(QULACS_INSTALL_MACOS)/include/
+	@cp -r $(QULACS_SRC)/src/csim   $(QULACS_INSTALL_MACOS)/include/
+	@cp -r $(QULACS_BUILD_MACOS)/eigen/src/eigen/Eigen $(QULACS_INSTALL_MACOS)/include/
+	@cp native~/build/lib/libcppsim_static.a $(QULACS_INSTALL_MACOS)/lib/
+	@cp native~/build/lib/libcsim_static.a   $(QULACS_INSTALL_MACOS)/lib/
+
+# -----------------------------------------------------------------------------
+# ラッパーを macOS 向けにビルドして qulacs_unity.dylib を生成する
+# -----------------------------------------------------------------------------
+build-dll-macos:
+	@echo ">>> [3/4] Building $(DYLIB) for macOS..."
+	"$(CMAKE)" -B $(WRAPPER_BUILD_MACOS) -S $(WRAPPER_SRC) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DQULACS_ROOT=$(CURDIR)/$(QULACS_INSTALL_MACOS) \
+		-DOpenMP_C_FLAGS="-Xpreprocessor -fopenmp -I$(LIBOMP_PREFIX)/include" \
+		-DOpenMP_CXX_FLAGS="-Xpreprocessor -fopenmp -I$(LIBOMP_PREFIX)/include" \
+		-DOpenMP_C_LIB_NAMES=omp \
+		-DOpenMP_CXX_LIB_NAMES=omp \
+		-DOpenMP_omp_LIBRARY=$(LIBOMP_PREFIX)/lib/libomp.dylib
+	"$(CMAKE)" --build $(WRAPPER_BUILD_MACOS) --config Release
+
+# -----------------------------------------------------------------------------
+# .dylib を Unity プラグインフォルダにコピーする
+# -----------------------------------------------------------------------------
+deploy-dll-macos:
+	@echo ">>> [4/4] Deploying $(DYLIB) to Unity plugin folder..."
+	@mkdir -p $(PLUGIN_DIR_MACOS)
+	@if [ -f "$(WRAPPER_BUILD_MACOS)/$(DYLIB)" ]; then \
+		cp $(WRAPPER_BUILD_MACOS)/$(DYLIB) $(PLUGIN_DIR_MACOS)/$(DYLIB); \
+	else \
+		echo "ERROR: $(DYLIB) not found. Build may have failed."; exit 1; \
+	fi
+	@echo ">>> Done. $(PLUGIN_DIR_MACOS)/$(DYLIB)"
+
+# =============================================================================
+# iOS (cross-compile from macOS)
+# =============================================================================
+
+build-ios: fetch-qulacs fetch-boost build-qulacs-ios build-dll-ios deploy-dll-ios
+
+# -----------------------------------------------------------------------------
+# Qulacs を iOS ARM64 向けにクロスビルドする
+# -----------------------------------------------------------------------------
+build-qulacs-ios:
+	@echo ">>> [2/4] Building Qulacs for iOS..."
+	"$(CMAKE)" -B $(QULACS_BUILD_IOS) -S $(QULACS_SRC) \
+		-DCMAKE_SYSTEM_NAME=iOS \
+		-DCMAKE_OSX_DEPLOYMENT_TARGET=$(IOS_DEPLOYMENT_TARGET) \
+		-DCMAKE_OSX_ARCHITECTURES=arm64 \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=$(QULACS_INSTALL_IOS) \
+		-DCMAKE_POLICY_DEFAULT_CMP0144=NEW \
+		-DUSE_GPU=No \
+		-DUSE_MPI=No \
+		-DUSE_PYTHON=No \
+		-DBOOST_ROOT=$(CURDIR)/$(BOOST_ROOT) \
+		-DBoost_ROOT=$(CURDIR)/$(BOOST_ROOT) \
+		-DBoost_INCLUDE_DIR=$(CURDIR)/$(BOOST_ROOT) \
+		-DBoost_NO_SYSTEM_PATHS=ON
+	"$(CMAKE)" --build $(QULACS_BUILD_IOS) --config Release
+	@echo ">>> Staging Qulacs headers and libs for iOS..."
+	@mkdir -p $(QULACS_INSTALL_IOS)/include $(QULACS_INSTALL_IOS)/lib
+	@cp -r $(QULACS_SRC)/src/cppsim $(QULACS_INSTALL_IOS)/include/
+	@cp -r $(QULACS_SRC)/src/csim   $(QULACS_INSTALL_IOS)/include/
+	@cp -r $(QULACS_BUILD_IOS)/eigen/src/eigen/Eigen $(QULACS_INSTALL_IOS)/include/
+	@cp native~/build/lib/libcppsim_static.a $(QULACS_INSTALL_IOS)/lib/
+	@cp native~/build/lib/libcsim_static.a   $(QULACS_INSTALL_IOS)/lib/
+
+# -----------------------------------------------------------------------------
+# ラッパーを iOS 向けにビルドして静的ライブラリを生成する
+# -----------------------------------------------------------------------------
+build-dll-ios:
+	@echo ">>> [3/4] Building $(IOS_STATIC_LIB) for iOS..."
+	"$(CMAKE)" -B $(WRAPPER_BUILD_IOS) -S $(WRAPPER_SRC) \
+		-DCMAKE_SYSTEM_NAME=iOS \
+		-DCMAKE_OSX_DEPLOYMENT_TARGET=$(IOS_DEPLOYMENT_TARGET) \
+		-DCMAKE_OSX_ARCHITECTURES=arm64 \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DQULACS_ROOT=$(CURDIR)/$(QULACS_INSTALL_IOS) \
+		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH \
+		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH
+	"$(CMAKE)" --build $(WRAPPER_BUILD_IOS) --config Release
+
+# -----------------------------------------------------------------------------
+# .a を Unity プラグインフォルダにコピーする
+# -----------------------------------------------------------------------------
+deploy-dll-ios:
+	@echo ">>> [4/4] Deploying $(IOS_STATIC_LIB) to Unity plugin folder..."
+	@mkdir -p $(PLUGIN_DIR_IOS)
+	@find $(WRAPPER_BUILD_IOS) -name "$(IOS_STATIC_LIB)" | head -1 | xargs -I{} cp {} $(PLUGIN_DIR_IOS)/$(IOS_STATIC_LIB)
+	@echo ">>> Done. $(PLUGIN_DIR_IOS)/$(IOS_STATIC_LIB)"
+
+# =============================================================================
 # Clean
 # =============================================================================
 
@@ -271,4 +444,5 @@ clean-build:
 
 clean-all: clean-build
 	@echo ">>> Removing Qulacs install and source..."
-	rm -rf $(QULACS_INSTALL) $(QULACS_INSTALL_ANDROID) $(QULACS_INSTALL_ANDROID_X86_64) $(QULACS_SRC)
+	rm -rf $(QULACS_INSTALL) $(QULACS_INSTALL_ANDROID) $(QULACS_INSTALL_ANDROID_X86_64) \
+		$(QULACS_INSTALL_MACOS) $(QULACS_INSTALL_IOS) $(QULACS_SRC) $(BOOST_ROOT)

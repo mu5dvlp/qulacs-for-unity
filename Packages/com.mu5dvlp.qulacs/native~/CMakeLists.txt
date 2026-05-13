@@ -56,8 +56,13 @@ find_library(QULACS_CSIM_LIB
 # ---------------------------------------------------------------------------
 # Shared library target
 # ---------------------------------------------------------------------------
-add_library(qulacs_unity SHARED
-    src/qulacs_unity.cpp)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    add_library(qulacs_unity STATIC
+        src/qulacs_unity.cpp)
+else()
+    add_library(qulacs_unity SHARED
+        src/qulacs_unity.cpp)
+endif()
 
 target_include_directories(qulacs_unity PRIVATE
     "${QULACS_INCLUDE_DIR}"
