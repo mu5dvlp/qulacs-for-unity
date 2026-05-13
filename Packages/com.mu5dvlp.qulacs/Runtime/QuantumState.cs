@@ -6,7 +6,8 @@ namespace Mu5dvlp.Qulacs
 {
     /// <summary>
     /// Represents a quantum state vector backed by the Qulacs native library.
-    /// Must be disposed when no longer needed.
+    /// Must be disposed when no longer needed to free native resources.
+    /// This class is NOT thread-safe. Do not share an instance across threads without external synchronization.
     /// </summary>
     public sealed class QuantumState : IDisposable
     {

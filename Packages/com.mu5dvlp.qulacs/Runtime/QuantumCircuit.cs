@@ -7,7 +7,8 @@ namespace Mu5dvlp.Qulacs
     /// Represents a quantum circuit backed by the Qulacs native library.
     /// Gates are appended in order and applied to a <see cref="QuantumState"/> via
     /// <see cref="UpdateQuantumState"/>.
-    /// Must be disposed when no longer needed.
+    /// Must be disposed when no longer needed to free native resources.
+    /// This class is NOT thread-safe. Do not share an instance across threads without external synchronization.
     /// </summary>
     public sealed class QuantumCircuit : IDisposable
     {
@@ -155,7 +156,9 @@ namespace Mu5dvlp.Qulacs
         }
 
         // --- Rotation gates ---
+        // Qulacs convention: R{X,Y,Z}(θ) = exp(+iθP/2), opposite sign from standard exp(−iθP/2).
 
+        /// <summary>Rotation around X-axis. Qulacs convention: RX(θ) = exp(+iθX/2).</summary>
         public QuantumCircuit RX(int qubitIndex, double angle)
         {
             ThrowIfDisposed();
@@ -163,6 +166,7 @@ namespace Mu5dvlp.Qulacs
             return this;
         }
 
+        /// <summary>Rotation around Y-axis. Qulacs convention: RY(θ) = exp(+iθY/2).</summary>
         public QuantumCircuit RY(int qubitIndex, double angle)
         {
             ThrowIfDisposed();
@@ -170,6 +174,7 @@ namespace Mu5dvlp.Qulacs
             return this;
         }
 
+        /// <summary>Rotation around Z-axis. Qulacs convention: RZ(θ) = exp(+iθZ/2).</summary>
         public QuantumCircuit RZ(int qubitIndex, double angle)
         {
             ThrowIfDisposed();
