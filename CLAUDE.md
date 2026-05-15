@@ -37,6 +37,14 @@ Plugin paths per platform:
 "C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Unity.exe" -projectPath . -runTests -testPlatform editmode -quit -batchmode -logFile test.log
 ```
 
+## Branch Strategy
+
+- `main` — stable releases only
+- `dev` — active development (default branch for PRs)
+- Work branches: `{type}/#{issue}_{short-description}` (e.g., `feat/#42_add-ry-gate`)
+- Types: `feat`, `fix`, `chore`
+- Flow: work branch → PR to `dev` → release merge to `main`
+
 ## C# Scripts
 
 Scripts live in `Assets/`. Unity auto-generates `.csproj` — do not edit manually.

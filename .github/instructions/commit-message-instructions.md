@@ -11,3 +11,8 @@ Generate a single-line commit message in English using a Conventional Commits-st
 - Keep it short and specific (prefer ≤72 characters when possible)
 - No emojis, no trailing period
 - If there is a related issue, append `(#123)` at the end
+
+### Branch naming
+- Format: `{type}/#{issue}_{short-description}` (e.g., `feat/#42_add-ry-gate`)
+- Types: `feat`, `fix`, `chore`
+- All work branches are created from `dev` and merged back to `dev`

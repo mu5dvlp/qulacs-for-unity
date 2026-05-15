@@ -11,6 +11,7 @@ Usage (local – requires 'make fetch-qulacs' first):
 Usage (CI – supply paths explicitly):
   python tools/check_coverage.py --qulacs-src /path/to/qulacs/src/cppsim
 """
+import json
 import re
 import sys
 import argparse
@@ -225,6 +226,11 @@ def main() -> None:
         metavar="PCT",
         help="Exit 1 if coverage is below this percentage (0–100)",
     )
+    parser.add_argument(
+        "--badge-json",
+        metavar="FILE",
+        help="Write a shields.io endpoint-compatible JSON badge to FILE",
+    )
     args = parser.parse_args()
 
     src = Path(args.qulacs_src)
@@ -249,6 +255,20 @@ def main() -> None:
     if args.report:
         with open(args.report, "w", encoding="utf-8") as f:
             print_report(entries, out=f)
+
+    if args.badge_json:
+        in_scope = [e for e in entries if e.expected_wrapper is not None]
+        covered = [e for e in in_scope if e.covered]
+        pct = len(covered) / len(in_scope) * 100 if in_scope else 0.0
+        color = "brightgreen" if pct >= 90 else "green" if pct >= 80 else "yellow" if pct >= 50 else "red"
+        badge = {
+            "schemaVersion": 1,
+            "label": "API coverage",
+            "message": f"{pct:.1f}%",
+            "color": color,
+        }
+        with open(args.badge_json, "w", encoding="utf-8") as f:
+            json.dump(badge, f)
 
     if args.min_coverage is not None:
         in_scope = [e for e in entries if e.expected_wrapper is not None]

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class QubitObject : MonoBehaviour
 {
-    [SerializeField] bool useColor = false;
+    [SerializeField]
+    bool useColor = false;
     public QuantumState State { get; private set; }
 
     private Renderer _renderer;
@@ -28,7 +29,8 @@ public class QubitObject : MonoBehaviour
 
     void UpdateColor()
     {
-        if (State == null || _renderer == null) return;
+        if (State == null || _renderer == null)
+            return;
         if (!useColor)
         {
             _renderer.material.color = Color.white;

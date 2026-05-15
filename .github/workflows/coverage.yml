@@ -2,9 +2,9 @@ name: API Coverage
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
-    branches: [main]
+    branches: [main, dev]
 
 permissions:
   contents: read
@@ -38,7 +38,8 @@ jobs:
         run: |
           .venv/bin/python tools/check_coverage.py \
             --qulacs-src /tmp/qulacs/src/cppsim \
-            --report coverage-report.txt
+            --report coverage-report.txt \
+            --badge-json coverage-badge.json
 
       - name: Upload report
         if: always()
@@ -46,3 +47,21 @@ jobs:
         with:
           name: api-coverage-report
           path: coverage-report.txt
+
+      - name: Read badge data
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: badge
+        run: |
+          echo "message=$(jq -r .message coverage-badge.json)" >> "$GITHUB_OUTPUT"
+          echo "color=$(jq -r .color coverage-badge.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Update coverage badge
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ vars.COVERAGE_GIST_ID }}
+          filename: qulacs-for-unity-coverage.json
+          label: API coverage
+          message: ${{ steps.badge.outputs.message }}
+          color: ${{ steps.badge.outputs.color }}

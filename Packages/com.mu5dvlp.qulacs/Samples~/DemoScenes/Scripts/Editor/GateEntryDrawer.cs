@@ -13,7 +13,9 @@ public class GateEntryDrawer : PropertyDrawer
         var gateTypeProp = property.FindPropertyRelative("gateType");
         bool twoQubit = IsTwoQubit((GateType)gateTypeProp.enumValueIndex);
         int rows = twoQubit ? 3 : 2;
-        return EditorGUIUtility.singleLineHeight * rows + EditorGUIUtility.standardVerticalSpacing * (rows - 1) + EditorGUIUtility.singleLineHeight;
+        return EditorGUIUtility.singleLineHeight * rows
+            + EditorGUIUtility.standardVerticalSpacing * (rows - 1)
+            + EditorGUIUtility.singleLineHeight;
     }
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

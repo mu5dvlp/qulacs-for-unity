@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Mu5dvlp.Qulacs.Internal;
 
 namespace Mu5dvlp.Qulacs
@@ -40,11 +41,18 @@ namespace Mu5dvlp.Qulacs
             QubitCount = qubitCount;
         }
 
+        private QuantumCircuit(IntPtr handle, int qubitCount)
+        {
+            _handle = handle;
+            QubitCount = qubitCount;
+        }
+
         /// <summary>Applies all gates in the circuit to the given state in order.</summary>
         public void UpdateQuantumState(QuantumState state)
         {
             ThrowIfDisposed();
-            if (state == null) throw new ArgumentNullException(nameof(state));
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
             NativeMethods.qulacs_circuit_update_quantum_state(_handle, state.Handle);
         }
 
@@ -235,8 +243,7 @@ namespace Mu5dvlp.Qulacs
         public QuantumCircuit Measure(int qubitIndex, int registerAddress = 0)
         {
             ThrowIfDisposed();
-            NativeMethods.qulacs_circuit_add_measurement_gate(
-                _handle, (uint)qubitIndex, (uint)registerAddress);
+            NativeMethods.qulacs_circuit_add_measurement_gate(_handle, (uint)qubitIndex, (uint)registerAddress);
             return this;
         }
 
@@ -263,6 +270,40 @@ namespace Mu5dvlp.Qulacs
             return NativeMethods.qulacs_circuit_is_Gaussian(_handle) != 0;
         }
 
+        // --- Copy / Inverse / ToString ---
+
+        /// <summary>Returns a deep copy of this circuit.</summary>
+        public QuantumCircuit Copy()
+        {
+            ThrowIfDisposed();
+            IntPtr h = NativeMethods.qulacs_circuit_copy(_handle);
+            if (h == IntPtr.Zero)
+                throw new InvalidOperationException("Failed to copy QuantumCircuit.");
+            return new QuantumCircuit(h, QubitCount);
+        }
+
+        /// <summary>Returns the inverse (adjoint) of this circuit.</summary>
+        public QuantumCircuit GetInverse()
+        {
+            ThrowIfDisposed();
+            IntPtr h = NativeMethods.qulacs_circuit_get_inverse(_handle);
+            if (h == IntPtr.Zero)
+                throw new InvalidOperationException("Failed to get inverse QuantumCircuit.");
+            return new QuantumCircuit(h, QubitCount);
+        }
+
+        /// <summary>Returns the Qulacs string representation of this circuit.</summary>
+        public override string ToString()
+        {
+            ThrowIfDisposed();
+            uint needed = NativeMethods.qulacs_circuit_to_string(_handle, null, 0);
+            if (needed <= 1)
+                return string.Empty;
+            var buf = new byte[needed];
+            NativeMethods.qulacs_circuit_to_string(_handle, buf, needed);
+            return Encoding.UTF8.GetString(buf, 0, (int)(needed - 1));
+        }
+
         // --- Circuit mutation ---
 
         /// <summary>Removes the gate at the given index.</summary>
@@ -281,7 +322,8 @@ namespace Mu5dvlp.Qulacs
 
         private void ThrowIfDisposed()
         {
-            if (_disposed) throw new ObjectDisposedException(nameof(QuantumCircuit));
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(QuantumCircuit));
         }
 
         public void Dispose()

@@ -169,6 +169,10 @@ The native plugin binary is missing or not recognized by Unity.
 - **Qulacs source missing**: Run `make fetch-qulacs` first, or `make build` which includes the fetch step.
 - **Android `find_path` fails**: The Makefile uses `$(CURDIR)` for absolute paths. If building CMake manually, pass an absolute path for `-DQULACS_ROOT`.
 
+## Contributing
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for code style, branch naming (`{type}/#{issue}_{description}`), and PR guidelines.
+
 ## Contact
 
 - Personal: mu5dvlp@gmail.com

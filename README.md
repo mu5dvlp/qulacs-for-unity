@@ -1,6 +1,7 @@
 # Qulacs for Unity
 
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
+[![API Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mu5dvlp/COVERAGE_GIST_ID/raw/qulacs-for-unity-coverage.json)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/coverage.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
 
@@ -81,6 +82,12 @@ make build-ios            # iOS ARM64 (cross-compile from macOS)
 ```
 
 See [`Packages/com.mu5dvlp.qulacs/CLAUDE.md`](Packages/com.mu5dvlp.qulacs/CLAUDE.md) for details.
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on code style, branch naming, and the PR process.
+
+**Branch strategy**: Feature/fix branches → `dev` → `main` (releases). See the [branch naming convention](CONTRIBUTING.md#branch-naming-convention) for details.
 
 ## Contact
 

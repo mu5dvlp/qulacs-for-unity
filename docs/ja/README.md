@@ -76,6 +76,12 @@ cmake --build build --config Release
 
 生成された `qulacs_unity.dll` を `Runtime/Plugins/Windows/x86_64/` にコピーしてください。
 
+## コントリビュート
+
+コントリビュート歓迎です！コードスタイル、ブランチ命名規則 (`{type}/#{issue}_{description}`)、PR の手順については [CONTRIBUTING.md](../../CONTRIBUTING.md) をご覧ください。
+
+**ブランチ戦略**: 作業ブランチ → `dev` → `main` (リリース)
+
 ## 連絡先
 
 - 個人用: mu5dvlp@gmail.com

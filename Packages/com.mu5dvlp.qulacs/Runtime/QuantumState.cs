@@ -67,7 +67,8 @@ namespace Mu5dvlp.Qulacs
         public void SetStateVector(Complex[] vector)
         {
             ThrowIfDisposed();
-            if (vector == null) throw new ArgumentNullException(nameof(vector));
+            if (vector == null)
+                throw new ArgumentNullException(nameof(vector));
             if (vector.Length != Dimension)
                 throw new ArgumentException($"vector.Length must be {Dimension}.", nameof(vector));
 
@@ -128,7 +129,8 @@ namespace Mu5dvlp.Qulacs
         public ulong[] Sampling(int count)
         {
             ThrowIfDisposed();
-            if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
+            if (count <= 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
             var results = new ulong[count];
             NativeMethods.qulacs_state_sampling(_handle, (uint)count, results);
             return results;
@@ -138,20 +140,61 @@ namespace Mu5dvlp.Qulacs
         public ulong[] Sampling(int count, uint seed)
         {
             ThrowIfDisposed();
-            if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
+            if (count <= 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
             var results = new ulong[count];
             NativeMethods.qulacs_state_sampling_seed(_handle, (uint)count, seed, results);
             return results;
         }
 
+        /// <summary>Adds another state's vector element-wise: |this⟩ += |other⟩.</summary>
+        public void AddState(QuantumState other)
+        {
+            ThrowIfDisposed();
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+            NativeMethods.qulacs_state_add_state(_handle, other.Handle);
+        }
+
+        /// <summary>Multiplies the entire state vector by a complex scalar.</summary>
+        public void MultiplyCoef(Complex coef)
+        {
+            ThrowIfDisposed();
+            NativeMethods.qulacs_state_multiply_coef(_handle, coef.Real, coef.Imaginary);
+        }
+
+        /// <summary>
+        /// Returns the marginal probability for the given measurement pattern.
+        /// Each element is 0 (measure |0⟩), 1 (measure |1⟩), or 2 (not measured).
+        /// Length must equal QubitCount.
+        /// </summary>
+        public double GetMarginalProbability(int[] measuredValues)
+        {
+            ThrowIfDisposed();
+            if (measuredValues == null)
+                throw new ArgumentNullException(nameof(measuredValues));
+            if (measuredValues.Length != QubitCount)
+                throw new ArgumentException($"Length must be {QubitCount}.", nameof(measuredValues));
+
+            var mv = new uint[measuredValues.Length];
+            for (int i = 0; i < measuredValues.Length; i++)
+                mv[i] = (uint)measuredValues[i];
+            return NativeMethods.qulacs_state_get_marginal_probability(_handle, mv, (uint)mv.Length);
+        }
+
         internal IntPtr Handle
         {
-            get { ThrowIfDisposed(); return _handle; }
+            get
+            {
+                ThrowIfDisposed();
+                return _handle;
+            }
         }
 
         private void ThrowIfDisposed()
         {
-            if (_disposed) throw new ObjectDisposedException(nameof(QuantumState));
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(QuantumState));
         }
 
         public void Dispose()

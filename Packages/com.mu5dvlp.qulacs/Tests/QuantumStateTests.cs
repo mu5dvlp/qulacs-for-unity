@@ -70,7 +70,8 @@ namespace Mu5dvlp.Qulacs.Tests
             var vec = state.GetStateVector();
             Assert.AreEqual(1.0, vec[5].Real, Eps);
             for (int i = 0; i < vec.Length; i++)
-                if (i != 5) Assert.AreEqual(0.0, Complex.Abs(vec[i]), Eps);
+                if (i != 5)
+                    Assert.AreEqual(0.0, Complex.Abs(vec[i]), Eps);
         }
 
         // --- GetSquaredNorm ---
@@ -154,7 +155,7 @@ namespace Mu5dvlp.Qulacs.Tests
             var output = state.GetStateVector();
             for (int i = 0; i < input.Length; i++)
             {
-                Assert.AreEqual(input[i].Real,      output[i].Real,      Eps);
+                Assert.AreEqual(input[i].Real, output[i].Real, Eps);
                 Assert.AreEqual(input[i].Imaginary, output[i].Imaginary, Eps);
             }
         }
@@ -190,6 +191,81 @@ namespace Mu5dvlp.Qulacs.Tests
             ulong maxIndex = (ulong)state.Dimension;
             foreach (var r in results)
                 Assert.Less(r, maxIndex);
+        }
+
+        // --- AddState ---
+
+        [Test]
+        public void AddState_AddsVectorsElementWise()
+        {
+            using var a = new QuantumState(1);
+            using var b = new QuantumState(1);
+            // a = |0>, b = |1>
+            b.SetComputationalBasis(1);
+            a.AddState(b);
+            var v = a.GetStateVector();
+            Assert.AreEqual(1.0, v[0].Real, Eps);
+            Assert.AreEqual(1.0, v[1].Real, Eps);
+        }
+
+        [Test]
+        public void AddState_NullThrows()
+        {
+            using var state = new QuantumState(1);
+            Assert.Throws<ArgumentNullException>(() => state.AddState(null));
+        }
+
+        // --- MultiplyCoef ---
+
+        [Test]
+        public void MultiplyCoef_ScalesVector()
+        {
+            using var state = new QuantumState(1);
+            // |0> → multiply by 0.5 → amplitude[0] = 0.5
+            state.MultiplyCoef(new Complex(0.5, 0.0));
+            var v = state.GetStateVector();
+            Assert.AreEqual(0.5, v[0].Real, Eps);
+            Assert.AreEqual(0.0, v[0].Imaginary, Eps);
+        }
+
+        [Test]
+        public void MultiplyCoef_ImaginaryCoef()
+        {
+            using var state = new QuantumState(1);
+            state.MultiplyCoef(new Complex(0.0, 1.0));
+            var v = state.GetStateVector();
+            Assert.AreEqual(0.0, v[0].Real, Eps);
+            Assert.AreEqual(1.0, v[0].Imaginary, Eps);
+        }
+
+        // --- GetMarginalProbability ---
+
+        [Test]
+        public void GetMarginalProbability_ZeroState_AllZero()
+        {
+            using var state = new QuantumState(2);
+            // Both qubits measured as 0
+            double p = state.GetMarginalProbability(new[] { 0, 0 });
+            Assert.AreEqual(1.0, p, Eps);
+        }
+
+        [Test]
+        public void GetMarginalProbability_BellState_MarginalIsHalf()
+        {
+            using var state = new QuantumState(2);
+            using var circuit = new QuantumCircuit(2);
+            circuit.H(0).CNOT(0, 1);
+            circuit.UpdateQuantumState(state);
+            // Measure qubit 0 as 0, qubit 1 not measured (2)
+            double p = state.GetMarginalProbability(new[] { 0, 2 });
+            Assert.AreEqual(0.5, p, Eps);
+        }
+
+        [Test]
+        public void GetMarginalProbability_WrongLength_Throws()
+        {
+            using var state = new QuantumState(2);
+            Assert.Throws<ArgumentException>(() => state.GetMarginalProbability(new[] { 0, 0, 0 }));
         }
 
         // --- Dispose ---

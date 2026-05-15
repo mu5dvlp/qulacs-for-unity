@@ -23,6 +23,9 @@ State vector of `2^qubitCount` complex amplitudes. Initialized to |0…0⟩.
 | `GetSquaredNorm()` → `double` | Squared norm (≈ 1 for normalized states) |
 | `Sampling(int count)` → `ulong[]` | Sample measurement outcomes |
 | `Sampling(int count, uint seed)` → `ulong[]` | Sample with fixed seed |
+| `AddState(QuantumState other)` | Add another state element-wise: \|this⟩ += \|other⟩ |
+| `MultiplyCoef(Complex coef)` | Multiply the entire state vector by a complex scalar |
+| `GetMarginalProbability(int[] measuredValues)` → `double` | Marginal probability for a measurement pattern (0/1/2 per qubit; 2 = not measured) |
 
 Properties: `QubitCount`, `Dimension` (= `2^QubitCount`)
 
@@ -73,6 +76,14 @@ All gate methods return `this` for chaining.
 | `CalculateDepth()` → `int` | Critical-path length of the circuit |
 | `IsClifford()` → `bool` | True if all gates are Clifford |
 | `IsGaussian()` → `bool` | True if all gates are Gaussian |
+
+### Copy / Inverse / ToString
+
+| Method | Description |
+|---|---|
+| `Copy()` → `QuantumCircuit` | Deep copy of the circuit (caller owns the new instance) |
+| `GetInverse()` → `QuantumCircuit` | Inverse (adjoint) circuit (caller owns the new instance) |
+| `ToString()` → `string` | Qulacs string representation of the circuit |
 
 ### Circuit mutation
 

@@ -4,7 +4,16 @@ using UnityEngine;
 
 public enum ComposerGate
 {
-    None, H, X, Y, Z, S, T, CNOT, SWAP, Measure
+    None,
+    H,
+    X,
+    Y,
+    Z,
+    S,
+    T,
+    CNOT,
+    SWAP,
+    Measure,
 }
 
 [Serializable]
@@ -22,17 +31,22 @@ public struct ComposerCell
 
 public class CircuitComposer : MonoBehaviour
 {
-    [SerializeField, Range(1, 8)] int qubitCount = 3;
-    [SerializeField, Range(1, 16)] int stepCount = 8;
+    [SerializeField, Range(1, 8)]
+    int qubitCount = 3;
+
+    [SerializeField, Range(1, 16)]
+    int stepCount = 8;
 
     ComposerCell[,] grid;
     ComposerGate selectedTool = ComposerGate.H;
-    int pendingQubit = -1, pendingStep = -1;
+    int pendingQubit = -1,
+        pendingStep = -1;
     CircuitComposerUI view;
 
     public int QubitCount => qubitCount;
     public int StepCount => stepCount;
     public ComposerGate SelectedTool => selectedTool;
+
     public ComposerCell GetCell(int q, int s) => grid[q, s];
 
     void Start()
@@ -47,8 +61,8 @@ public class CircuitComposer : MonoBehaviour
     {
         grid = new ComposerCell[qubitCount, stepCount];
         for (int q = 0; q < qubitCount; q++)
-            for (int s = 0; s < stepCount; s++)
-                grid[q, s] = ComposerCell.Empty;
+        for (int s = 0; s < stepCount; s++)
+            grid[q, s] = ComposerCell.Empty;
     }
 
     public void SelectTool(ComposerGate tool)
@@ -88,7 +102,11 @@ public class CircuitComposer : MonoBehaviour
             pendingQubit = qubit;
             pendingStep = step;
             grid[qubit, step] = new ComposerCell
-                { gate = selectedTool, partnerQubit = -1, isControl = true };
+            {
+                gate = selectedTool,
+                partnerQubit = -1,
+                isControl = true,
+            };
             view.RefreshCell(qubit, step);
             view.ShowStatus($"Select target qubit (step {step})");
             return;
@@ -106,7 +124,11 @@ public class CircuitComposer : MonoBehaviour
         grid[pendingQubit, pendingStep] = ctrl;
 
         grid[qubit, step] = new ComposerCell
-            { gate = selectedTool, partnerQubit = pendingQubit, isControl = false };
+        {
+            gate = selectedTool,
+            partnerQubit = pendingQubit,
+            isControl = false,
+        };
 
         view.RefreshCell(pendingQubit, pendingStep);
         view.RefreshCell(qubit, step);
@@ -130,7 +152,8 @@ public class CircuitComposer : MonoBehaviour
     void EraseCellPair(int q, int s)
     {
         var cell = grid[q, s];
-        if (cell.IsEmpty) return;
+        if (cell.IsEmpty)
+            return;
         if (cell.IsTwoQubit && cell.partnerQubit >= 0)
         {
             grid[cell.partnerQubit, s] = ComposerCell.Empty;
@@ -143,26 +166,30 @@ public class CircuitComposer : MonoBehaviour
 
     public void AddQubit()
     {
-        if (qubitCount >= 8) return;
+        if (qubitCount >= 8)
+            return;
         Resize(qubitCount + 1, stepCount);
     }
 
     public void RemoveQubit()
     {
-        if (qubitCount <= 1) return;
+        if (qubitCount <= 1)
+            return;
         ClearRefsToQubit(qubitCount - 1);
         Resize(qubitCount - 1, stepCount);
     }
 
     public void AddStep()
     {
-        if (stepCount >= 16) return;
+        if (stepCount >= 16)
+            return;
         Resize(qubitCount, stepCount + 1);
     }
 
     public void RemoveStep()
     {
-        if (stepCount <= 1) return;
+        if (stepCount <= 1)
+            return;
         ClearRefsInStep(stepCount - 1);
         Resize(qubitCount, stepCount - 1);
     }
@@ -190,13 +217,14 @@ public class CircuitComposer : MonoBehaviour
     void Resize(int nq, int ns)
     {
         var old = grid;
-        int oq = qubitCount, os = stepCount;
+        int oq = qubitCount,
+            os = stepCount;
         qubitCount = nq;
         stepCount = ns;
         grid = new ComposerCell[nq, ns];
         for (int q = 0; q < nq; q++)
-            for (int s = 0; s < ns; s++)
-                grid[q, s] = (q < oq && s < os) ? old[q, s] : ComposerCell.Empty;
+        for (int s = 0; s < ns; s++)
+            grid[q, s] = (q < oq && s < os) ? old[q, s] : ComposerCell.Empty;
         view.RebuildAll();
         RunCircuit();
     }
@@ -211,32 +239,47 @@ public class CircuitComposer : MonoBehaviour
 
     public void RunCircuit()
     {
-        if (view == null) return;
+        if (view == null)
+            return;
 
         using var state = new QuantumState(qubitCount);
         using var circuit = new QuantumCircuit(qubitCount);
 
         for (int s = 0; s < stepCount; s++)
-            for (int q = 0; q < qubitCount; q++)
+        for (int q = 0; q < qubitCount; q++)
+        {
+            var c = grid[q, s];
+            switch (c.gate)
             {
-                var c = grid[q, s];
-                switch (c.gate)
-                {
-                    case ComposerGate.H: circuit.H(q); break;
-                    case ComposerGate.X: circuit.X(q); break;
-                    case ComposerGate.Y: circuit.Y(q); break;
-                    case ComposerGate.Z: circuit.Z(q); break;
-                    case ComposerGate.S: circuit.S(q); break;
-                    case ComposerGate.T: circuit.T(q); break;
-                    case ComposerGate.Measure: circuit.Measure(q, q); break;
-                    case ComposerGate.CNOT when c.isControl && c.partnerQubit >= 0:
-                        circuit.CNOT(q, c.partnerQubit);
-                        break;
-                    case ComposerGate.SWAP when c.isControl && c.partnerQubit >= 0:
-                        circuit.SWAP(q, c.partnerQubit);
-                        break;
-                }
+                case ComposerGate.H:
+                    circuit.H(q);
+                    break;
+                case ComposerGate.X:
+                    circuit.X(q);
+                    break;
+                case ComposerGate.Y:
+                    circuit.Y(q);
+                    break;
+                case ComposerGate.Z:
+                    circuit.Z(q);
+                    break;
+                case ComposerGate.S:
+                    circuit.S(q);
+                    break;
+                case ComposerGate.T:
+                    circuit.T(q);
+                    break;
+                case ComposerGate.Measure:
+                    circuit.Measure(q, q);
+                    break;
+                case ComposerGate.CNOT when c.isControl && c.partnerQubit >= 0:
+                    circuit.CNOT(q, c.partnerQubit);
+                    break;
+                case ComposerGate.SWAP when c.isControl && c.partnerQubit >= 0:
+                    circuit.SWAP(q, c.partnerQubit);
+                    break;
             }
+        }
 
         circuit.UpdateQuantumState(state);
 

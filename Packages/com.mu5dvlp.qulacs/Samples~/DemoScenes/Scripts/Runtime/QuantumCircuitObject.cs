@@ -13,13 +13,21 @@ public struct GateEntry
 
 public class QuantumCircuitObject : MonoBehaviour
 {
-    [SerializeField] QubitObject qubitObjectPrefab;
-    [SerializeField] QuantumGateObject gateObjectPrefab;
-    [SerializeField] GameObject wire;
+    [SerializeField]
+    QubitObject qubitObjectPrefab;
+
+    [SerializeField]
+    QuantumGateObject gateObjectPrefab;
+
+    [SerializeField]
+    GameObject wire;
 
     [Space(20)]
-    [SerializeField, Range(1, 64)] int qubitCount = 2;
-    [SerializeField] List<GateEntry> gates = new();
+    [SerializeField, Range(1, 64)]
+    int qubitCount = 2;
+
+    [SerializeField]
+    List<GateEntry> gates = new();
 
     const float Spacing = 1.5f;
 
@@ -42,7 +50,11 @@ public class QuantumCircuitObject : MonoBehaviour
                 var wireObj = Instantiate(wire, transform);
                 wireObj.gameObject.SetActive(true);
                 wireObj.transform.localPosition = new Vector3(0, -i * Spacing, 0);
-                wireObj.transform.localScale = new Vector3(wireObj.transform.localScale.x, wireLength, wireObj.transform.localScale.z);
+                wireObj.transform.localScale = new Vector3(
+                    wireObj.transform.localScale.x,
+                    wireLength,
+                    wireObj.transform.localScale.z
+                );
             }
         }
 
@@ -57,9 +69,7 @@ public class QuantumCircuitObject : MonoBehaviour
             gateObj.GateType = gate.gateType;
             gateObjects.Add(gateObj);
 
-            float wireHeight = gate.gateType is GateType.CNOT
-                ? (gate.targetIndex - gate.controlIndex)
-                : 0f;
+            float wireHeight = gate.gateType is GateType.CNOT ? (gate.targetIndex - gate.controlIndex) : 0f;
             gateObj.SetwireHeight(wireHeight);
         }
 
@@ -68,7 +78,8 @@ public class QuantumCircuitObject : MonoBehaviour
 
     public void RunCircuit()
     {
-        if (qubitObjects.Count == 0) return;
+        if (qubitObjects.Count == 0)
+            return;
 
         using var state = new QuantumState(qubitCount);
         using var circuit = new QuantumCircuit(qubitCount);
@@ -101,11 +112,14 @@ public class QuantumCircuitObject : MonoBehaviour
         {
             double p1 = 1.0 - state.GetZeroProbability(i);
             double p0 = 1.0 - p1;
-            qubitObjects[i].State.SetStateVector(new System.Numerics.Complex[]
-            {
-                new System.Numerics.Complex(Math.Sqrt(p0), 0),
-                new System.Numerics.Complex(Math.Sqrt(p1), 0),
-            });
+            qubitObjects[i]
+                .State.SetStateVector(
+                    new System.Numerics.Complex[]
+                    {
+                        new System.Numerics.Complex(Math.Sqrt(p0), 0),
+                        new System.Numerics.Complex(Math.Sqrt(p1), 0),
+                    }
+                );
         }
     }
 }
