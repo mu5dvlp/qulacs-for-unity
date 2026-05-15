@@ -1,0 +1,11 @@
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+Assets/TextMesh Pro/
+Assets/TutorialInfo/
+Assets/Samples/
+Packages/com.mu5dvlp.qulacs/native~/

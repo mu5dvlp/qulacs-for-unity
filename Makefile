@@ -14,8 +14,31 @@ TAG         := v$(VERSION)
 CHANGELOG   := $(PACKAGE_DIR)/CHANGELOG.md
 DRAFT       ?= 1
 
-.PHONY: coverage release release-notes
+.PHONY: coverage release release-notes format format-check lint
 
+NATIVE_SRCS := Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h \
+               Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.cpp
+
+# -----------------------------------------------------------------------------
+# Format / Lint
+# -----------------------------------------------------------------------------
+format:
+	@echo ">>> Formatting C# (CSharpier)..."
+	dotnet csharpier .
+	@echo ">>> Formatting C++ (clang-format)..."
+	clang-format -i $(NATIVE_SRCS)
+
+format-check:
+	@echo ">>> Checking C# formatting..."
+	dotnet csharpier --check .
+	@echo ">>> Checking C++ formatting..."
+	clang-format --dry-run --Werror $(NATIVE_SRCS)
+
+lint: format-check
+
+# -----------------------------------------------------------------------------
+# Coverage
+# -----------------------------------------------------------------------------
 coverage:
 	@echo ">>> Checking Qulacs wrapper coverage..."
 	"$(VENV_PYTHON)" tools/check_coverage.py

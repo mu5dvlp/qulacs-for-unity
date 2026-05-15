@@ -1,0 +1,39 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  csharp:
+    name: "C# (CSharpier)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Check formatting
+        run: dotnet csharpier --check .
+
+  cpp:
+    name: "C++ (clang-format)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check formatting
+        run: |
+          clang-format --dry-run --Werror \
+            Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h \
+            Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.cpp
