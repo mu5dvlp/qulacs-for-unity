@@ -26,6 +26,10 @@ native~/
   src/qulacs_unity.cpp        # extern "C" wrapper
   CMakeLists.txt
   build.sh                    # invoked by Makefile
+dotnet~/
+  Mu5dvlp.Qulacs.Runtime.csproj  # class library for dotnet test
+  Mu5dvlp.Qulacs.Tests.csproj    # test project (NUnit)
+  Mu5dvlp.Qulacs.sln
 Tests/
   QuantumStateTests.cs
   GateTests.cs

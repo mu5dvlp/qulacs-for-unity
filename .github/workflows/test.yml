@@ -1,8 +1,6 @@
 name: Test
 
 on:
-  push:
-    branches: [main, dev]
   pull_request:
     branches: [main, dev]
 
@@ -13,44 +11,34 @@ permissions:
 
 jobs:
   test:
-    name: EditMode Tests (Unity ${{ matrix.unity-version }})
+    name: dotnet test
     runs-on: windows-2022
-
-    strategy:
-      fail-fast: false
-      matrix:
-        unity-version:
-          - 2020.3.49f1
-          - 2021.3.45f1
-          - 2022.3.62f1
-          - 2023.2.22f1
-          - 6000.0.47f1
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Start Docker service
-        shell: powershell
-        run: |
-          Start-Service docker
-          docker info
-
-      - name: Activate Unity and run tests
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          unityVersion:   ${{ matrix.unity-version }}
-          testMode:       editmode
-          artifactsPath:  test-results
-          githubToken:    ${{ secrets.GITHUB_TOKEN }}
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj
+
+      - name: Build
+        run: dotnet build Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj --no-restore
+
+      - name: Test
+        run: >-
+          dotnet test Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj
+          --no-build
+          --logger "trx;LogFileName=test-results.trx"
+          --results-directory test-results
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results-${{ matrix.unity-version }}
+          name: test-results
           path: test-results
