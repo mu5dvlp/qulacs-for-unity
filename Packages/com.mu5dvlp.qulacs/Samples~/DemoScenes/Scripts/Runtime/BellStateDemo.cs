@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Mu5dvlp.Qulacs;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 /// <summary>
 /// Demonstrates creating a Bell state (|00> + |11>) / √2 and displaying measurement results.
@@ -97,7 +97,7 @@ public class BellStateDemo : MonoBehaviour
         {
             string basis = Convert.ToString((long)kv.Key, 2).PadLeft(state.QubitCount, '0');
             float ratio = (float)kv.Value / samplingCount * 100f;
-            sb.AppendLine($"  |{basis}> : {kv.Value,5} ({ratio:F1}%)");
+            sb.AppendLine($"  |{basis}> : {kv.Value, 5} ({ratio:F1}%)");
         }
 
         sb.AppendLine();

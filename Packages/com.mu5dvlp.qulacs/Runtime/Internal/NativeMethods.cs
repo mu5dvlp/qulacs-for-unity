@@ -45,14 +45,16 @@ namespace Mu5dvlp.Qulacs.Internal
             IntPtr state,
             [Out] double[] realOut,
             [Out] double[] imagOut,
-            ulong length);
+            ulong length
+        );
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void qulacs_state_set_vector(
             IntPtr state,
             [In] double[] realIn,
             [In] double[] imagIn,
-            ulong length);
+            ulong length
+        );
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern double qulacs_state_get_zero_probability(IntPtr state, uint qubitIndex);
@@ -61,12 +63,15 @@ namespace Mu5dvlp.Qulacs.Internal
         internal static extern double qulacs_state_get_squared_norm(IntPtr state);
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void qulacs_state_sampling(
-            IntPtr state, uint count, [Out] ulong[] resultsOut);
+        internal static extern void qulacs_state_sampling(IntPtr state, uint count, [Out] ulong[] resultsOut);
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void qulacs_state_sampling_seed(
-            IntPtr state, uint count, uint seed, [Out] ulong[] resultsOut);
+            IntPtr state,
+            uint count,
+            uint seed,
+            [Out] ulong[] resultsOut
+        );
 
         // --- QuantumCircuit ---
 
@@ -132,7 +137,10 @@ namespace Mu5dvlp.Qulacs.Internal
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void qulacs_circuit_add_measurement_gate(
-            IntPtr circuit, uint qubitIndex, uint registerAddress);
+            IntPtr circuit,
+            uint qubitIndex,
+            uint registerAddress
+        );
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void qulacs_circuit_add_sqrtX_gate(IntPtr circuit, uint qubitIndex);
@@ -156,10 +164,21 @@ namespace Mu5dvlp.Qulacs.Internal
         internal static extern void qulacs_circuit_add_U1_gate(IntPtr circuit, uint qubitIndex, double lambda);
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void qulacs_circuit_add_U2_gate(IntPtr circuit, uint qubitIndex, double phi, double lambda);
+        internal static extern void qulacs_circuit_add_U2_gate(
+            IntPtr circuit,
+            uint qubitIndex,
+            double phi,
+            double lambda
+        );
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void qulacs_circuit_add_U3_gate(IntPtr circuit, uint qubitIndex, double theta, double phi, double lambda);
+        internal static extern void qulacs_circuit_add_U3_gate(
+            IntPtr circuit,
+            uint qubitIndex,
+            double theta,
+            double phi,
+            double lambda
+        );
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern uint qulacs_circuit_calculate_depth(IntPtr circuit);
@@ -189,7 +208,10 @@ namespace Mu5dvlp.Qulacs.Internal
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern double qulacs_state_get_marginal_probability(
-            IntPtr state, [In] uint[] measuredValues, uint length);
+            IntPtr state,
+            [In] uint[] measuredValues,
+            uint length
+        );
 
         // --- QuantumCircuit (additional) ---
 

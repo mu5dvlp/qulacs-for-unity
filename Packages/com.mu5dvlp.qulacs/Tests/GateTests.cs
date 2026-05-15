@@ -81,7 +81,7 @@ namespace Mu5dvlp.Qulacs.Tests
             circuit.H(0).Z(0);
             circuit.UpdateQuantumState(state);
             var v = state.GetStateVector();
-            Assert.AreEqual( Inv_Sqrt2, v[0].Real, Eps);
+            Assert.AreEqual(Inv_Sqrt2, v[0].Real, Eps);
             Assert.AreEqual(-Inv_Sqrt2, v[1].Real, Eps);
         }
 
@@ -109,7 +109,7 @@ namespace Mu5dvlp.Qulacs.Tests
             circuit.UpdateQuantumState(state);
             var v = state.GetStateVector();
             Assert.AreEqual(Inv_Sqrt2, v[0].Real, Eps);
-            Assert.AreEqual(0.0,       v[1].Real, Eps);
+            Assert.AreEqual(0.0, v[1].Real, Eps);
             Assert.AreEqual(Inv_Sqrt2, v[1].Imaginary, Eps);
         }
 
@@ -166,7 +166,7 @@ namespace Mu5dvlp.Qulacs.Tests
             // standard physics convention exp(-iθY/2).
             // RY(π)|0> = -|1>  (Qulacs convention)
             var v = ApplyToZero(1, c => c.RY(0, Math.PI));
-            Assert.AreEqual(0.0,  Complex.Abs(v[0]), Eps);
+            Assert.AreEqual(0.0, Complex.Abs(v[0]), Eps);
             Assert.AreEqual(-1.0, v[1].Real, Eps);
         }
 
@@ -201,7 +201,8 @@ namespace Mu5dvlp.Qulacs.Tests
             // index 3 = |11> in little-endian (qubit0=1, qubit1=1)
             Assert.AreEqual(1.0, v[3].Real, Eps);
             for (int i = 0; i < v.Length; i++)
-                if (i != 3) Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
+                if (i != 3)
+                    Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
         }
 
         // --- Identity ---
@@ -249,7 +250,7 @@ namespace Mu5dvlp.Qulacs.Tests
             // (SqrtY)^2 = Y, so two applications on |0> give Y|0> = i|1>
             var v = ApplyToZero(1, c => c.SqrtY(0).SqrtY(0));
             Assert.AreEqual(0.0, Complex.Abs(v[0]), Eps);
-            Assert.AreEqual(0.0, v[1].Real,      Eps);
+            Assert.AreEqual(0.0, v[1].Real, Eps);
             Assert.AreEqual(1.0, v[1].Imaginary, Eps);
         }
 
@@ -308,8 +309,8 @@ namespace Mu5dvlp.Qulacs.Tests
             var v = state.GetStateVector();
             for (int i = 0; i < 3; i++)
                 Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
-            Assert.AreEqual(-1.0, v[3].Real,      Eps);
-            Assert.AreEqual( 0.0, v[3].Imaginary, Eps);
+            Assert.AreEqual(-1.0, v[3].Real, Eps);
+            Assert.AreEqual(0.0, v[3].Imaginary, Eps);
         }
 
         // --- U1 / U2 / U3 ---
@@ -320,7 +321,7 @@ namespace Mu5dvlp.Qulacs.Tests
             // U1(π) = diag(1, e^{iπ}) = diag(1, -1) = Z
             // Z(H|0>) = Z|+> = |->: amplitudes [1/√2, -1/√2]
             var v = ApplyToZero(1, c => c.H(0).U1(0, Math.PI));
-            Assert.AreEqual( Inv_Sqrt2, v[0].Real, Eps);
+            Assert.AreEqual(Inv_Sqrt2, v[0].Real, Eps);
             Assert.AreEqual(-Inv_Sqrt2, v[1].Real, Eps);
         }
 
@@ -353,8 +354,7 @@ namespace Mu5dvlp.Qulacs.Tests
             circuit.H(0).Measure(0, 0);
             circuit.UpdateQuantumState(state);
             double p0 = state.GetZeroProbability(0);
-            Assert.IsTrue(p0 < Eps || p0 > 1.0 - Eps,
-                $"Expected P(|0>) ≈ 0 or 1 after measurement, got {p0}");
+            Assert.IsTrue(p0 < Eps || p0 > 1.0 - Eps, $"Expected P(|0>) ≈ 0 or 1 after measurement, got {p0}");
             Assert.AreEqual(1.0, state.GetSquaredNorm(), Eps);
         }
 
@@ -368,7 +368,8 @@ namespace Mu5dvlp.Qulacs.Tests
             // index 2 = |10> in little-endian qubit1=1, qubit0=0
             Assert.AreEqual(1.0, v[2].Real, Eps);
             for (int i = 0; i < v.Length; i++)
-                if (i != 2) Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
+                if (i != 2)
+                    Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
         }
     }
 }

@@ -70,7 +70,8 @@ namespace Mu5dvlp.Qulacs.Tests
             var vec = state.GetStateVector();
             Assert.AreEqual(1.0, vec[5].Real, Eps);
             for (int i = 0; i < vec.Length; i++)
-                if (i != 5) Assert.AreEqual(0.0, Complex.Abs(vec[i]), Eps);
+                if (i != 5)
+                    Assert.AreEqual(0.0, Complex.Abs(vec[i]), Eps);
         }
 
         // --- GetSquaredNorm ---
@@ -154,7 +155,7 @@ namespace Mu5dvlp.Qulacs.Tests
             var output = state.GetStateVector();
             for (int i = 0; i < input.Length; i++)
             {
-                Assert.AreEqual(input[i].Real,      output[i].Real,      Eps);
+                Assert.AreEqual(input[i].Real, output[i].Real, Eps);
                 Assert.AreEqual(input[i].Imaginary, output[i].Imaginary, Eps);
             }
         }
@@ -264,8 +265,7 @@ namespace Mu5dvlp.Qulacs.Tests
         public void GetMarginalProbability_WrongLength_Throws()
         {
             using var state = new QuantumState(2);
-            Assert.Throws<ArgumentException>(() =>
-                state.GetMarginalProbability(new[] { 0, 0, 0 }));
+            Assert.Throws<ArgumentException>(() => state.GetMarginalProbability(new[] { 0, 0, 0 }));
         }
 
         // --- Dispose ---

@@ -51,7 +51,8 @@ namespace Mu5dvlp.Qulacs
         public void UpdateQuantumState(QuantumState state)
         {
             ThrowIfDisposed();
-            if (state == null) throw new ArgumentNullException(nameof(state));
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
             NativeMethods.qulacs_circuit_update_quantum_state(_handle, state.Handle);
         }
 
@@ -242,8 +243,7 @@ namespace Mu5dvlp.Qulacs
         public QuantumCircuit Measure(int qubitIndex, int registerAddress = 0)
         {
             ThrowIfDisposed();
-            NativeMethods.qulacs_circuit_add_measurement_gate(
-                _handle, (uint)qubitIndex, (uint)registerAddress);
+            NativeMethods.qulacs_circuit_add_measurement_gate(_handle, (uint)qubitIndex, (uint)registerAddress);
             return this;
         }
 
@@ -297,7 +297,8 @@ namespace Mu5dvlp.Qulacs
         {
             ThrowIfDisposed();
             uint needed = NativeMethods.qulacs_circuit_to_string(_handle, null, 0);
-            if (needed <= 1) return string.Empty;
+            if (needed <= 1)
+                return string.Empty;
             var buf = new byte[needed];
             NativeMethods.qulacs_circuit_to_string(_handle, buf, needed);
             return Encoding.UTF8.GetString(buf, 0, (int)(needed - 1));
@@ -321,7 +322,8 @@ namespace Mu5dvlp.Qulacs
 
         private void ThrowIfDisposed()
         {
-            if (_disposed) throw new ObjectDisposedException(nameof(QuantumCircuit));
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(QuantumCircuit));
         }
 
         public void Dispose()

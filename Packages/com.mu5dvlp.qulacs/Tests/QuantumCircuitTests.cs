@@ -111,8 +111,7 @@ namespace Mu5dvlp.Qulacs.Tests
 
             var samples = state.Sampling(500, seed: 42);
             foreach (var s in samples)
-                Assert.IsTrue(s == 0UL || s == 3UL,
-                    $"Expected |00>(0) or |11>(3), got {s}");
+                Assert.IsTrue(s == 0UL || s == 3UL, $"Expected |00>(0) or |11>(3), got {s}");
         }
 
         [Test]
@@ -127,7 +126,8 @@ namespace Mu5dvlp.Qulacs.Tests
             var samples = state.Sampling(shots, seed: 0);
             int count00 = 0;
             foreach (var s in samples)
-                if (s == 0UL) count00++;
+                if (s == 0UL)
+                    count00++;
 
             double ratio = (double)count00 / shots;
             Assert.AreEqual(0.5, ratio, 0.05); // within 5%
@@ -244,7 +244,7 @@ namespace Mu5dvlp.Qulacs.Tests
             circuit.RemoveGate(1);
             circuit.UpdateQuantumState(state);
             var v = state.GetStateVector();
-            Assert.AreEqual( Inv_Sqrt2, v[0].Real, Eps);
+            Assert.AreEqual(Inv_Sqrt2, v[0].Real, Eps);
             Assert.AreEqual(-Inv_Sqrt2, v[1].Real, Eps);
         }
 
@@ -355,7 +355,10 @@ namespace Mu5dvlp.Qulacs.Tests
             var circuit = new QuantumCircuit(2);
             circuit.Dispose();
             Assert.Throws<ObjectDisposedException>(() => circuit.H(0));
-            Assert.Throws<ObjectDisposedException>(() => { var _ = circuit.GateCount; });
+            Assert.Throws<ObjectDisposedException>(() =>
+            {
+                var _ = circuit.GateCount;
+            });
         }
     }
 }

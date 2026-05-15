@@ -3,16 +3,28 @@ using UnityEngine.Rendering;
 
 public class BlochSphereObject : MonoBehaviour
 {
-    enum ShaderType { URP, BuiltIn }
+    enum ShaderType
+    {
+        URP,
+        BuiltIn,
+    }
 
-    [SerializeField] QubitObject qubitObject;
-    [SerializeField] Renderer sphereRenderer;
-    [SerializeField] Transform arrow;
-    [SerializeField] ShaderType shaderType = ShaderType.URP;
+    [SerializeField]
+    QubitObject qubitObject;
+
+    [SerializeField]
+    Renderer sphereRenderer;
+
+    [SerializeField]
+    Transform arrow;
+
+    [SerializeField]
+    ShaderType shaderType = ShaderType.URP;
 
     void Start()
     {
-        if (sphereRenderer == null) return;
+        if (sphereRenderer == null)
+            return;
         var mat = sphereRenderer.material;
 
         if (shaderType == ShaderType.URP)
@@ -45,7 +57,8 @@ public class BlochSphereObject : MonoBehaviour
 
     void UpdateArrowDirection()
     {
-        if (qubitObject?.State == null || arrow == null) return;
+        if (qubitObject?.State == null || arrow == null)
+            return;
 
         var v = qubitObject.State.GetStateVector();
         float p0 = (float)qubitObject.State.GetZeroProbability(0);
@@ -64,7 +77,8 @@ public class BlochSphereObject : MonoBehaviour
 
     void UpdateSphereColor()
     {
-        if (qubitObject?.State == null || sphereRenderer == null) return;
+        if (qubitObject?.State == null || sphereRenderer == null)
+            return;
 
         var v = qubitObject.State.GetStateVector();
         var beta = v[1];
