@@ -85,19 +85,40 @@ The `.editorconfig` file is recognized by most editors (VS Code, Rider, Visual S
 
 ## Branch Strategy
 
+```
+feat/#123_add-ry-gate  ─┐
+fix/#456_null-check     ─┼──▶ dev ──▶ (release) ──▶ main
+chore/#789_update-ci   ─┘
+```
+
 | Branch | Purpose |
 |---|---|
-| `main` | Stable releases |
-| `dev` | Active development |
-| Feature branches | Branch from `dev`, merge back to `dev` |
+| `main` | Stable releases only |
+| `dev` | Active development — all feature/fix branches merge here |
+| `{type}/#{issue}_{description}` | Short-lived work branches, created from `dev` |
+
+### Branch Naming Convention
+
+```
+{type}/#{issue_number}_{short-description}
+```
+
+- **type**: `feat`, `fix`, `chore` (matches Conventional Commits)
+- **issue_number**: GitHub Issue number
+- **short-description**: kebab-case summary
+
+Examples:
+- `feat/#42_add-ry-gate`
+- `fix/#108_null-check-sampling`
+- `chore/#15_update-ci-workflow`
 
 ## Submitting a Pull Request
 
-1. Create a feature branch from `dev`:
+1. Create a branch from `dev` following the naming convention:
    ```bash
    git checkout dev
    git pull origin dev
-   git checkout -b feature/your-feature
+   git checkout -b feat/#42_add-ry-gate
    ```
 
 2. Make your changes.
@@ -111,13 +132,15 @@ The `.editorconfig` file is recognized by most editors (VS Code, Rider, Visual S
 
 5. Commit with a clear message:
    ```
-   feat: add RY gate support
+   feat: add RY gate support (#42)
    ```
-   Follow [Conventional Commits](https://www.conventionalcommits.org/) where possible (`feat:`, `fix:`, `docs:`, `chore:`, etc.).
+   Follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, etc.). Append `(#issue)` when applicable.
 
 6. Push and open a PR targeting `dev`.
 
 7. CI will automatically check formatting and run tests.
+
+> **Release flow**: When ready to release, `dev` is merged into `main` and tagged (e.g., `v0.3.0`).
 
 ## Reporting Issues
 

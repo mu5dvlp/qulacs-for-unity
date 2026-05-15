@@ -83,6 +83,12 @@ make build-ios            # iOS ARM64 (cross-compile from macOS)
 
 See [`Packages/com.mu5dvlp.qulacs/CLAUDE.md`](Packages/com.mu5dvlp.qulacs/CLAUDE.md) for details.
 
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on code style, branch naming, and the PR process.
+
+**Branch strategy**: Feature/fix branches → `dev` → `main` (releases). See the [branch naming convention](CONTRIBUTING.md#branch-naming-convention) for details.
+
 ## Contact
 
 - Personal: mu5dvlp@gmail.com
