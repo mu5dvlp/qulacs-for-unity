@@ -7,7 +7,7 @@ Thank you for your interest in contributing! This guide covers how to set up you
 | Tool | Version | Purpose |
 |---|---|---|
 | Unity | 6000.4.1f1 LTS | Project editor |
-| .NET SDK | 8.0+ | C# formatter (CSharpier) |
+| .NET SDK | 8.0+ | C# formatter (CSharpier), test runner |
 | Git | any | Version control |
 | clang-format | 14+ | C++ formatter |
 | make | any | Build & format commands |
@@ -76,12 +76,12 @@ The `.editorconfig` file is recognized by most editors (VS Code, Rider, Visual S
 ## Running Tests
 
 ```bash
-# Unity EditMode tests (Windows)
-"C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Unity.exe" \
-  -projectPath . -runTests -testPlatform editmode -quit -batchmode -logFile test.log
-
-# Check test.log for results
+make test
+# Or directly:
+dotnet test Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj
 ```
+
+Tests use NUnit and run via `dotnet test`. The native DLL (`qulacs_unity.dll`) is automatically copied to the output directory at build time.
 
 ## Branch Strategy
 
@@ -157,14 +157,15 @@ Use the [issue templates](https://github.com/mu5dvlp/qulacs-for-unity/issues/new
 .
 ├── Packages/com.mu5dvlp.qulacs/   # The UPM package
 │   ├── Runtime/                    # C# public API + P/Invoke
-│   ├── Tests/                      # EditMode tests
+│   ├── Tests/                      # NUnit tests (run via dotnet test)
+│   ├── dotnet~/                    # .csproj / .sln for dotnet test
 │   ├── Samples~/                   # Sample scenes & scripts
 │   ├── native~/                    # C++ wrapper source & build
 │   │   ├── src/                    #   qulacs_unity.h / .cpp
 │   │   └── extern/                 #   Qulacs & Boost (gitignored)
 │   └── Makefile                    # Native build targets
 ├── .github/workflows/              # CI (test, coverage, lint)
-├── Makefile                        # Root targets (format, coverage, release)
+├── Makefile                        # Root targets (format, test, coverage, release)
 └── CONTRIBUTING.md                 # ← You are here
 ```
 

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Mu5dvlp.Qulacs</RootNamespace>
+    <AssemblyName>Mu5dvlp.Qulacs.Runtime</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Runtime\QuantumState.cs" />
+    <Compile Include="..\Runtime\QuantumCircuit.cs" />
+    <Compile Include="..\Runtime\Internal\NativeMethods.cs" />
+  </ItemGroup>
+</Project>

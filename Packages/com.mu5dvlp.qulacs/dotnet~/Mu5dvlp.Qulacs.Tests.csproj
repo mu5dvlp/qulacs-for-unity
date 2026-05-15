@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Mu5dvlp.Qulacs.Tests</RootNamespace>
+    <AssemblyName>Mu5dvlp.Qulacs.Tests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Tests\GateTests.cs" />
+    <Compile Include="..\Tests\QuantumCircuitTests.cs" />
+    <Compile Include="..\Tests\QuantumStateTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Mu5dvlp.Qulacs.Runtime.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Runtime\Plugins\Windows\x86_64\qulacs_unity.dll">
+      <Link>qulacs_unity.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

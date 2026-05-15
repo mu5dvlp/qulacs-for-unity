@@ -30,11 +30,13 @@ Plugin paths per platform:
 | Android x86_64 | `Runtime/Plugins/Android/x86_64/` | `.so` |
 | iOS | `Runtime/Plugins/iOS/` | `.a` |
 
-## Unity Commands
+## Test Commands
 
 ```bash
-# EditMode tests
-"C:\Program Files\Unity\Hub\Editor\6000.4.1f1\Editor\Unity.exe" -projectPath . -runTests -testPlatform editmode -quit -batchmode -logFile test.log
+# Run tests with dotnet CLI (requires .NET 8 SDK)
+make test
+# Or directly:
+dotnet test Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj
 ```
 
 ## Branch Strategy
