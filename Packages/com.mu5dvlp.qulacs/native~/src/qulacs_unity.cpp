@@ -259,4 +259,45 @@ double qulacs_state_get_entropy(void* state) {
     return as_state(state)->get_entropy();
 }
 
+void qulacs_state_add_state(void* state, const void* other) {
+    as_state(state)->add_state(static_cast<const QuantumState*>(other));
+}
+
+void qulacs_state_multiply_coef(void* state, double coef_real, double coef_imag) {
+    as_state(state)->multiply_coef(CPPCTYPE(coef_real, coef_imag));
+}
+
+double qulacs_state_get_marginal_probability(void* state, const uint32_t* measured_values, uint32_t length) {
+    std::vector<UINT> mv(measured_values, measured_values + length);
+    return as_state(state)->get_marginal_probability(mv);
+}
+
+// QuantumCircuit (additional)
+void* qulacs_circuit_copy(void* circuit) {
+    try {
+        return as_circuit(circuit)->copy();
+    } catch (...) {
+        return nullptr;
+    }
+}
+
+void* qulacs_circuit_get_inverse(void* circuit) {
+    try {
+        return as_circuit(circuit)->get_inverse();
+    } catch (...) {
+        return nullptr;
+    }
+}
+
+uint32_t qulacs_circuit_to_string(void* circuit, char* buf, uint32_t buf_size) {
+    std::string s = as_circuit(circuit)->to_string();
+    uint32_t required = static_cast<uint32_t>(s.size() + 1);
+    if (buf != nullptr && buf_size > 0) {
+        uint32_t copy_len = (required < buf_size) ? required : buf_size;
+        std::memcpy(buf, s.c_str(), copy_len - 1);
+        buf[copy_len - 1] = '\0';
+    }
+    return required;
+}
+
 } // extern "C"

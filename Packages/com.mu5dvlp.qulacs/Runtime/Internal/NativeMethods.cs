@@ -180,5 +180,26 @@ namespace Mu5dvlp.Qulacs.Internal
 
         [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
         internal static extern double qulacs_state_get_entropy(IntPtr state);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_state_add_state(IntPtr state, IntPtr other);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void qulacs_state_multiply_coef(IntPtr state, double coefReal, double coefImag);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern double qulacs_state_get_marginal_probability(
+            IntPtr state, [In] uint[] measuredValues, uint length);
+
+        // --- QuantumCircuit (additional) ---
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr qulacs_circuit_copy(IntPtr circuit);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr qulacs_circuit_get_inverse(IntPtr circuit);
+
+        [DllImport(Lib, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern uint qulacs_circuit_to_string(IntPtr circuit, byte[] buf, uint bufSize);
     }
 }

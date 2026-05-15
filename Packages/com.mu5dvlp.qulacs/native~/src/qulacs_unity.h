@@ -117,6 +117,32 @@ QULACS_UNITY_API void         qulacs_circuit_move_gate(void* circuit, uint32_t f
  * -------------------------------------------------------------------------*/
 QULACS_UNITY_API double       qulacs_state_get_entropy(void* state);
 
+/* Adds another state's vector element-wise: |this⟩ += |other⟩ */
+QULACS_UNITY_API void         qulacs_state_add_state(void* state, const void* other);
+
+/* Multiplies the entire state vector by a complex scalar. */
+QULACS_UNITY_API void         qulacs_state_multiply_coef(void* state, double coef_real, double coef_imag);
+
+/* Returns marginal probability.
+ * measured_values[i] ∈ {0, 1, 2}: 0/1 = observed value, 2 = not measured.
+ * Length must equal qubit_count. */
+QULACS_UNITY_API double       qulacs_state_get_marginal_probability(void* state, const uint32_t* measured_values, uint32_t length);
+
+/* -------------------------------------------------------------------------
+ * QuantumCircuit (additional)
+ * -------------------------------------------------------------------------*/
+
+/* Returns a deep copy of the circuit. Caller owns the returned handle. */
+QULACS_UNITY_API void*        qulacs_circuit_copy(void* circuit);
+
+/* Returns the inverse (adjoint) circuit. Caller owns the returned handle. */
+QULACS_UNITY_API void*        qulacs_circuit_get_inverse(void* circuit);
+
+/* Writes the string representation into buf (including NUL).
+ * Returns the required buffer size (including NUL).
+ * If buf is NULL or buf_size is 0, only the required size is returned. */
+QULACS_UNITY_API uint32_t     qulacs_circuit_to_string(void* circuit, char* buf, uint32_t buf_size);
+
 #ifdef __cplusplus
 }
 #endif

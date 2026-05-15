@@ -265,6 +265,80 @@ namespace Mu5dvlp.Qulacs.Tests
             Assert.AreEqual(Inv_Sqrt2, v[1].Real, Eps);
         }
 
+        // --- Copy ---
+
+        [Test]
+        public void Copy_ProducesSameBehavior()
+        {
+            using var original = new QuantumCircuit(2);
+            original.H(0).CNOT(0, 1);
+            using var copy = original.Copy();
+            Assert.AreEqual(original.QubitCount, copy.QubitCount);
+            Assert.AreEqual(original.GateCount, copy.GateCount);
+
+            using var s1 = new QuantumState(2);
+            using var s2 = new QuantumState(2);
+            original.UpdateQuantumState(s1);
+            copy.UpdateQuantumState(s2);
+            var v1 = s1.GetStateVector();
+            var v2 = s2.GetStateVector();
+            for (int i = 0; i < v1.Length; i++)
+            {
+                Assert.AreEqual(v1[i].Real, v2[i].Real, Eps);
+                Assert.AreEqual(v1[i].Imaginary, v2[i].Imaginary, Eps);
+            }
+        }
+
+        [Test]
+        public void Copy_IsIndependent()
+        {
+            using var original = new QuantumCircuit(1);
+            original.H(0);
+            using var copy = original.Copy();
+            original.X(0);
+            Assert.AreEqual(2, original.GateCount);
+            Assert.AreEqual(1, copy.GateCount);
+        }
+
+        // --- GetInverse ---
+
+        [Test]
+        public void GetInverse_UndoesCircuit()
+        {
+            using var state = new QuantumState(2);
+            using var circuit = new QuantumCircuit(2);
+            circuit.H(0).CNOT(0, 1).RZ(1, 0.7);
+            circuit.UpdateQuantumState(state);
+
+            using var inv = circuit.GetInverse();
+            inv.UpdateQuantumState(state);
+
+            var v = state.GetStateVector();
+            Assert.AreEqual(1.0, v[0].Real, Eps);
+            for (int i = 1; i < v.Length; i++)
+                Assert.AreEqual(0.0, Complex.Abs(v[i]), Eps);
+        }
+
+        // --- ToString ---
+
+        [Test]
+        public void ToString_ContainsGateInfo()
+        {
+            using var circuit = new QuantumCircuit(2);
+            circuit.H(0).X(1);
+            string s = circuit.ToString();
+            Assert.IsNotNull(s);
+            Assert.IsNotEmpty(s);
+        }
+
+        [Test]
+        public void ToString_EmptyCircuit_ReturnsNonNull()
+        {
+            using var circuit = new QuantumCircuit(1);
+            string s = circuit.ToString();
+            Assert.IsNotNull(s);
+        }
+
         // --- Dispose ---
 
         [Test]

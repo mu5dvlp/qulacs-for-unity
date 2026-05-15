@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Mu5dvlp.Qulacs.Internal;
 
 namespace Mu5dvlp.Qulacs
@@ -37,6 +38,12 @@ namespace Mu5dvlp.Qulacs
             if (_handle == IntPtr.Zero)
                 throw new InvalidOperationException("Failed to create QuantumCircuit in native library.");
 
+            QubitCount = qubitCount;
+        }
+
+        private QuantumCircuit(IntPtr handle, int qubitCount)
+        {
+            _handle = handle;
             QubitCount = qubitCount;
         }
 
@@ -261,6 +268,39 @@ namespace Mu5dvlp.Qulacs
         {
             ThrowIfDisposed();
             return NativeMethods.qulacs_circuit_is_Gaussian(_handle) != 0;
+        }
+
+        // --- Copy / Inverse / ToString ---
+
+        /// <summary>Returns a deep copy of this circuit.</summary>
+        public QuantumCircuit Copy()
+        {
+            ThrowIfDisposed();
+            IntPtr h = NativeMethods.qulacs_circuit_copy(_handle);
+            if (h == IntPtr.Zero)
+                throw new InvalidOperationException("Failed to copy QuantumCircuit.");
+            return new QuantumCircuit(h, QubitCount);
+        }
+
+        /// <summary>Returns the inverse (adjoint) of this circuit.</summary>
+        public QuantumCircuit GetInverse()
+        {
+            ThrowIfDisposed();
+            IntPtr h = NativeMethods.qulacs_circuit_get_inverse(_handle);
+            if (h == IntPtr.Zero)
+                throw new InvalidOperationException("Failed to get inverse QuantumCircuit.");
+            return new QuantumCircuit(h, QubitCount);
+        }
+
+        /// <summary>Returns the Qulacs string representation of this circuit.</summary>
+        public override string ToString()
+        {
+            ThrowIfDisposed();
+            uint needed = NativeMethods.qulacs_circuit_to_string(_handle, null, 0);
+            if (needed <= 1) return string.Empty;
+            var buf = new byte[needed];
+            NativeMethods.qulacs_circuit_to_string(_handle, buf, needed);
+            return Encoding.UTF8.GetString(buf, 0, (int)(needed - 1));
         }
 
         // --- Circuit mutation ---
