@@ -1,6 +1,7 @@
 # Qulacs for Unity
 
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
+[![API Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mu5dvlp/COVERAGE_GIST_ID/raw/qulacs-for-unity-coverage.json)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/coverage.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
 
