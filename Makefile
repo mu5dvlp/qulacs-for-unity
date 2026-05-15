@@ -1,7 +1,9 @@
 ifeq ($(OS),Windows_NT)
     VENV_PYTHON := .venv/Scripts/python.exe
+    DOTNET      := dotnet
 else
     VENV_PYTHON := .venv/bin/python
+    DOTNET      := dotnet.exe
 endif
 
 # -----------------------------------------------------------------------------
@@ -14,27 +16,35 @@ TAG         := v$(VERSION)
 CHANGELOG   := $(PACKAGE_DIR)/CHANGELOG.md
 DRAFT       ?= 1
 
-.PHONY: coverage release release-notes format format-check lint
+.PHONY: coverage release release-notes format format-check lint test
 
 NATIVE_SRCS := Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h \
                Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.cpp
+
+TEST_CSPROJ := Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj
 
 # -----------------------------------------------------------------------------
 # Format / Lint
 # -----------------------------------------------------------------------------
 format:
 	@echo ">>> Formatting C# (CSharpier)..."
-	dotnet csharpier .
+	$(DOTNET) csharpier .
 	@echo ">>> Formatting C++ (clang-format)..."
 	clang-format -i $(NATIVE_SRCS)
 
 format-check:
 	@echo ">>> Checking C# formatting..."
-	dotnet csharpier --check .
+	$(DOTNET) csharpier --check .
 	@echo ">>> Checking C++ formatting..."
 	clang-format --dry-run --Werror $(NATIVE_SRCS)
 
 lint: format-check
+
+# -----------------------------------------------------------------------------
+# Test
+# -----------------------------------------------------------------------------
+test:
+	$(DOTNET) test $(TEST_CSPROJ)
 
 # -----------------------------------------------------------------------------
 # Coverage

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mu5dvlp.Qulacs.Runtime", "Mu5dvlp.Qulacs.Runtime.csproj", "{6A178704-268A-48D3-BF2E-8E67B21E2032}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mu5dvlp.Qulacs.Tests", "Mu5dvlp.Qulacs.Tests.csproj", "{6412CE02-FA4C-4987-B5EC-2B5767080A05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A178704-268A-48D3-BF2E-8E67B21E2032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A178704-268A-48D3-BF2E-8E67B21E2032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A178704-268A-48D3-BF2E-8E67B21E2032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A178704-268A-48D3-BF2E-8E67B21E2032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6412CE02-FA4C-4987-B5EC-2B5767080A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6412CE02-FA4C-4987-B5EC-2B5767080A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6412CE02-FA4C-4987-B5EC-2B5767080A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6412CE02-FA4C-4987-B5EC-2B5767080A05}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

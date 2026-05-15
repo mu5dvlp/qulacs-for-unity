@@ -80,3 +80,8 @@ Desktop.ini
 .venv/
 __pycache__/
 *.pyc
+
+# dotnet test infrastructure (override *.csproj / *.sln ignore)
+!Packages/com.mu5dvlp.qulacs/dotnet~/*.csproj
+!Packages/com.mu5dvlp.qulacs/dotnet~/*.sln
+Packages/com.mu5dvlp.qulacs/dotnet~/bin/

@@ -79,6 +79,9 @@ new QuantumState(int qubitCount)   // IDisposable
 | `GetEntropy()` | Von Neumann entropy of the state |
 | `Sampling(int count)` → `ulong[]` | Measure `count` times |
 | `Sampling(int count, uint seed)` → `ulong[]` | Reproducible sampling |
+| `AddState(QuantumState other)` | Add another state element-wise: \|this⟩ += \|other⟩ |
+| `MultiplyCoef(Complex coef)` | Multiply the entire state vector by a complex scalar |
+| `GetMarginalProbability(int[] measuredValues)` → `double` | Marginal probability (0/1 per qubit, 2 = not measured) |
 
 ### QuantumCircuit
 
@@ -107,6 +110,8 @@ All gate methods return `this` to allow method chaining.
 **Measurement:** `Measure(qubit, registerAddress = 0)`
 
 **Circuit inspection:** `CalculateDepth()`, `IsClifford()`, `IsGaussian()`
+
+**Circuit operations:** `Copy()`, `GetInverse()`, `ToString()`
 
 **Circuit mutation:** `RemoveGate(index)`, `MoveGate(fromIndex, toIndex)`
 
