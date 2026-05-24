@@ -7,6 +7,24 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-05-24
 
+First stable release.
+
+### Added
+- **macOS platform support**: prebuilt `qulacs_unity.dylib` (Apple Silicon).
+- **iOS platform support**: prebuilt `qulacs_unity.a` (ARM64 static library). The wrapper archive is merged with `libcppsim_static.a` / `libcsim_static.a` via `libtool -static` so Unity picks up Qulacs symbols from a single plugin file.
+- Makefile targets for macOS (`make build-macos`) and iOS (`make build-ios`).
+- CI: **native symbol-sync workflow** (`.github/workflows/native-symbols.yml` + `.github/scripts/check-symbols.py`) that verifies every committed plugin binary exports every `QULACS_UNITY_API` function in `qulacs_unity.h`, and that `NativeMethods.cs` `[DllImport]` declarations stay in lockstep with the header.
+
+### Fixed
+- iOS `DllNotFoundException`: P/Invoke now binds to `"__Internal"` on iOS (`UNITY_IOS && !UNITY_EDITOR`) as Unity requires for statically linked plugins.
+- iOS `Undefined symbol` link errors at Xcode build time: bundled Qulacs static archives into the iOS plugin (see *iOS platform support* above).
+
+### Changed
+- Platform support table updated across all READMEs: macOS and iOS ARM64 are now listed as supported (in addition to Windows / Android).
+- Build scripts and CLAUDE.md comments normalised to English (Makefile, CMakeLists.txt, build.sh).
+
+## [0.2.0] - 2026-05-12
+
 ### Added
 - **Android platform support**: ARM64 and x86_64 prebuilt native plugins (`libqulacs_unity.so`).
 - **Demo Scenes sample**: BellState, Bloch sphere visualiser, inspector-driven quantum circuit, qubit colouring — importable via Package Manager.
