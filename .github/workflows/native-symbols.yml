@@ -6,14 +6,14 @@ on:
       - "Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Internal/NativeMethods.cs"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/**"
-      - "Packages/com.mu5dvlp.qulacs/native~/check-symbols.py"
+      - ".github/scripts/check-symbols.py"
       - ".github/workflows/native-symbols.yml"
   pull_request:
     paths:
       - "Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Internal/NativeMethods.cs"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/**"
-      - "Packages/com.mu5dvlp.qulacs/native~/check-symbols.py"
+      - ".github/scripts/check-symbols.py"
       - ".github/workflows/native-symbols.yml"
 
 jobs:
@@ -28,4 +28,4 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends llvm
 
       - name: Verify symbol parity across native plugins
-        run: python3 Packages/com.mu5dvlp.qulacs/native~/check-symbols.py
+        run: python3 .github/scripts/check-symbols.py
