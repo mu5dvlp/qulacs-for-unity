@@ -1,5 +1,9 @@
 # Qulacs for Unity
 
+<p align="center">
+  <img src="docs/images/hero.png" alt="qulacs-for-unity" width="300">
+</p>
+
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
 [![API Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mu5dvlp/8a140c24ea7fedc7e83595cdd5a5ffee/raw/qulacs-for-unity-coverage.json)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/coverage.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity?include_prereleases)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
