@@ -20,7 +20,7 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 In Unity Editor, open **Window → Package Manager → + → Add package from git URL…** and paste:
 
 ```
-https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0
+https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v1.0.0
 ```
 
 Or edit `Packages/manifest.json` directly:
@@ -28,12 +28,12 @@ Or edit `Packages/manifest.json` directly:
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v1.0.0"
   }
 }
 ```
 
-Replace `v0.2.0` with the desired tag, or omit `#v0.2.0` to track `main`.
+Replace `v1.0.0` with the desired tag, or omit `#v1.0.0` to track `main`.
 
 > Requires `git` to be available on the PATH — Unity invokes it internally to clone the repository.
 

@@ -5,7 +5,7 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2026-05-12
+## [1.0.0] - 2026-05-24
 
 ### Added
 - **Android platform support**: ARM64 and x86_64 prebuilt native plugins (`libqulacs_unity.so`).
