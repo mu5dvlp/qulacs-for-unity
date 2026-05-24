@@ -1,5 +1,9 @@
 # qulacs-for-unity
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mu5dvlp/qulacs-for-unity/main/docs/images/hero.png" alt="qulacs-for-unity" width="300">
+</p>
+
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity?include_prereleases)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
