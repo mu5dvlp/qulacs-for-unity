@@ -41,7 +41,7 @@ Unity C# (Mu5dvlp.Qulacs)
 Install via Unity Package Manager using the git URL:
 
 ```
-https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0
+https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v1.0.0
 ```
 
 Or add to your project's `Packages/manifest.json`:
@@ -49,12 +49,12 @@ Or add to your project's `Packages/manifest.json`:
 ```json
 {
   "dependencies": {
-    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v0.2.0"
+    "com.mu5dvlp.qulacs": "https://github.com/mu5dvlp/qulacs-for-unity.git?path=/Packages/com.mu5dvlp.qulacs#v1.0.0"
   }
 }
 ```
 
-Replace `v0.2.0` with the desired release tag, or omit `#v0.2.0` to track `main`.
+Replace `v1.0.0` with the desired release tag, or omit `#v1.0.0` to track `main`.
 `git` must be on the PATH — Unity invokes it internally.
 
 Alternatively, clone this repository and open the Unity project directly — the package is embedded under `Packages/com.mu5dvlp.qulacs/`.
