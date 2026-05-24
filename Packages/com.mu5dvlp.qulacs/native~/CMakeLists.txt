@@ -21,7 +21,7 @@ endif()
 # BOOST_INCLUDE_DIR: directory containing the boost/ folder
 # ---------------------------------------------------------------------------
 if(NOT DEFINED BOOST_INCLUDE_DIR)
-    # デフォルト: QULACS_ROOT の兄弟ディレクトリ native~/extern/boost
+    # Default: a sibling of QULACS_ROOT, i.e. native~/extern/boost
     get_filename_component(_extern_dir "${QULACS_ROOT}" DIRECTORY)
     set(BOOST_INCLUDE_DIR "${_extern_dir}/boost")
 endif()
