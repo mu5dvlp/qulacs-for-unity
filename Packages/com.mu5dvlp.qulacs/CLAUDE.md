@@ -87,7 +87,7 @@ make build-android-x86_64 # Android x86_64 full build (emulator)
 make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS full build (host arch): fetch-qulacs → fetch-boost → build → deploy
 make build-ios            # iOS ARM64 full build (cross-compile from macOS)
-make fetch-boost          # Boost ヘッダーのみダウンロード
+make fetch-boost          # download Boost headers only
 ```
 
 ### Prerequisites by platform

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# build.sh — Qulacs ラッパー DLL のフルビルドスクリプト
-# native~/ ディレクトリで実行: bash build.sh
+# build.sh — full build script for the Qulacs wrapper DLL
+# Run from the native~/ directory: bash build.sh
 
 set -e
 
@@ -20,7 +20,7 @@ echo "======================================================"
 echo " Qulacs Unity DLL Build Script"
 echo "======================================================"
 
-# --- [1] Boost ヘッダー展開 ---
+# --- [1] Extract Boost headers ---
 if [ ! -d "$BOOST_DIR/boost" ]; then
   if [ -f "$BOOST_ZIP" ]; then
     echo "[1/5] Extracting Boost headers..."
@@ -38,7 +38,7 @@ else
   echo "[1/5] Boost already extracted, skipping."
 fi
 
-# --- [2] Qulacs clone ---
+# --- [2] Clone Qulacs ---
 if [ ! -d "$QULACS_SRC/.git" ]; then
   echo "[2/5] Cloning Qulacs..."
   git clone --depth 1 https://github.com/qulacs/qulacs.git "$QULACS_SRC"
@@ -46,7 +46,7 @@ else
   echo "[2/5] Qulacs source already present, skipping."
 fi
 
-# --- [3] Qulacs ビルド & インストール ---
+# --- [3] Build & install Qulacs ---
 echo "[3/5] Building Qulacs..."
 "$CMAKE" -B "$QULACS_BUILD" -S "$QULACS_SRC" \
   -DCMAKE_BUILD_TYPE=Release \
@@ -60,14 +60,14 @@ echo "[3/5] Building Qulacs..."
 "$CMAKE" --install "$QULACS_BUILD" --config Release
 echo "      Installed to: $QULACS_INSTALL"
 
-# --- [4] ラッパー DLL ビルド ---
+# --- [4] Build the wrapper DLL ---
 echo "[4/5] Building qulacs_unity.dll..."
 "$CMAKE" -B "$WRAPPER_BUILD" -S "$SCRIPT_DIR" \
   -DCMAKE_BUILD_TYPE=Release \
   -DQULACS_ROOT="$QULACS_INSTALL"
 "$CMAKE" --build "$WRAPPER_BUILD" --config Release
 
-# --- [5] DLL をプラグインフォルダへ ---
+# --- [5] Copy the DLL into the plugin folder ---
 echo "[5/5] Deploying DLL..."
 mkdir -p "$PLUGIN_DIR"
 if [ -f "$WRAPPER_BUILD/Release/qulacs_unity.dll" ]; then

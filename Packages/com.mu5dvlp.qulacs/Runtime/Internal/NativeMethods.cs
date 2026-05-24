@@ -15,7 +15,11 @@ namespace Mu5dvlp.Qulacs.Internal
     /// </summary>
     internal static class NativeMethods
     {
+#if UNITY_IOS && !UNITY_EDITOR
+        private const string Lib = "__Internal";
+#else
         private const string Lib = "qulacs_unity";
+#endif
 
         // --- QuantumState ---
 
