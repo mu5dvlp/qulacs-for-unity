@@ -5,8 +5,8 @@
 #   - Git
 #   - CMake 3.20+
 #   - Visual Studio 2022 (MSVC) with "Desktop development with C++" workload
-#   - make (Git Bash 付属、または choco install make)
-#   - Android: Unity 付属の NDK (Android Build Support をインストール)
+#   - make (bundled with Git Bash, or `choco install make`)
+#   - Android: NDK bundled with Unity (install via "Android Build Support")
 #
 # Prerequisites (macOS):
 #   - Git
@@ -15,16 +15,16 @@
 #   - OpenMP: brew install libomp
 #
 # Commands:
-#   make build                # Windows x86_64 フルビルド
-#   make build-android        # Android ARM64 フルビルド
-#   make build-android-x86_64 # Android x86_64 フルビルド (エミュレータ用)
-#   make build-android-all    # Android ARM64 + x86_64 フルビルド
-#   make build-macos          # macOS フルビルド (ホストアーキテクチャ)
-#   make build-ios            # iOS ARM64 フルビルド (クロスコンパイル)
-#   make fetch-qulacs         # Qulacs ソースを git clone する
-#   make fetch-boost          # Boost ヘッダーをダウンロードする
-#   make clean-build          # ビルド成果物を削除する (native~/build/)
-#   make clean-all            # ビルド成果物 + Qulacs ソース & インストール先を全削除する
+#   make build                # Windows x86_64 full build
+#   make build-android        # Android ARM64 full build
+#   make build-android-x86_64 # Android x86_64 full build (emulator)
+#   make build-android-all    # Android ARM64 + x86_64 full build
+#   make build-macos          # macOS full build (host architecture)
+#   make build-ios            # iOS ARM64 full build (cross-compile)
+#   make fetch-qulacs         # git clone the Qulacs source
+#   make fetch-boost          # download Boost headers
+#   make clean-build          # remove build artifacts (native~/build/)
+#   make clean-all            # remove build artifacts + Qulacs source & install dir
 # =============================================================================
 
 # ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ WRAPPER_BUILD_ANDROID  := native~/build/wrapper-android
 PLUGIN_DIR_ANDROID     := Runtime/Plugins/Android/ARM64
 
 # ---------------------------------------------------------------------------
-# Android x86_64 settings (エミュレータ用)
+# Android x86_64 settings (for emulator)
 # ---------------------------------------------------------------------------
 ANDROID_ABI_X86_64            := x86_64
 QULACS_BUILD_ANDROID_X86_64   := native~/build/qulacs-android-x86_64
@@ -109,7 +109,7 @@ IOS_DEPLOYMENT_TARGET := 13.0
 build: fetch-qulacs build-qulacs build-dll deploy-dll
 
 # -----------------------------------------------------------------------------
-# Qulacs ソースを取得する
+# Fetch the Qulacs source
 # -----------------------------------------------------------------------------
 fetch-qulacs:
 	@echo ">>> [1/4] Fetching Qulacs source..."
@@ -120,7 +120,7 @@ fetch-qulacs:
 	fi
 
 # -----------------------------------------------------------------------------
-# Boost ヘッダーをダウンロード・展開する
+# Download and extract Boost headers
 # -----------------------------------------------------------------------------
 fetch-boost:
 	@echo ">>> Fetching Boost headers..."
@@ -137,7 +137,7 @@ fetch-boost:
 	fi
 
 # -----------------------------------------------------------------------------
-# Qulacs をビルドして include/ と lib/ をインストールする
+# Build Qulacs and install include/ and lib/
 # -----------------------------------------------------------------------------
 build-qulacs:
 	@echo ">>> [2/4] Building Qulacs..."
@@ -160,7 +160,7 @@ build-qulacs:
 	@cp native~/build/lib/csim_static.lib   $(QULACS_INSTALL)/lib/
 
 # -----------------------------------------------------------------------------
-# extern "C" ラッパーをビルドして qulacs_unity.dll を生成する
+# Build the extern "C" wrapper to produce qulacs_unity.dll
 # -----------------------------------------------------------------------------
 build-dll:
 	@echo ">>> [3/4] Building qulacs_unity.dll..."
@@ -170,7 +170,7 @@ build-dll:
 	"$(CMAKE)" --build $(WRAPPER_BUILD) --config Release
 
 # -----------------------------------------------------------------------------
-# 生成した DLL を Unity が読み込むフォルダにコピーする
+# Copy the built DLL into the folder Unity loads from
 # -----------------------------------------------------------------------------
 deploy-dll:
 	@echo ">>> [4/4] Deploying $(DLL) to Unity plugin folder..."
@@ -191,7 +191,7 @@ deploy-dll:
 build-android: fetch-qulacs build-qulacs-android build-dll-android deploy-dll-android
 
 # -----------------------------------------------------------------------------
-# Qulacs を Android ARM64 向けにクロスビルドする
+# Cross-build Qulacs for Android ARM64
 # -----------------------------------------------------------------------------
 build-qulacs-android:
 	@echo ">>> [2/4] Building Qulacs for Android ARM64..."
@@ -221,7 +221,7 @@ build-qulacs-android:
 	@find $(QULACS_BUILD_ANDROID) -name "libcsim_static.a"   | head -1 | xargs -I{} cp {} $(QULACS_INSTALL_ANDROID)/lib/
 
 # -----------------------------------------------------------------------------
-# ラッパーを Android ARM64 向けにクロスビルドする
+# Cross-build the wrapper for Android ARM64
 # -----------------------------------------------------------------------------
 build-dll-android:
 	@echo ">>> [3/4] Building $(SO) for Android ARM64..."
@@ -238,7 +238,7 @@ build-dll-android:
 	"$(CMAKE)" --build $(WRAPPER_BUILD_ANDROID) --config Release
 
 # -----------------------------------------------------------------------------
-# .so を Unity プラグインフォルダにコピーする
+# Copy the .so into the Unity plugin folder
 # -----------------------------------------------------------------------------
 deploy-dll-android:
 	@echo ">>> [4/4] Deploying $(SO) to Unity plugin folder..."
@@ -247,13 +247,13 @@ deploy-dll-android:
 	@echo ">>> Done. $(PLUGIN_DIR_ANDROID)/$(SO)"
 
 # =============================================================================
-# Android x86_64 (エミュレータ用)
+# Android x86_64 (for emulator)
 # =============================================================================
 
 build-android-x86_64: fetch-qulacs build-qulacs-android-x86_64 build-dll-android-x86_64 deploy-dll-android-x86_64
 
 # -----------------------------------------------------------------------------
-# Qulacs を Android x86_64 向けにクロスビルドする
+# Cross-build Qulacs for Android x86_64
 # -----------------------------------------------------------------------------
 build-qulacs-android-x86_64:
 	@echo ">>> [2/4] Building Qulacs for Android x86_64..."
@@ -283,7 +283,7 @@ build-qulacs-android-x86_64:
 	@find $(QULACS_BUILD_ANDROID_X86_64) -name "libcsim_static.a"   | head -1 | xargs -I{} cp {} $(QULACS_INSTALL_ANDROID_X86_64)/lib/
 
 # -----------------------------------------------------------------------------
-# ラッパーを Android x86_64 向けにクロスビルドする
+# Cross-build the wrapper for Android x86_64
 # -----------------------------------------------------------------------------
 build-dll-android-x86_64:
 	@echo ">>> [3/4] Building $(SO) for Android x86_64..."
@@ -300,7 +300,7 @@ build-dll-android-x86_64:
 	"$(CMAKE)" --build $(WRAPPER_BUILD_ANDROID_X86_64) --config Release
 
 # -----------------------------------------------------------------------------
-# x86_64 の .so を Unity プラグインフォルダにコピーする
+# Copy the x86_64 .so into the Unity plugin folder
 # -----------------------------------------------------------------------------
 deploy-dll-android-x86_64:
 	@echo ">>> [4/4] Deploying $(SO) to Unity plugin folder (x86_64)..."
@@ -321,7 +321,7 @@ build-android-all: build-android build-android-x86_64
 build-macos: fetch-qulacs fetch-boost build-qulacs-macos build-dll-macos deploy-dll-macos
 
 # -----------------------------------------------------------------------------
-# Qulacs を macOS 向けにビルドする
+# Build Qulacs for macOS
 # -----------------------------------------------------------------------------
 build-qulacs-macos:
 	@echo ">>> [2/4] Building Qulacs for macOS..."
@@ -346,7 +346,7 @@ build-qulacs-macos:
 	@cp native~/build/lib/libcsim_static.a   $(QULACS_INSTALL_MACOS)/lib/
 
 # -----------------------------------------------------------------------------
-# ラッパーを macOS 向けにビルドして qulacs_unity.dylib を生成する
+# Build the wrapper for macOS to produce qulacs_unity.dylib
 # -----------------------------------------------------------------------------
 build-dll-macos:
 	@echo ">>> [3/4] Building $(DYLIB) for macOS..."
@@ -361,7 +361,7 @@ build-dll-macos:
 	"$(CMAKE)" --build $(WRAPPER_BUILD_MACOS) --config Release
 
 # -----------------------------------------------------------------------------
-# .dylib を Unity プラグインフォルダにコピーする
+# Copy the .dylib into the Unity plugin folder
 # -----------------------------------------------------------------------------
 deploy-dll-macos:
 	@echo ">>> [4/4] Deploying $(DYLIB) to Unity plugin folder..."
@@ -380,7 +380,7 @@ deploy-dll-macos:
 build-ios: fetch-qulacs fetch-boost build-qulacs-ios build-dll-ios deploy-dll-ios
 
 # -----------------------------------------------------------------------------
-# Qulacs を iOS ARM64 向けにクロスビルドする
+# Cross-build Qulacs for iOS ARM64
 # -----------------------------------------------------------------------------
 build-qulacs-ios:
 	@echo ">>> [2/4] Building Qulacs for iOS..."
@@ -408,7 +408,7 @@ build-qulacs-ios:
 	@cp native~/build/lib/libcsim_static.a   $(QULACS_INSTALL_IOS)/lib/
 
 # -----------------------------------------------------------------------------
-# ラッパーを iOS 向けにビルドして静的ライブラリを生成する
+# Build the wrapper for iOS to produce a static library
 # -----------------------------------------------------------------------------
 build-dll-ios:
 	@echo ">>> [3/4] Building $(IOS_STATIC_LIB) for iOS..."
@@ -423,12 +423,23 @@ build-dll-ios:
 	"$(CMAKE)" --build $(WRAPPER_BUILD_IOS) --config Release
 
 # -----------------------------------------------------------------------------
-# .a を Unity プラグインフォルダにコピーする
+# Merge the wrapper .a with the Qulacs (cppsim/csim) .a archives into a single .a.
+# Unity iOS only picks up one plugin .a, so CMake's transitive link dependency
+# alone leaves unresolved symbols (state_multiply, marginal_prob, etc.).
+# Use `libtool -static` to physically combine the archives.
 # -----------------------------------------------------------------------------
 deploy-dll-ios:
 	@echo ">>> [4/4] Deploying $(IOS_STATIC_LIB) to Unity plugin folder..."
 	@mkdir -p $(PLUGIN_DIR_IOS)
-	@find $(WRAPPER_BUILD_IOS) -name "$(IOS_STATIC_LIB)" | head -1 | xargs -I{} cp {} $(PLUGIN_DIR_IOS)/$(IOS_STATIC_LIB)
+	@WRAPPER_A=$$(find $(WRAPPER_BUILD_IOS) -name "$(IOS_STATIC_LIB)" | head -1); \
+	if [ -z "$$WRAPPER_A" ]; then \
+		echo "ERROR: $(IOS_STATIC_LIB) not found under $(WRAPPER_BUILD_IOS)"; exit 1; \
+	fi; \
+	echo "    Merging $$WRAPPER_A + libcppsim_static.a + libcsim_static.a"; \
+	libtool -static -o $(PLUGIN_DIR_IOS)/$(IOS_STATIC_LIB) \
+		"$$WRAPPER_A" \
+		$(QULACS_INSTALL_IOS)/lib/libcppsim_static.a \
+		$(QULACS_INSTALL_IOS)/lib/libcsim_static.a
 	@echo ">>> Done. $(PLUGIN_DIR_IOS)/$(IOS_STATIC_LIB)"
 
 # =============================================================================
@@ -436,7 +447,7 @@ deploy-dll-ios:
 # =============================================================================
 
 # -----------------------------------------------------------------------------
-# ビルド成果物を削除する
+# Remove build artifacts
 # -----------------------------------------------------------------------------
 clean-build:
 	@echo ">>> Removing build artifacts (native~/build/)..."

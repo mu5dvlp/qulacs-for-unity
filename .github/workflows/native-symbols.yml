@@ -1,0 +1,31 @@
+name: Native symbol sync
+
+on:
+  push:
+    paths:
+      - "Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h"
+      - "Packages/com.mu5dvlp.qulacs/Runtime/Internal/NativeMethods.cs"
+      - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/**"
+      - ".github/scripts/check-symbols.py"
+      - ".github/workflows/native-symbols.yml"
+  pull_request:
+    paths:
+      - "Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h"
+      - "Packages/com.mu5dvlp.qulacs/Runtime/Internal/NativeMethods.cs"
+      - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/**"
+      - ".github/scripts/check-symbols.py"
+      - ".github/workflows/native-symbols.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install LLVM tooling
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends llvm
+
+      - name: Verify symbol parity across native plugins
+        run: python3 .github/scripts/check-symbols.py
