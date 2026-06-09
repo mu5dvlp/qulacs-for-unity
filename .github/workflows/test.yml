@@ -3,8 +3,20 @@ name: Test
 on:
   push:
     branches: [main]
+    paths:
+      - "Packages/com.mu5dvlp.qulacs/Runtime/**/*.cs"
+      - "Packages/com.mu5dvlp.qulacs/Tests/**/*.cs"
+      - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
+      - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
+      - ".github/workflows/test.yml"
   pull_request:
     branches: [main, dev]
+    paths:
+      - "Packages/com.mu5dvlp.qulacs/Runtime/**/*.cs"
+      - "Packages/com.mu5dvlp.qulacs/Tests/**/*.cs"
+      - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
+      - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
+      - ".github/workflows/test.yml"
 
 permissions:
   contents: read
