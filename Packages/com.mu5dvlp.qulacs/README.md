@@ -182,6 +182,18 @@ The native plugin binary is missing or not recognized by Unity.
 
 See [CONTRIBUTING.md](../../CONTRIBUTING.md) for code style, branch naming (`{type}/#{issue}_{description}`), and PR guidelines.
 
+## Support
+
+This is a community-maintained, best-effort open-source project — there is no guaranteed response time or SLA.
+
+**GitHub Issues is the only officially tracked support channel.** Please open an issue from the [issue chooser](https://github.com/mu5dvlp/qulacs-for-unity/issues/new/choose):
+
+- **Bug reports** — use the *Bug report* template
+- **Feature requests** — use the *Feature request* template
+- **Questions** — use the *Question* template
+
+The contacts below are for general inquiries only and are not guaranteed to receive a response.
+
 ## Contact
 
 - Personal: mu5dvlp@gmail.com

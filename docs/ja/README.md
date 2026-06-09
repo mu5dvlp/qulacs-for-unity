@@ -86,6 +86,18 @@ cmake --build build --config Release
 
 **ブランチ戦略**: 作業ブランチ → `dev` → `main` (リリース)
 
+## サポート
+
+本プロジェクトはコミュニティベースの OSS であり、ベストエフォートでの対応となります (応答時間の保証・SLA はありません)。
+
+**公式に追跡するサポート窓口は GitHub Issues のみです。** [Issue 作成ページ](https://github.com/mu5dvlp/qulacs-for-unity/issues/new/choose) から起票してください:
+
+- **バグ報告** — *Bug report* テンプレート
+- **機能要望** — *Feature request* テンプレート
+- **質問** — *Question* テンプレート
+
+下記の連絡先は一般的なお問い合わせ用であり、返信を保証するものではありません。
+
 ## 連絡先
 
 - 個人用: mu5dvlp@gmail.com
