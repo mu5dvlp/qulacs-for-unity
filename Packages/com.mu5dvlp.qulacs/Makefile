@@ -21,6 +21,7 @@
 #   make build-android-all    # Android ARM64 + x86_64 full build
 #   make build-macos          # macOS full build (host architecture)
 #   make build-ios            # iOS ARM64 full build (cross-compile)
+#   make build-webgl          # WebGL/WebAssembly full build (Emscripten)
 #   make fetch-qulacs         # git clone the Qulacs source
 #   make fetch-boost          # download Boost headers
 #   make clean-build          # remove build artifacts (native~/build/)
@@ -98,12 +99,20 @@ PLUGIN_DIR_IOS     := Runtime/Plugins/iOS
 IOS_STATIC_LIB     := qulacs_unity.a
 IOS_DEPLOYMENT_TARGET := 13.0
 
+# ---------------------------------------------------------------------------
+# WebGL settings (Emscripten toolchain bundled with Unity WebGL Build Support)
+# ---------------------------------------------------------------------------
+PLUGIN_DIR_WEBGL     := Runtime/Plugins/WebGL
+WEBGL_STATIC_LIB     := qulacs_unity.a
+QULACS_INSTALL_WEBGL := native~/extern/qulacs-install-webgl
+
 .PHONY: build fetch-qulacs fetch-boost build-qulacs build-dll deploy-dll \
         build-android build-qulacs-android build-dll-android deploy-dll-android \
         build-android-x86_64 build-qulacs-android-x86_64 build-dll-android-x86_64 deploy-dll-android-x86_64 \
         build-android-all \
         build-macos build-qulacs-macos build-dll-macos deploy-dll-macos \
         build-ios build-qulacs-ios build-dll-ios deploy-dll-ios \
+        build-webgl \
         clean-build clean-all
 
 build: fetch-qulacs build-qulacs build-dll deploy-dll
@@ -443,6 +452,23 @@ deploy-dll-ios:
 	@echo ">>> Done. $(PLUGIN_DIR_IOS)/$(IOS_STATIC_LIB)"
 
 # =============================================================================
+# WebGL (WebAssembly, cross-compile via Emscripten)
+# =============================================================================
+#
+# Uses the Emscripten toolchain bundled with Unity's "WebGL Build Support" so the
+# static archive is ABI-compatible with Unity's IL2CPP/wasm link. The heavy
+# lifting (config generation, -pthread patch, Qulacs + wrapper build, archive
+# merge, deploy) lives in native~/build-webgl.sh.
+#
+# Override the Unity install with UNITY_EDITOR if it is not at the default path:
+#   UNITY_EDITOR="C:/Program Files/Unity/Hub/Editor/6000.4.1f1" make build-webgl
+
+build-webgl: fetch-qulacs fetch-boost
+	@echo ">>> Building $(WEBGL_STATIC_LIB) for WebGL (Emscripten)..."
+	@bash native~/build-webgl.sh
+	@echo ">>> Done. $(PLUGIN_DIR_WEBGL)/$(WEBGL_STATIC_LIB)"
+
+# =============================================================================
 # Clean
 # =============================================================================
 
@@ -456,4 +482,5 @@ clean-build:
 clean-all: clean-build
 	@echo ">>> Removing Qulacs install and source..."
 	rm -rf $(QULACS_INSTALL) $(QULACS_INSTALL_ANDROID) $(QULACS_INSTALL_ANDROID_X86_64) \
-		$(QULACS_INSTALL_MACOS) $(QULACS_INSTALL_IOS) $(QULACS_SRC) $(BOOST_ROOT)
+		$(QULACS_INSTALL_MACOS) $(QULACS_INSTALL_IOS) $(QULACS_INSTALL_WEBGL) \
+		$(QULACS_SRC) $(BOOST_ROOT)

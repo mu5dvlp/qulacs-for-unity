@@ -29,10 +29,13 @@ Unity C# (Mu5dvlp.Qulacs)
 | プラットフォーム | 状態 |
 |---|---|
 | Windows x86_64 | 対応済み |
+| macOS x86_64 | 対応済み |
 | Android ARM64 | 対応済み |
 | Android x86_64 | 対応済み (エミュレータ) |
-| macOS | 予定 |
-| iOS | 予定 |
+| iOS ARM64 | 対応済み |
+| WebGL (WebAssembly) | 対応済み |
+
+> WebGL はシングルスレッド動作 (OpenMP/SIMD なし) のため、大規模回路はネイティブより低速です。
 
 ## パッケージ
 

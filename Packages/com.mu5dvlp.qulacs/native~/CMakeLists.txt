@@ -56,7 +56,9 @@ find_library(QULACS_CSIM_LIB
 # ---------------------------------------------------------------------------
 # Shared library target
 # ---------------------------------------------------------------------------
-if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+# iOS and WebGL (Emscripten) require a static library — Unity links it into the
+# player binary. Other platforms load a shared library at runtime.
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS" OR EMSCRIPTEN)
     add_library(qulacs_unity STATIC
         src/qulacs_unity.cpp)
 else()
@@ -78,6 +80,9 @@ if(ANDROID)
     # NDK ships libomp.a alongside libomp.so; -static-openmp selects the former.
     target_compile_options(qulacs_unity PRIVATE -fopenmp)
     target_link_options(qulacs_unity PRIVATE -fopenmp -static-openmp)
+elseif(EMSCRIPTEN)
+    # WebGL is single-threaded; Qulacs is built with USE_OMP=No, so the wrapper
+    # must not pull in OpenMP either. Nothing to link here.
 else()
     find_package(OpenMP)
     if(OpenMP_CXX_FOUND)

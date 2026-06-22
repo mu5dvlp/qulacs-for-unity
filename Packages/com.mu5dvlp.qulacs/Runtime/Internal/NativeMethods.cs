@@ -15,7 +15,10 @@ namespace Mu5dvlp.Qulacs.Internal
     /// </summary>
     internal static class NativeMethods
     {
-#if UNITY_IOS && !UNITY_EDITOR
+        // iOS and WebGL statically link the native library into the player binary,
+        // so P/Invoke resolves symbols from the main module ("__Internal") rather
+        // than a separately-loaded "qulacs_unity" dynamic library.
+#if (UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR
         private const string Lib = "__Internal";
 #else
         private const string Lib = "qulacs_unity";

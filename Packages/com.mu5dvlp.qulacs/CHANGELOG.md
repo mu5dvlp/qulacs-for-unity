@@ -5,6 +5,17 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-06-22
+
+### Added
+- **WebGL (WebAssembly) platform support**: prebuilt `qulacs_unity.a` (wasm static library) under `Runtime/Plugins/WebGL/`, cross-compiled with the Emscripten toolchain bundled with Unity's WebGL Build Support. The wrapper archive is merged with `libcppsim_static.a` / `libcsim_static.a` via `llvm-ar` so Unity links Qulacs symbols from a single self-contained plugin.
+- Makefile target `make build-webgl` (delegates to `native~/build-webgl.sh`).
+
+### Changed
+- P/Invoke now binds to `"__Internal"` on WebGL as well as iOS (`(UNITY_IOS || UNITY_WEBGL) && !UNITY_EDITOR`), since both statically link the native library into the player.
+- WebGL builds Qulacs with `USE_OMP=No` / `USE_SIMD=No` (WebGL is single-threaded) and patches out Qulacs' hard-coded `-pthread` flag for Emscripten ABI compatibility. Large circuits are therefore slower on WebGL than on native platforms.
+- Platform support tables updated across all READMEs to list WebGL.
+
 ## [1.0.0] - 2026-05-24
 
 First stable release.
