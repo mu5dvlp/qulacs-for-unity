@@ -3,8 +3,16 @@ name: API Coverage
 on:
   push:
     branches: [main]
+    paths:
+      - "Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h"
+      - "tools/**"
+      - ".github/workflows/coverage.yml"
   pull_request:
     branches: [main, dev]
+    paths:
+      - "Packages/com.mu5dvlp.qulacs/native~/src/qulacs_unity.h"
+      - "tools/**"
+      - ".github/workflows/coverage.yml"
 
 permissions:
   contents: read

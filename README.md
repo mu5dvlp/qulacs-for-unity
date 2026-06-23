@@ -1,5 +1,9 @@
 # Qulacs for Unity
 
+<p align="center">
+  <img src="docs/images/hero.png" alt="qulacs-for-unity" width="300">
+</p>
+
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
 [![API Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mu5dvlp/8a140c24ea7fedc7e83595cdd5a5ffee/raw/qulacs-for-unity-coverage.json)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/coverage.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity?include_prereleases)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
@@ -30,6 +34,9 @@ Unity C# (Mu5dvlp.Qulacs)
 | Android ARM64 | Supported |
 | Android x86_64 | Supported (emulator) |
 | iOS ARM64 | Supported |
+| WebGL (WebAssembly) | Supported |
+
+> WebGL runs single-threaded (no OpenMP/SIMD), so large circuits are slower than on native platforms.
 
 ## Package
 
@@ -69,6 +76,7 @@ Alternatively, clone this repository and open the Unity project directly — the
 | Android | Above + Unity-bundled NDK (install via Unity Hub → Android Build Support) |
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
+| WebGL | Windows host + Unity-bundled Emscripten (install via Unity Hub → WebGL Build Support) |
 
 ### Build
 
@@ -79,6 +87,7 @@ make build                # Windows x86_64
 make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS (host architecture)
 make build-ios            # iOS ARM64 (cross-compile from macOS)
+make build-webgl          # WebGL/WebAssembly (Emscripten, Windows host)
 ```
 
 See [`Packages/com.mu5dvlp.qulacs/CLAUDE.md`](Packages/com.mu5dvlp.qulacs/CLAUDE.md) for details.
@@ -88,6 +97,18 @@ See [`Packages/com.mu5dvlp.qulacs/CLAUDE.md`](Packages/com.mu5dvlp.qulacs/CLAUDE
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on code style, branch naming, and the PR process.
 
 **Branch strategy**: Feature/fix branches → `dev` → `main` (releases). See the [branch naming convention](CONTRIBUTING.md#branch-naming-convention) for details.
+
+## Support
+
+This is a community-maintained, best-effort open-source project — there is no guaranteed response time or SLA.
+
+**GitHub Issues is the only officially tracked support channel.** Please open an issue from the [issue chooser](https://github.com/mu5dvlp/qulacs-for-unity/issues/new/choose):
+
+- **Bug reports** — use the *Bug report* template
+- **Feature requests** — use the *Feature request* template
+- **Questions** — use the *Question* template
+
+The contacts below are for general inquiries only and are not guaranteed to receive a response.
 
 ## Contact
 

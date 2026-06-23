@@ -54,6 +54,8 @@ crashlytics-build.properties
 # IDE
 .vscode/
 .idea/
+*.code-workspace
+*.code-workspace.meta
 
 # Local settings
 *.local.json

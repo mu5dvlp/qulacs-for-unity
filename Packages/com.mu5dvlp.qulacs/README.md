@@ -1,5 +1,9 @@
 # com.mu5dvlp.qulacs
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mu5dvlp/qulacs-for-unity/main/docs/images/hero.png" alt="qulacs-for-unity" width="300">
+</p>
+
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity?include_prereleases)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
@@ -11,7 +15,8 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 - **Unity 6000.0 or later** (developed and tested on Unity 6000.4.1f1 LTS)
   - Unity 2022.3 LTS: confirmed working via UPM Git URL install
   - Unity 2021.x and earlier: untested, may work but not officially supported
-- Windows x86_64, macOS x86_64, Android ARM64, Android x86_64, iOS ARM64
+- Windows x86_64, macOS x86_64, Android ARM64, Android x86_64, iOS ARM64, WebGL (WebAssembly)
+  - WebGL runs single-threaded (no OpenMP/SIMD); large circuits are slower than on native platforms
 
 ## Installation
 
@@ -134,6 +139,7 @@ make build                # Windows x86_64
 make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS (host architecture)
 make build-ios            # iOS ARM64 (cross-compile from macOS)
+make build-webgl          # WebGL/WebAssembly (Emscripten, Windows host)
 ```
 
 | Platform | Prerequisites |
@@ -142,6 +148,7 @@ make build-ios            # iOS ARM64 (cross-compile from macOS)
 | Android | Above + Unity-bundled NDK (install via Unity Hub → Android Build Support) |
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
+| WebGL | Windows host + Unity-bundled Emscripten (install via Unity Hub → WebGL Build Support) |
 
 ## Architecture
 
@@ -177,6 +184,18 @@ The native plugin binary is missing or not recognized by Unity.
 ## Contributing
 
 See [CONTRIBUTING.md](../../CONTRIBUTING.md) for code style, branch naming (`{type}/#{issue}_{description}`), and PR guidelines.
+
+## Support
+
+This is a community-maintained, best-effort open-source project — there is no guaranteed response time or SLA.
+
+**GitHub Issues is the only officially tracked support channel.** Please open an issue from the [issue chooser](https://github.com/mu5dvlp/qulacs-for-unity/issues/new/choose):
+
+- **Bug reports** — use the *Bug report* template
+- **Feature requests** — use the *Feature request* template
+- **Questions** — use the *Question* template
+
+The contacts below are for general inquiries only and are not guaranteed to receive a response.
 
 ## Contact
 

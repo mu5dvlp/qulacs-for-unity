@@ -1,5 +1,9 @@
 # qulacs-for-unity
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mu5dvlp/qulacs-for-unity/main/docs/images/hero.png" alt="qulacs-for-unity" width="300">
+</p>
+
 [![CI](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml/badge.svg)](https://github.com/mu5dvlp/qulacs-for-unity/actions/workflows/test.yml)
 [![Release](https://img.shields.io/github/v/release/mu5dvlp/qulacs-for-unity?include_prereleases)](https://github.com/mu5dvlp/qulacs-for-unity/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mu5dvlp/qulacs-for-unity/blob/main/Packages/com.mu5dvlp.qulacs/LICENSE.md)
@@ -25,10 +29,13 @@ Unity C# (Mu5dvlp.Qulacs)
 | プラットフォーム | 状態 |
 |---|---|
 | Windows x86_64 | 対応済み |
+| macOS x86_64 | 対応済み |
 | Android ARM64 | 対応済み |
 | Android x86_64 | 対応済み (エミュレータ) |
-| macOS | 予定 |
-| iOS | 予定 |
+| iOS ARM64 | 対応済み |
+| WebGL (WebAssembly) | 対応済み |
+
+> WebGL はシングルスレッド動作 (OpenMP/SIMD なし) のため、大規模回路はネイティブより低速です。
 
 ## パッケージ
 
@@ -81,6 +88,18 @@ cmake --build build --config Release
 コントリビュート歓迎です！コードスタイル、ブランチ命名規則 (`{type}/#{issue}_{description}`)、PR の手順については [CONTRIBUTING.md](../../CONTRIBUTING.md) をご覧ください。
 
 **ブランチ戦略**: 作業ブランチ → `dev` → `main` (リリース)
+
+## サポート
+
+本プロジェクトはコミュニティベースの OSS であり、ベストエフォートでの対応となります (応答時間の保証・SLA はありません)。
+
+**公式に追跡するサポート窓口は GitHub Issues のみです。** [Issue 作成ページ](https://github.com/mu5dvlp/qulacs-for-unity/issues/new/choose) から起票してください:
+
+- **バグ報告** — *Bug report* テンプレート
+- **機能要望** — *Feature request* テンプレート
+- **質問** — *Question* テンプレート
+
+下記の連絡先は一般的なお問い合わせ用であり、返信を保証するものではありません。
 
 ## 連絡先
 

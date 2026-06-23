@@ -3,6 +3,12 @@ name: Lint
 on:
   pull_request:
     branches: [main, dev]
+    paths:
+      - "**/*.cs"
+      - "Packages/com.mu5dvlp.qulacs/native~/src/**"
+      - ".csharpierrc.yaml"
+      - ".config/dotnet-tools.json"
+      - ".github/workflows/lint.yml"
 
 permissions:
   contents: read
