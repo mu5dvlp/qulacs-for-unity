@@ -19,6 +19,7 @@ Runtime/
   Plugins/Windows/x86_64/     # qulacs_unity.dll
   Plugins/macOS/               # qulacs_unity.dylib
   Plugins/iOS/                 # qulacs_unity.a (static)
+  Plugins/WebGL/               # qulacs_unity.a (wasm static, Emscripten)
 docs/
   api-reference.md            # full API reference
 native~/
@@ -87,6 +88,7 @@ make build-android-x86_64 # Android x86_64 full build (emulator)
 make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS full build (host arch): fetch-qulacs → fetch-boost → build → deploy
 make build-ios            # iOS ARM64 full build (cross-compile from macOS)
+make build-webgl          # WebGL/WebAssembly full build (Emscripten, Windows host)
 make fetch-boost          # download Boost headers only
 ```
 
@@ -98,12 +100,15 @@ make fetch-boost          # download Boost headers only
 | Android | Above + Unity-bundled NDK |
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
+| WebGL | Windows host + Unity-bundled Emscripten (install "WebGL Build Support") |
 
 ### Notes
 
 - macOS/iOS builds auto-detect cmake via `which cmake` and libomp via `brew --prefix libomp`
-- iOS builds as static library (`.a`) — Unity iOS requires static plugins
+- iOS/WebGL build as static libraries (`.a`) — Unity links them into the player; P/Invoke uses `__Internal`
 - iOS builds without OpenMP (not available on iOS; gracefully skipped)
+- WebGL is single-threaded: built with `USE_OMP=No` and `USE_SIMD=No`, and Qulacs' hard-coded `-pthread` is patched out (see `native~/build-webgl.sh`). Logic lives in that script rather than inline Makefile recipes; `make build-webgl` delegates to it.
+- WebGL uses the Emscripten toolchain bundled with Unity (must match the editor's wasm ABI). Override the editor path with `UNITY_EDITOR=...` if not at the default. The final `qulacs_unity.a` merges wrapper + cppsim + csim via `llvm-ar`.
 - Source/deps: `native~/extern/` (gitignored)
 - Built libs: `native~/build/lib/`
-- Install prefix: `native~/extern/qulacs-install{,-macos,-ios}/`
+- Install prefix: `native~/extern/qulacs-install{,-macos,-ios,-webgl}/`
