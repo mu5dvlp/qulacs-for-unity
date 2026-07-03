@@ -22,6 +22,7 @@
 #   make build-macos          # macOS full build (host architecture)
 #   make build-ios            # iOS ARM64 full build (cross-compile)
 #   make build-webgl          # WebGL/WebAssembly full build (Emscripten)
+#   make build-linux          # Linux x86_64 full build (Linux host or WSL)
 #   make fetch-qulacs         # git clone the Qulacs source
 #   make fetch-boost          # download Boost headers
 #   make clean-build          # remove build artifacts (native~/build/)
@@ -113,6 +114,7 @@ QULACS_INSTALL_WEBGL := native~/extern/qulacs-install-webgl
         build-macos build-qulacs-macos build-dll-macos deploy-dll-macos \
         build-ios build-qulacs-ios build-dll-ios deploy-dll-ios \
         build-webgl \
+        build-linux \
         clean-build clean-all
 
 build: fetch-qulacs build-qulacs build-dll deploy-dll
@@ -467,6 +469,16 @@ build-webgl: fetch-qulacs fetch-boost
 	@echo ">>> Building $(WEBGL_STATIC_LIB) for WebGL (Emscripten)..."
 	@bash native~/build-webgl.sh
 	@echo ">>> Done. $(PLUGIN_DIR_WEBGL)/$(WEBGL_STATIC_LIB)"
+
+# =============================================================================
+# Linux x86_64 (run on a Linux host or WSL; fetch/boost handled inside the script)
+# 全ロジック (Qulacsビルド → ラッパー.so → デプロイ) は native~/build-linux.sh。
+# Unityエディタ(Linux)・Linuxプレイヤー・CI (game-ci docker) で使われる。
+# =============================================================================
+build-linux:
+	@echo ">>> Building libqulacs_unity.so for Linux x86_64..."
+	@bash native~/build-linux.sh
+	@echo ">>> Done. Runtime/Plugins/Linux/x86_64/libqulacs_unity.so"
 
 # =============================================================================
 # Clean

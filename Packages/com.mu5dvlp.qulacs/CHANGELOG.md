@@ -5,6 +5,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-03
+
+### Added
+- **Linux x86_64 platform support**: prebuilt `libqulacs_unity.so` under `Runtime/Plugins/Linux/x86_64/`, enabled for the Linux editor and Linux standalone players. This unblocks EditMode tests on Linux CI runners (e.g. game-ci docker images), where the missing binary previously caused `DllNotFoundException` in every native-backed test.
+- Makefile target `make build-linux` (delegates to `native~/build-linux.sh`; runs on a Linux host or WSL).
+
+### Changed
+- Linux builds Qulacs with `USE_OMP=No` and statically links libstdc++/libgcc, so the `.so` depends only on libc/libm and loads in arbitrary distros. The `lib` prefix is kept on Linux (Mono probes `libqulacs_unity.so` for `DllImport("qulacs_unity")`).
+- Platform support tables updated across READMEs / CLAUDE.md to list Linux.
+
 ## [1.0.1] - 2026-06-22
 
 ### Added
