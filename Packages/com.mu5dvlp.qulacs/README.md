@@ -15,7 +15,7 @@ Unity native plugin package that wraps **Qulacs** — a high-performance C++ qua
 - **Unity 6000.0 or later** (developed and tested on Unity 6000.4.1f1 LTS)
   - Unity 2022.3 LTS: confirmed working via UPM Git URL install
   - Unity 2021.x and earlier: untested, may work but not officially supported
-- Windows x86_64, macOS x86_64, Android ARM64, Android x86_64, iOS ARM64, WebGL (WebAssembly)
+- Windows x86_64, macOS x86_64, Linux x86_64, Android ARM64, Android x86_64, iOS ARM64, WebGL (WebAssembly)
   - WebGL runs single-threaded (no OpenMP/SIMD); large circuits are slower than on native platforms
 
 ## Installation
@@ -140,6 +140,7 @@ make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS (host architecture)
 make build-ios            # iOS ARM64 (cross-compile from macOS)
 make build-webgl          # WebGL/WebAssembly (Emscripten, Windows host)
+make build-linux          # Linux x86_64 (Linux host or WSL)
 ```
 
 | Platform | Prerequisites |

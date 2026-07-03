@@ -19,7 +19,7 @@ Unity C# (Mu5dvlp.Qulacs)
 
 ## Platform Support
 
-Windows x86_64, macOS x86_64, Android ARM64, Android x86_64, iOS ARM64, WebGL (WebAssembly).
+Windows x86_64, macOS x86_64, Linux x86_64, Android ARM64, Android x86_64, iOS ARM64, WebGL (WebAssembly).
 
 Plugin paths per platform:
 | Platform | Path | Ext |
@@ -30,6 +30,7 @@ Plugin paths per platform:
 | Android x86_64 | `Runtime/Plugins/Android/x86_64/` | `.so` |
 | iOS | `Runtime/Plugins/iOS/` | `.a` |
 | WebGL | `Runtime/Plugins/WebGL/` | `.a` (wasm, static) |
+| Linux x86_64 | `Runtime/Plugins/Linux/x86_64/` | `.so` |
 
 iOS and WebGL statically link the native lib into the player, so their P/Invoke
 uses `[DllImport("__Internal")]` (see `NativeMethods.cs`).

@@ -35,6 +35,7 @@ Unity C# (Mu5dvlp.Qulacs)
 | Android x86_64 | Supported (emulator) |
 | iOS ARM64 | Supported |
 | WebGL (WebAssembly) | Supported |
+| Linux x86_64 | Supported |
 
 > WebGL runs single-threaded (no OpenMP/SIMD), so large circuits are slower than on native platforms.
 
@@ -77,6 +78,7 @@ Alternatively, clone this repository and open the Unity project directly — the
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
 | WebGL | Windows host + Unity-bundled Emscripten (install via Unity Hub → WebGL Build Support) |
+| Linux | Linux host or WSL + CMake 3.20+, g++, make |
 
 ### Build
 
@@ -88,6 +90,7 @@ make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS (host architecture)
 make build-ios            # iOS ARM64 (cross-compile from macOS)
 make build-webgl          # WebGL/WebAssembly (Emscripten, Windows host)
+make build-linux          # Linux x86_64 (Linux host or WSL)
 ```
 
 See [`Packages/com.mu5dvlp.qulacs/CLAUDE.md`](Packages/com.mu5dvlp.qulacs/CLAUDE.md) for details.
