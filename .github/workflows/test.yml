@@ -17,6 +17,9 @@ on:
       - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
       - ".github/workflows/test.yml"
+  # "dotnet test" は main の必須チェック。pathフィルタ外の変更 (例: 他プラットフォーム
+  # のバイナリ追加) だと PR で一度も走らず永遠に pending になるため、手動起動を用意。
+  workflow_dispatch:
 
 permissions:
   contents: read
