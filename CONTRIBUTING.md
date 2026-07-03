@@ -140,7 +140,20 @@ Examples:
 
 7. CI will automatically check formatting and run tests.
 
-> **Release flow**: When ready to release, `dev` is merged into `main` and tagged (e.g., `v0.3.0`).
+> **Release flow**: When ready to release, `dev` is merged into `main`, **and only then** is the release tag created — on the resulting `main` commit.
+>
+> **Release tags live on `main` only.** A `vX.Y.Z` tag must always point to a commit that is reachable from `main`. Never tag a `dev` or work branch, and never create the tag before the release merge lands on `main`. The correct order is:
+>
+> ```bash
+> # 1. Merge dev -> main (via PR). Use a merge commit / no history rewrite so the
+> #    released commit stays reachable from main.
+> # 2. Then tag the main commit and push the tag:
+> git checkout main && git pull origin main
+> git tag -a v0.3.0 -m "v0.3.0"
+> git push origin v0.3.0
+> ```
+>
+> Packages consuming this repo pin a tag (`...git#v0.3.0`), so a tag that is not on `main` (e.g. created on a work branch before merge) points at a commit outside the released line and is easy to lose — do not do this.
 
 ## Reporting Issues
 
