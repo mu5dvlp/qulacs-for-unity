@@ -472,8 +472,8 @@ build-webgl: fetch-qulacs fetch-boost
 
 # =============================================================================
 # Linux x86_64 (run on a Linux host or WSL; fetch/boost handled inside the script)
-# 全ロジック (Qulacsビルド → ラッパー.so → デプロイ) は native~/build-linux.sh。
-# Unityエディタ(Linux)・Linuxプレイヤー・CI (game-ci docker) で使われる。
+# All logic (build Qulacs -> wrapper .so -> deploy) lives in native~/build-linux.sh.
+# Used by the Unity editor (Linux), Linux players, and CI (game-ci docker).
 # =============================================================================
 build-linux:
 	@echo ">>> Building libqulacs_unity.so for Linux x86_64..."

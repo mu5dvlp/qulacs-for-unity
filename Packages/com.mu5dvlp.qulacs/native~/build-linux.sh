@@ -66,9 +66,9 @@ else
 fi
 
 # --- [3] Build Qulacs (static libs, PIC, no OpenMP) & stage headers/libs ---
-# Qulacs の CMake は install ターゲットで期待レイアウトを作らないため、
-# Makefile の他プラットフォームと同様にヘッダ/ライブラリを手動ステージングする。
-# 静的ライブラリは qulacs 側の設定で native~/build/lib/ に出力される。
+# Qulacs' CMake does not produce the expected layout from its install target, so
+# stage the headers/libs manually like the other platforms in the Makefile. The
+# static libs are emitted to native~/build/lib/ by Qulacs' own configuration.
 echo "[3/5] Building Qulacs..."
 cmake -B "$QULACS_BUILD" -S "$QULACS_SRC" \
   -DCMAKE_BUILD_TYPE=Release \
