@@ -27,6 +27,16 @@ PLUGINS_DIR = PKG_ROOT / "Runtime/Plugins"
 
 BIN_SUFFIXES = (".dll", ".dylib", ".so", ".a")
 
+# Maximum glibc symbol version a Linux ELF plugin may require. A .so built on a
+# newer host (e.g. Ubuntu 24.04 / glibc 2.38 emits __isoc23_* @ GLIBC_2.38)
+# fails to load on the older glibc of the game-ci Unity editor docker images,
+# surfacing as DllNotFoundException at the first P/Invoke. Build the Linux .so
+# in an old-glibc container (see native~/build-linux.sh / `make build-linux-docker`).
+# Ubuntu 20.04 == glibc 2.31, the floor across the CI images we target.
+MAX_GLIBC = (2, 31)
+GLIBC_RE = re.compile(rb"GLIBC_(\d+)\.(\d+)(?:\.(\d+))?")
+ELF_MAGIC = b"\x7fELF"
+
 # Matches: QULACS_UNITY_API <return type ...> qulacs_xxx(
 HEADER_RE = re.compile(
     r"QULACS_UNITY_API\s+[^;{]*?\b(qulacs_[A-Za-z0-9_]+)\s*\(",
@@ -83,6 +93,39 @@ def exported_from_binary(path: Path) -> set[str]:
     return syms
 
 
+def glibc_version_violation(path: Path) -> str | None:
+    """For an ELF binary, return an error string if it requires a glibc symbol
+    version newer than MAX_GLIBC; otherwise None. Non-ELF files are skipped.
+
+    Scans the raw bytes for GLIBC_<major>.<minor> tokens (stored verbatim in the
+    .gnu.version_r / .dynstr sections) rather than shelling out, so it needs no
+    extra tooling and works identically on every host.
+    """
+    data = path.read_bytes()
+    if not data.startswith(ELF_MAGIC):
+        return None
+    versions = {
+        (int(m.group(1)), int(m.group(2)))
+        for m in GLIBC_RE.finditer(data)
+    }
+    if not versions:
+        return None
+    worst = max(versions)
+    if worst <= MAX_GLIBC:
+        return None
+    try:
+        rel = path.relative_to(REPO_ROOT)
+    except ValueError:
+        rel = path
+    return (
+        f"{rel}: requires GLIBC_{worst[0]}.{worst[1]} "
+        f"(> allowed {MAX_GLIBC[0]}.{MAX_GLIBC[1]}).\n"
+        f"  This .so was built on too new a host and will fail to load on the "
+        f"older glibc of the CI docker images (DllNotFoundException).\n"
+        f"  Rebuild it in an old-glibc container: `make build-linux-docker`."
+    )
+
+
 def _diff_report(label: str, expected: set[str], actual: set[str]) -> str | None:
     if actual == expected:
         return None
@@ -135,6 +178,9 @@ def main() -> int:
             failures.append(diff)
         else:
             print(f"OK   {rel}")
+        glibc_err = glibc_version_violation(b)
+        if glibc_err:
+            failures.append(glibc_err)
 
     if failures:
         print("\n=== Symbol-sync check FAILED ===", file=sys.stderr)
