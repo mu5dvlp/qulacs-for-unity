@@ -4,6 +4,15 @@
 # Run on a Linux host or WSL, from the native~/ directory:
 #   bash build-linux.sh
 #
+# IMPORTANT — glibc floor:
+#   Run this in an OLD-glibc environment (Ubuntu 20.04 / glibc 2.31). The .so
+#   inherits the build host's glibc symbol versions; building on a modern host
+#   (Ubuntu 24.04 / glibc 2.38 emits __isoc23_* @ GLIBC_2.38) produces a .so
+#   that fails to load on the older glibc of the game-ci Unity editor docker
+#   images -> DllNotFoundException at the first P/Invoke. The reproducible way
+#   is `make build-linux-docker` (builds inside ubuntu:20.04). The committed
+#   ceiling (GLIBC_2.31) is enforced by .github/scripts/check-symbols.py.
+#
 # Notes:
 #  - Qulacs is built with USE_OMP=No so the resulting .so has no libgomp.so
 #    runtime dependency (it must load inside arbitrary distros, including the
