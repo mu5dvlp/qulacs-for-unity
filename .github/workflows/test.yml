@@ -9,16 +9,14 @@ on:
       - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
       - ".github/workflows/test.yml"
+  # "dotnet test" は main の必須ステータスチェック。必須チェックに pull_request の
+  # pathフィルタを併用すると、フィルタ外の変更だけの PR (例: Linux/他プラット
+  # フォームのバイナリ更新、ビルドスクリプトや CI の変更) でジョブが一度も起動せず、
+  # 必須チェックが永久に pending になりマージ不能になる。よって pull_request では
+  # pathフィルタを使わず常に実行する。push はコスト削減のため pathフィルタを維持。
   pull_request:
     branches: [main, dev]
-    paths:
-      - "Packages/com.mu5dvlp.qulacs/Runtime/**/*.cs"
-      - "Packages/com.mu5dvlp.qulacs/Tests/**/*.cs"
-      - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
-      - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
-      - ".github/workflows/test.yml"
-  # "dotnet test" は main の必須チェック。pathフィルタ外の変更 (例: 他プラットフォーム
-  # のバイナリ追加) だと PR で一度も走らず永遠に pending になるため、手動起動を用意。
+  # 手動再実行用のエスケープハッチ (通常は不要)。
   workflow_dispatch:
 
 permissions:
