@@ -20,6 +20,7 @@ Runtime/
   Plugins/macOS/               # qulacs_unity.dylib
   Plugins/iOS/                 # qulacs_unity.a (static)
   Plugins/WebGL/               # qulacs_unity.a (wasm static, Emscripten)
+  Plugins/Linux/x86_64/        # libqulacs_unity.so
 docs/
   api-reference.md            # full API reference
 native~/
@@ -89,6 +90,7 @@ make build-android-all    # Android ARM64 + x86_64
 make build-macos          # macOS full build (host arch): fetch-qulacs → fetch-boost → build → deploy
 make build-ios            # iOS ARM64 full build (cross-compile from macOS)
 make build-webgl          # WebGL/WebAssembly full build (Emscripten, Windows host)
+make build-linux          # Linux x86_64 full build (Linux host or WSL)
 make fetch-boost          # download Boost headers only
 ```
 
@@ -101,6 +103,7 @@ make fetch-boost          # download Boost headers only
 | macOS | CMake 3.20+, Xcode, `brew install libomp` |
 | iOS | Same as macOS (cross-compile) |
 | WebGL | Windows host + Unity-bundled Emscripten (install "WebGL Build Support") |
+| Linux | Linux host or WSL + CMake 3.20+, g++, make |
 
 ### Notes
 
@@ -108,6 +111,7 @@ make fetch-boost          # download Boost headers only
 - iOS/WebGL build as static libraries (`.a`) — Unity links them into the player; P/Invoke uses `__Internal`
 - iOS builds without OpenMP (not available on iOS; gracefully skipped)
 - WebGL is single-threaded: built with `USE_OMP=No` and `USE_SIMD=No`, and Qulacs' hard-coded `-pthread` is patched out (see `native~/build-webgl.sh`). Logic lives in that script rather than inline Makefile recipes; `make build-webgl` delegates to it.
+- Linux wraps a Qulacs built with `USE_OMP=No` and statically links libstdc++/libgcc, so the `.so` has no libgomp / host-C++-runtime dependency (must load in arbitrary distros, e.g. game-ci docker images). Keeps the `lib` prefix — Mono probes `libqulacs_unity.so` for `DllImport("qulacs_unity")`. Logic lives in `native~/build-linux.sh`.
 - WebGL uses the Emscripten toolchain bundled with Unity (must match the editor's wasm ABI). Override the editor path with `UNITY_EDITOR=...` if not at the default. The final `qulacs_unity.a` merges wrapper + cppsim + csim via `llvm-ar`.
 - Source/deps: `native~/extern/` (gitignored)
 - Built libs: `native~/build/lib/`

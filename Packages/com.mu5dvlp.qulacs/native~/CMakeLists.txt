@@ -83,6 +83,10 @@ if(ANDROID)
 elseif(EMSCRIPTEN)
     # WebGL is single-threaded; Qulacs is built with USE_OMP=No, so the wrapper
     # must not pull in OpenMP either. Nothing to link here.
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    # Linux wraps a Qulacs built with USE_OMP=No (see build-linux.sh), so no
+    # OpenMP here either — this keeps the .so free of a libgomp.so runtime
+    # dependency, which may be absent in minimal distros / CI docker images.
 else()
     find_package(OpenMP)
     if(OpenMP_CXX_FOUND)
@@ -90,13 +94,21 @@ else()
     endif()
 endif()
 
+# Linux: statically link libstdc++/libgcc so the .so does not depend on the
+# host distro's C++ runtime version (must load in the Unity editor and players
+# across distros, including CI docker images).
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_link_options(qulacs_unity PRIVATE -static-libstdc++ -static-libgcc)
+endif()
+
 # Android 15+ requires 16KB-aligned shared libraries
 if(ANDROID)
     target_link_options(qulacs_unity PRIVATE "-Wl,-z,max-page-size=16384")
 endif()
 
-# Android requires the "lib" prefix (dlopen looks for libqulacs_unity.so).
-# Other platforms strip it so Unity finds "qulacs_unity.dll/.dylib".
-if(NOT ANDROID)
+# Android and Linux require the "lib" prefix (dlopen probes libqulacs_unity.so
+# for DllImport("qulacs_unity")). Other platforms strip it so Unity finds
+# "qulacs_unity.dll/.dylib".
+if(NOT ANDROID AND NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set_target_properties(qulacs_unity PROPERTIES PREFIX "")
 endif()
