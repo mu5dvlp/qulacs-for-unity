@@ -9,16 +9,15 @@ on:
       - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
       - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
       - ".github/workflows/test.yml"
+  # "dotnet test" is a required status check on main. Combining a required check
+  # with a pull_request `paths` filter makes the job never start for PRs that only
+  # touch files outside the filter (e.g. Linux / other-platform binary updates,
+  # build scripts, CI changes), so the required check stays pending forever and the
+  # PR cannot be merged. Therefore do NOT filter pull_request by path — always run.
+  # push keeps its `paths` filter to save CI minutes.
   pull_request:
     branches: [main, dev]
-    paths:
-      - "Packages/com.mu5dvlp.qulacs/Runtime/**/*.cs"
-      - "Packages/com.mu5dvlp.qulacs/Tests/**/*.cs"
-      - "Packages/com.mu5dvlp.qulacs/dotnet~/**"
-      - "Packages/com.mu5dvlp.qulacs/Runtime/Plugins/Windows/x86_64/qulacs_unity.dll"
-      - ".github/workflows/test.yml"
-  # "dotnet test" は main の必須チェック。pathフィルタ外の変更 (例: 他プラットフォーム
-  # のバイナリ追加) だと PR で一度も走らず永遠に pending になるため、手動起動を用意。
+  # Manual re-run escape hatch (normally unnecessary).
   workflow_dispatch:
 
 permissions:

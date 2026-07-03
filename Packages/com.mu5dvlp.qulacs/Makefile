@@ -114,7 +114,7 @@ QULACS_INSTALL_WEBGL := native~/extern/qulacs-install-webgl
         build-macos build-qulacs-macos build-dll-macos deploy-dll-macos \
         build-ios build-qulacs-ios build-dll-ios deploy-dll-ios \
         build-webgl \
-        build-linux \
+        build-linux build-linux-docker \
         clean-build clean-all
 
 build: fetch-qulacs build-qulacs build-dll deploy-dll
@@ -472,12 +472,36 @@ build-webgl: fetch-qulacs fetch-boost
 
 # =============================================================================
 # Linux x86_64 (run on a Linux host or WSL; fetch/boost handled inside the script)
-# 全ロジック (Qulacsビルド → ラッパー.so → デプロイ) は native~/build-linux.sh。
-# Unityエディタ(Linux)・Linuxプレイヤー・CI (game-ci docker) で使われる。
+# All logic (build Qulacs -> wrapper .so -> deploy) lives in native~/build-linux.sh.
+# Used by the Unity editor (Linux), Linux players, and CI (game-ci docker).
 # =============================================================================
 build-linux:
 	@echo ">>> Building libqulacs_unity.so for Linux x86_64..."
 	@bash native~/build-linux.sh
+	@echo ">>> Done. Runtime/Plugins/Linux/x86_64/libqulacs_unity.so"
+
+# -----------------------------------------------------------------------------
+# Linux x86_64 build inside an old-glibc docker container (REQUIRED for release).
+#
+# Building on a modern host (e.g. Ubuntu 24.04 / glibc 2.38) bakes __isoc23_*
+# @ GLIBC_2.38 symbols into the .so, which the older glibc of the game-ci Unity
+# editor docker images cannot resolve -> DllNotFoundException at the first
+# P/Invoke. Ubuntu 20.04 (glibc 2.31) is the floor across the CI images we
+# target, so build there for maximum backward compatibility. The committed
+# GLIBC_2.31 ceiling is enforced by .github/scripts/check-symbols.py.
+#
+# Requires Docker. Run from a Linux host, macOS, or WSL (native Windows path
+# translation for the bind mount is unreliable; use WSL there).
+# -----------------------------------------------------------------------------
+LINUX_DOCKER_IMAGE := ubuntu:20.04
+build-linux-docker:
+	@echo ">>> Building libqulacs_unity.so in $(LINUX_DOCKER_IMAGE) (old-glibc)..."
+	docker run --rm -v "$(CURDIR):/work" -w /work $(LINUX_DOCKER_IMAGE) bash -c '\
+		set -e; export DEBIAN_FRONTEND=noninteractive; \
+		apt-get update -qq >/dev/null; \
+		apt-get install -y -qq build-essential git curl unzip python3-pip >/dev/null; \
+		pip3 install -q cmake >/dev/null; \
+		bash native~/build-linux.sh'
 	@echo ">>> Done. Runtime/Plugins/Linux/x86_64/libqulacs_unity.so"
 
 # =============================================================================

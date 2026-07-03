@@ -51,6 +51,7 @@ dotnet test Packages/com.mu5dvlp.qulacs/dotnet~/Mu5dvlp.Qulacs.Tests.csproj
 - Work branches: `{type}/#{issue}_{short-description}` (e.g., `feat/#42_add-ry-gate`)
 - Types: `feat`, `fix`, `chore`
 - Flow: work branch → PR to `dev` → release merge to `main`
+- **Release tags (`vX.Y.Z`) are created ONLY on `main`, and only after the release merge lands.** A tag must always point to a commit reachable from `main` — never tag `dev` or a work branch, and never tag before merging to `main`. Consumers pin tags (`...git#vX.Y.Z`), so an off-`main` tag points outside the released line. Merge `dev → main` with a merge commit (no rewrite) so the released commit stays reachable, then tag the `main` commit. See CONTRIBUTING.md → Release flow.
 
 ## C# Scripts
 
