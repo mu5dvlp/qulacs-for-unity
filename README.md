@@ -42,7 +42,7 @@ Unity C# (Mu5dvlp.Qulacs)
 ## Package
 
 **Package ID:** `com.mu5dvlp.qulacs`
-**Unity:** 6000.0+ (developed on 6000.4.1f1 LTS; also confirmed on 2022.3 LTS)
+**Unity:** 6000.0+ (developed on 6000.4.1f1 LTS; also confirmed on 2022.3 LTS and Unity 5)
 
 ### Installation
 
